@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YolKargo | Şehirler Arası Yol Arkadaşı Kargo Platformu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero" id="top">
+      <div class="hero__overlay"></div>
+      <div class="container hero__content">
+        <nav class="nav">
+          <a class="logo" href="#top">YolKargo</a>
+          <div class="nav__actions">
+            <a class="nav__link" href="#features">Özellikler</a>
+            <a class="nav__link" href="#process">Nasıl Çalışır?</a>
+            <a class="nav__link" href="#pricing">Ücretlendirme</a>
+            <a class="button button--ghost" href="#waitlist">Giriş Yap</a>
+            <a class="button" href="#waitlist">Hemen Katıl</a>
+          </div>
+        </nav>
+        <div class="hero__grid">
+          <div class="hero__text">
+            <span class="badge">Beta erken erişimi başladı</span>
+            <h1>Şehirler arası yolculukları kazanca çeviren kargo paylaşım ağı</h1>
+            <p>
+              YolKargo, araçlarında boş alan bulunan sürücüler ile kargosunu hızlı ve uygun fiyata
+              göndermek isteyen kişileri aynı platformda buluşturur.
+            </p>
+            <div class="hero__cta">
+              <a class="button button--large" href="#waitlist">Bekleme listesine katıl</a>
+              <a class="link" href="#security">Nasıl güvende kalıyoruz?</a>
+            </div>
+            <ul class="hero__stats">
+              <li>
+                <strong>+180</strong>
+                <span>Ön kayıtlı sürücü</span>
+              </li>
+              <li>
+                <strong>%98</strong>
+                <span>Memnuniyet hedefi</span>
+              </li>
+              <li>
+                <strong>24+</strong>
+                <span>Aktif rota</span>
+              </li>
+            </ul>
+          </div>
+          <div class="hero__card">
+            <div class="card card--driver">
+              <h2>Sürücü Paneli</h2>
+              <ul>
+                <li>Çıkış ve varış illerini seç</li>
+                <li>Yola çıkış tarihini belirt</li>
+                <li>Araç tipini ve boş alanını ekle</li>
+                <li>Fiyat aralığını gir</li>
+              </ul>
+              <button class="button button--ghost">Paneli keşfet</button>
+            </div>
+            <div class="card card--sender">
+              <h2>Gönderici Paneli</h2>
+              <ul>
+                <li>Kargonun çıkış / varış adresi</li>
+                <li>Paket boyutu ve önemi</li>
+                <li>Esnek tarihler ve teklif seçenekleri</li>
+              </ul>
+              <button class="button button--ghost">Gönderim oluştur</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section" id="features">
+        <div class="container">
+          <header class="section__header">
+            <span class="badge">Özellikler</span>
+            <h2>Güvenilir, şeffaf ve ölçeklenebilir pazar yeri altyapısı</h2>
+            <p>
+              YolKargo, gerçek zamanlı eşleştirme ve güvenlik kontrolleri ile hem sürücüler hem de
+              göndericiler için sorunsuz bir deneyim sunar.
+            </p>
+          </header>
+          <div class="grid grid--features">
+            <article class="feature">
+              <div class="feature__icon">🚗</div>
+              <h3>Akıllı eşleşme algoritması</h3>
+              <p>
+                Rota, tarih, araç tipi ve kargo önceliğine göre en uygun sürücüyü anında önerir.
+              </p>
+            </article>
+            <article class="feature">
+              <div class="feature__icon">💬</div>
+              <h3>Canlı teklif ve sohbet</h3>
+              <p>
+                Uygulama içi sohbet ile fiyat pazarlığı yapın, anlaşma sonrası iletişim bilgileri
+                otomatik paylaşılır.
+              </p>
+            </article>
+            <article class="feature">
+              <div class="feature__icon">🛰️</div>
+              <h3>Konum takibi</h3>
+              <p>
+                Google Maps API entegrasyonu sayesinde gönderinizin yolculuğunu gerçek zamanlı izleyin.
+              </p>
+            </article>
+            <article class="feature">
+              <div class="feature__icon">🛡️</div>
+              <h3>Kimlik ve plaka doğrulama</h3>
+              <p>
+                Sürücü kimliği ve araç plakası doğrulaması ile güvenli bir ekosistem oluşturuyoruz.
+              </p>
+            </article>
+            <article class="feature">
+              <div class="feature__icon">⭐</div>
+              <h3>Puanlama & yorum sistemi</h3>
+              <p>
+                Her teslimat sonrası iki taraflı değerlendirme ile kalite standartlarını koruyun.
+              </p>
+            </article>
+            <article class="feature">
+              <div class="feature__icon">🔒</div>
+              <h3>Opsiyonel kargo sigortası</h3>
+              <p>
+                Dilerseniz kargonuzu YolKargo Sigorta ile güvence altına alın.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--alt" id="process">
+        <div class="container">
+          <header class="section__header">
+            <span class="badge">Adım Adım</span>
+            <h2>3 kolay adımda hızlı teslimat</h2>
+          </header>
+          <div class="timeline">
+            <div class="timeline__item">
+              <div class="timeline__step">1</div>
+              <h3>Kayıt ol ve profilini doğrula</h3>
+              <p>
+                Kimlik, sürücü belgesi ve araç bilgilerinizi birkaç dakikada tamamlayın. Göndericiler
+                için sadece kimlik doğrulaması yeterli.
+              </p>
+            </div>
+            <div class="timeline__item">
+              <div class="timeline__step">2</div>
+              <h3>İhtiyacına uygun ilanı oluştur</h3>
+              <p>
+                Sürücüler rotalarını eklerken, göndericiler kargonun detaylarını paylaşır. Sistem
+                otomatik eşleşmeleri önerir.
+              </p>
+            </div>
+            <div class="timeline__item">
+              <div class="timeline__step">3</div>
+              <h3>Anlaş, takip et, puanla</h3>
+              <p>
+                Canlı sohbetle anlaş, Stripe / iyzico güvencesiyle ödemeni yap, kargonun takibini izle
+                ve deneyimini puanla.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="security">
+        <div class="container security">
+          <div class="security__content">
+            <span class="badge">Güvenlik</span>
+            <h2>Güvendiğiniz teslimatlar için uçtan uca koruma</h2>
+            <p>
+              YolKargo, tüm kullanıcılarını doğrular, ödemeleri güvence altına alır ve teslimat süreci
+              boyunca şeffaflık sağlar.
+            </p>
+            <ul class="checklist">
+              <li>Kimlik, plaka ve belge doğrulama</li>
+              <li>Stripe / iyzico güvenceli emanet hesap</li>
+              <li>Opsiyonel kargo sigortası ve hasar desteği</li>
+              <li>Gerçek zamanlı konum paylaşımı</li>
+            </ul>
+          </div>
+          <div class="security__card">
+            <div class="map">
+              <div class="map__pin map__pin--driver">Sürücü</div>
+              <div class="map__route"></div>
+              <div class="map__pin map__pin--sender">Gönderi</div>
+            </div>
+            <p class="map__caption">
+              Konum takibi Google Maps API üzerinden gerçekleşir ve yalnızca eşleşen taraflarca
+              görüntülenir.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--alt" id="pricing">
+        <div class="container">
+          <header class="section__header">
+            <span class="badge">Kazanç Modeli</span>
+            <h2>Sürdürülebilir gelir için şeffaf ücretlendirme</h2>
+          </header>
+          <div class="pricing">
+            <article class="pricing__card">
+              <h3>Komisyon</h3>
+              <p>Her başarılı teslimatta %8 sabit komisyon.</p>
+              <ul>
+                <li>Ödeme sonrası otomatik tahsilat</li>
+                <li>Anında cüzdan bakiyesi</li>
+                <li>Esnek çekim limitleri</li>
+              </ul>
+            </article>
+            <article class="pricing__card">
+              <h3>Premium üyelik</h3>
+              <p>Daha fazla görünürlük ve hızlı eşleşmeler.</p>
+              <ul>
+                <li>Öne çıkan ilanlar</li>
+                <li>Rota başına maksimum eşleşme</li>
+                <li>Öncelikli destek</li>
+              </ul>
+            </article>
+            <article class="pricing__card">
+              <h3>Reklam alanı</h3>
+              <p>Kargo ve araç ekosistemine özel kampanyalar.</p>
+              <ul>
+                <li>Hedefli banner alanları</li>
+                <li>Partner iş birlikleri</li>
+                <li>Aylık raporlama</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="integrations">
+        <div class="container">
+          <header class="section__header">
+            <span class="badge">Teknoloji</span>
+            <h2>Modern altyapı ile dakikalar içinde yayına hazır</h2>
+            <p>
+              Firebase kimlik doğrulaması, Google Maps entegrasyonu ve Stripe / iyzico ödeme altyapısı
+              ile güvenli ve ölçeklenebilir bir çözüm.
+            </p>
+          </header>
+          <div class="integrations">
+            <div class="integrations__item">
+              <span>🔥</span>
+              <h3>Firebase</h3>
+              <p>Gerçek zamanlı veri tabanı ve kimlik doğrulama.</p>
+            </div>
+            <div class="integrations__item">
+              <span>🗺️</span>
+              <h3>Google Maps API</h3>
+              <p>Dinamik rota hesaplama ve konum paylaşımı.</p>
+            </div>
+            <div class="integrations__item">
+              <span>💳</span>
+              <h3>Stripe / iyzico</h3>
+              <p>Güvenli ödeme alma ve komisyon yönetimi.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--alt waitlist" id="waitlist">
+        <div class="container waitlist__content">
+          <div>
+            <span class="badge">Erken erişim</span>
+            <h2>İlk kullananlardan olun</h2>
+            <p>
+              YolKargo'yu denemek ve topluluğumuza katılmak için e-posta adresinizi bırakmanız yeterli.
+              Cpanel üzerinden kolayca yükleyebileceğiniz bu sayfa, ziyaretçilerinizi bekleme listesine
+              davet eder.
+            </p>
+          </div>
+          <form class="waitlist__form">
+            <label class="sr-only" for="email">E-posta adresi</label>
+            <input id="email" type="email" placeholder="E-posta adresiniz" required />
+            <button type="submit" class="button button--large">Beni haberdar et</button>
+            <small>Kaydolarak kullanım koşulları ve KVKK metnini kabul etmiş olursunuz.</small>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div>
+          <a class="logo" href="#top">YolKargo</a>
+          <p>Türkiye'nin şehirler arası kargo paylaşım platformu.</p>
+        </div>
+        <div>
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="#features">Özellikler</a></li>
+            <li><a href="#process">Süreç</a></li>
+            <li><a href="#pricing">Ücretlendirme</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Topluluk</h4>
+          <ul>
+            <li><a href="mailto:hello@yolkargo.com">hello@yolkargo.com</a></li>
+            <li><a href="https://t.me/yolkargo" target="_blank" rel="noreferrer">Telegram</a></li>
+            <li><a href="https://instagram.com/yolkargo" target="_blank" rel="noreferrer">Instagram</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Hızlı bağlantılar</h4>
+          <ul>
+            <li><a href="#security">Güvenlik</a></li>
+            <li><a href="#integrations">Entegrasyonlar</a></li>
+            <li><a href="#waitlist">Bekleme listesi</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>© <span id="year"></span> YolKargo Teknoloji. Tüm hakları saklıdır.</p>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
