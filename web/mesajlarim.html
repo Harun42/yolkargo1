@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mesajlarım | GoGo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --text-dark: #0f172a;
+        --text-muted: #5f6c85;
+        --accent: #ff7a00;
+        --accent-dark: #ff6700;
+        --border: #e2e8f0;
+        --card-bg: #ffffff;
+        --radius-lg: 28px;
+        --radius-md: 20px;
+        --radius-sm: 12px;
+        --shadow-card: 0 24px 45px rgba(15, 23, 42, 0.12);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text-dark);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: saturate(180%) blur(20px);
+        border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+      }
+
+      .site-header__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem clamp(1rem, 3vw, 2.5rem);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .logo img {
+        height: 42px;
+        width: auto;
+        display: block;
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        font-weight: 600;
+        color: var(--text-muted);
+      }
+
+      nav a {
+        padding: 0.4rem 0;
+        position: relative;
+      }
+
+      nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -0.35rem;
+        height: 2px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.2s ease;
+      }
+
+      nav a:hover::after,
+      nav a:focus-visible::after {
+        transform: scaleX(1);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .nav__profile {
+        position: relative;
+      }
+
+      .nav__profile-trigger {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        background: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+
+      .nav__profile-trigger:hover,
+      .nav__profile-trigger[aria-expanded="true"] {
+        transform: translateY(-1px);
+        border-color: rgba(15, 23, 42, 0.3);
+      }
+
+      .nav__profile-menu {
+        position: absolute;
+        top: calc(100% + 0.75rem);
+        right: 0;
+        min-width: 230px;
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        background: #fff;
+        box-shadow: var(--shadow-card);
+        display: grid;
+        gap: 0.35rem;
+        z-index: 20;
+      }
+
+      .nav__profile-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+        margin-bottom: 0.35rem;
+      }
+
+      .nav__profile-divider {
+        height: 1px;
+        background: rgba(15, 23, 42, 0.08);
+        margin: 0.35rem 0 0.25rem;
+      }
+
+      .nav__profile-name {
+        font-weight: 600;
+        font-size: 0.98rem;
+      }
+
+      .nav__profile-role {
+        color: var(--text-muted);
+        font-size: 0.82rem;
+      }
+
+      .nav__profile-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.55rem 0.65rem;
+        border-radius: 10px;
+        font-weight: 500;
+        color: inherit;
+        transition: background 0.2s ease;
+      }
+
+      .nav__profile-link svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .nav__profile-link:hover {
+        background: rgba(15, 23, 42, 0.06);
+      }
+
+      .nav__profile-link[data-has-unread="true"] {
+        background: rgba(255, 122, 0, 0.15);
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .nav__profile-link[data-has-unread="true"] svg {
+        color: var(--accent);
+      }
+
+      .nav__profile-link--primary {
+        background: rgba(255, 122, 0, 0.12);
+        color: var(--accent);
+      }
+
+      .nav__profile-link--primary:hover {
+        background: rgba(255, 122, 0, 0.2);
+      }
+
+      .nav__profile-link--danger {
+        color: #dc2626;
+      }
+
+      .nav__profile-link--danger:hover {
+        background: rgba(220, 38, 38, 0.12);
+      }
+
+      .nav__badge {
+        margin-left: auto;
+        padding: 0 0.45rem;
+        min-width: 22px;
+        height: 22px;
+        border-radius: 999px;
+        background: var(--accent);
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      main {
+        flex: 1;
+      }
+
+      .hero {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: clamp(2rem, 3vw, 3.5rem) clamp(1rem, 3vw, 2.5rem);
+        display: grid;
+        gap: 0.5rem;
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(2rem, 4vw, 2.8rem);
+        letter-spacing: -0.02em;
+      }
+
+      .hero p {
+        margin: 0;
+        font-size: 1.05rem;
+        color: var(--text-muted);
+      }
+
+      .messages-layout {
+        max-width: 1200px;
+        margin: 0 auto clamp(2.5rem, 4vw, 4rem);
+        padding: 0 clamp(1rem, 3vw, 2.5rem);
+        display: grid;
+        grid-template-columns: minmax(260px, 330px) minmax(0, 1fr);
+        gap: clamp(1rem, 2vw, 1.75rem);
+      }
+
+      .panel {
+        background: var(--card-bg);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-card);
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        min-height: 520px;
+      }
+
+      .panel--list {
+        gap: 0.75rem;
+      }
+
+      .panel__title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem;
+      }
+
+      .conversation-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 0.2rem;
+      }
+
+      .conversation-empty,
+      .thread-empty {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        padding: 1rem;
+      }
+
+      .conversation-card {
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 0.9rem;
+        display: grid;
+        gap: 0.35rem;
+        cursor: pointer;
+        background: #fff;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        position: relative;
+      }
+
+      .conversation-card:hover,
+      .conversation-card--active {
+        border-color: rgba(15, 23, 42, 0.2);
+        box-shadow: 0 16px 24px rgba(15, 23, 42, 0.08);
+      }
+
+      .conversation-card__title {
+        font-weight: 600;
+      }
+
+      .conversation-card__meta {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+
+      .conversation-card__excerpt {
+        font-size: 0.9rem;
+        color: var(--text-dark);
+      }
+
+      .conversation-card__badge {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        background: rgba(255, 122, 0, 0.18);
+        color: var(--accent-dark);
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+      }
+
+      .thread-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        margin-bottom: 1rem;
+      }
+
+      .thread-header__title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .thread-header__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.25rem;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+      }
+
+      .thread-header__meta span {
+        display: inline-flex;
+        gap: 0.35rem;
+        align-items: center;
+      }
+
+      .thread-header__meta svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .message-feed {
+        flex: 1;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding-right: 0.5rem;
+      }
+
+      .message-bubble {
+        max-width: 75%;
+        padding: 0.75rem 1rem;
+        border-radius: 18px;
+        background: rgba(15, 23, 42, 0.05);
+        align-self: flex-start;
+      }
+
+      .message-bubble--me {
+        background: rgba(255, 122, 0, 0.12);
+        align-self: flex-end;
+      }
+
+      .message-bubble small {
+        display: block;
+        margin-top: 0.35rem;
+        font-size: 0.78rem;
+        color: var(--text-muted);
+      }
+
+      .reply-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .reply-form textarea {
+        width: 100%;
+        min-height: 120px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        padding: 0.75rem 1rem;
+        font-family: inherit;
+        font-size: 1rem;
+        resize: vertical;
+      }
+
+      .button {
+        border: none;
+        border-radius: 999px;
+        padding: 0.75rem 1.5rem;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+        background: var(--accent-dark);
+      }
+
+      @media (max-width: 980px) {
+        nav {
+          display: none;
+        }
+
+        .messages-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .panel {
+          min-height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="logo" href="index.html" aria-label="GoGo ana sayfa">
+          <img src="assets/gogo-logo.svg" alt="GoGo" />
+        </a>
+        <nav>
+          <a href="index.html">Anasayfa</a>
+          <a href="ilanlar.html">İlanlar</a>
+          <a href="ilan-ver.html" data-requires-auth="sender">İlan Ver</a>
+        </nav>
+        <div class="header-actions">
+          <div class="nav__profile" data-auth-profile hidden>
+            <button
+              class="nav__profile-trigger"
+              type="button"
+              data-auth-profile-trigger
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-label="Hesap menüsünü aç"
+            >
+              <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4 0-7 2-7 4.2 0 1.1.9 1.8 2.5 1.8h9c1.6 0 2.5-.7 2.5-1.8C19 16 16 14 12 14Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+            <div class="nav__profile-menu" data-auth-profile-menu hidden role="menu">
+              <div class="nav__profile-header">
+                <span class="nav__profile-name" data-auth-name>Hesabım</span>
+                <span class="nav__profile-role" data-auth-role hidden></span>
+              </div>
+              <div class="nav__profile-divider"></div>
+              <a
+                class="nav__profile-link nav__profile-link--primary"
+                data-auth-trigger="login"
+                data-auth-role="sender"
+                href="giris.html"
+                role="menuitem"
+              >
+                <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M14 3h7v18h-7v-2h5V5h-5ZM3.29 11.29l3-3 1.42 1.42L6.41 11H16v2H6.41l1.3 1.29-1.42 1.42-3-3a1 1 0 0 1 0-1.42Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Giriş Yap / Kayıt Ol
+              </a>
+              <a class="nav__profile-link" href="ilanlar.html#my" data-auth-visible="sender" role="menuitem">
+                <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M5 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Zm2 0h10v1H7Zm0 3h10v9H7Zm2 2v2h6v-2Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                İlanlarım
+              </a>
+              <a
+                class="nav__profile-link"
+                href="mesajlarim.html"
+                data-auth-visible="sender"
+                data-requires-auth="sender"
+                data-message-link
+                role="menuitem"
+              >
+                <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M4 4h16a2 2 0 0 1 2 2v9.5a2 2 0 0 1-2 2H8.83L4 21.5V6a2 2 0 0 1 2-2Zm0 2v11.38L7.38 15H20V6Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span>Mesajlarım</span>
+                <span class="nav__badge" data-message-badge hidden>0</span>
+              </a>
+              <a class="nav__profile-link" href="randevu.html" data-auth-visible="sender" role="menuitem">
+                <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M7 3h2v2h6V3h2v2h3v16H4V5h3Zm12 6H5v10h14Zm-9 3h2v2H10Zm4 0h2v2h-2Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Kargo Durumlarım
+              </a>
+              <a class="nav__profile-link" href="randevu.html#hareket" data-auth-visible="driver" role="menuitem">
+                <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M4 5h4l2 3h10v6h-3l-2 3H4Zm2 2v8h8.17l2-3H18V10H9.83l-2-3Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Kargo Hareket Durumu
+              </a>
+              <a class="nav__profile-link" href="giris.html#ayarlar" role="menuitem">
+                <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 15a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm8-3a1 1 0 0 0-.52-.88l-1.54-.88.06-1.78a1 1 0 0 0-.29-.73l-1.5-1.5a1 1 0 0 0-.73-.29l-1.78.06-.88-1.54A1 1 0 0 0 12 2h-2a1 1 0 0 0-.88.52l-.88 1.54-1.78-.06a1 1 0 0 0-.73.29l-1.5 1.5a1 1 0 0 0-.29.73l.06 1.78-1.54.88A1 1 0 0 0 2 12v2a1 1 0 0 0 .52.88l1.54.88-.06 1.78a1 1 0 0 0 .29.73l1.5 1.5a1 1 0 0 0 .73.29l1.78-.06.88 1.54A1 1 0 0 0 10 22h2a1 1 0 0 0 .88-.52l.88-1.54 1.78.06a1 1 0 0 0 .73-.29l1.5-1.5a1 1 0 0 0 .29-.73l-.06-1.78 1.54-.88A1 1 0 0 0 20 14Zm-2 1.38-1.22.7a1 1 0 0 0-.49.91l.05 1.42-1 .95-1.42-.05a1 1 0 0 0-.91.49L12.88 20h-1.76l-.69-1.22a1 1 0 0 0-.91-.49l-1.42.05-1-.95.05-1.42a1 1 0 0 0-.49-.91L5 15.38V13l1.22-.7a1 1 0 0 0 .49-.91l-.05-1.42 1-.95 1.42.05a1 1 0 0 0 .91-.49L11.12 4h1.76l.69 1.22a1 1 0 0 0 .91.49l1.42-.05 1 .95-.05 1.42a1 1 0 0 0 .49.91L19 11.05Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Ayarlar
+              </a>
+              <button
+                class="nav__profile-link nav__profile-link--danger"
+                type="button"
+                data-auth-trigger="logout"
+                role="menuitem"
+              >
+                <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M14 3h7v18h-7v-2h5V5h-5ZM3.29 11.29l3-3 1.42 1.42L6.41 11H16v2H6.41l1.3 1.29-1.42 1.42-3-3a1 1 0 0 1 0-1.42Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Çıkış Yap
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Gönderici paneli</p>
+        <h1>Mesaj kutun, GoGo üzerinde.</h1>
+        <p>
+          Yayınladığın ilanlara sürücülerden gelen tüm mesajları tek bir yerden takip et,
+          sohbeti sürdür ve bir sonraki adıma hızlıca geç.
+        </p>
+      </section>
+
+      <section class="messages-layout">
+        <article class="panel panel--list">
+          <header>
+            <h2 class="panel__title">Sohbetlerim</h2>
+          </header>
+          <div class="conversation-list" id="conversationList"></div>
+          <div class="conversation-empty" id="conversationEmpty" hidden>
+            Henüz mesajlaşma bulunmuyor. Bir sürücü ilanına yanıt verdiğinde burada görünecek.
+          </div>
+        </article>
+        <article class="panel">
+          <div class="thread-header" id="threadHeader" hidden>
+            <h3 class="thread-header__title" data-thread-title></h3>
+            <div class="thread-header__meta">
+              <span>
+                <svg fill="none" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4 0-7 2-7 4v1h14v-1c0-2-3-4-7-4Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span data-thread-driver>—</span>
+              </span>
+              <span>
+                <svg fill="none" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M3 4h18v2H3Zm0 7h18v2H3Zm0 7h18v2H3Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span data-thread-status>—</span>
+              </span>
+              <span>
+                <svg fill="none" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 8a4 4 0 1 1-4 4 4 4 0 0 1 4-4Zm0-6a10 10 0 0 1 7.74 16.2l2 3.35-1.72 1-2-3.36a9.93 9.93 0 0 1-11 0l-2 3.36-1.72-1 2-3.35A10 10 0 1 1 12 2Zm0 2a8 8 0 0 0-5.55 13.73l.44.45-.06.1A7.94 7.94 0 0 0 12 20a8 8 0 0 0 5.17-1.72l-.06-.1.44-.45A8 8 0 0 0 12 4Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span data-thread-route>—</span>
+              </span>
+            </div>
+          </div>
+          <div class="thread-empty" id="threadEmpty">
+            Bir sohbet seçin veya yeni bir mesaj bekleyin.
+          </div>
+          <div class="message-feed" id="messageFeed" hidden></div>
+          <form class="reply-form" id="replyForm" hidden>
+            <textarea id="replyInput" placeholder="Yanıtınızı yazın" required></textarea>
+            <button class="button" type="submit">Mesaj Gönder</button>
+          </form>
+        </article>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        const SESSION_KEY = "yolkargoSession";
+        const CHAT_KEY = "yolkargoChats";
+        const LISTING_KEY = "yolkargoListings";
+        const loginLinks = Array.from(document.querySelectorAll('[data-auth-trigger="login"]'));
+        const logoutButtons = Array.from(document.querySelectorAll('[data-auth-trigger="logout"]'));
+        const guardedElements = Array.from(document.querySelectorAll('[data-requires-auth]'));
+        const profileWrapper = document.querySelector('[data-auth-profile]');
+        const profileTrigger = profileWrapper
+          ? profileWrapper.querySelector('[data-auth-profile-trigger]')
+          : null;
+        const profileMenu = profileWrapper
+          ? profileWrapper.querySelector('[data-auth-profile-menu]')
+          : null;
+        if (profileMenu) {
+          profileMenu.hidden = true;
+        }
+        const profileName = document.querySelector('[data-auth-name]');
+        const profileRole = document.querySelector('[data-auth-role]');
+        const roleVisibility = Array.from(document.querySelectorAll('[data-auth-visible]'));
+        const messageBadges = Array.from(document.querySelectorAll('[data-message-badge]'));
+        const messageLinks = Array.from(document.querySelectorAll('[data-message-link]'));
+        const ROLE_LABELS = {
+          sender: "Gönderici",
+          driver: "Sürücü",
+          admin: "Yönetici"
+        };
+        let profileMenuOpen = false;
+
+        function readSession() {
+          try {
+            const raw = window.localStorage.getItem(SESSION_KEY);
+            if (!raw) {
+              return null;
+            }
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== "object") {
+              return null;
+            }
+            if (!parsed.role || !parsed.id) {
+              return null;
+            }
+            return parsed;
+          } catch (error) {
+            console.warn("Oturum bilgisi okunamadı.", error);
+            return null;
+          }
+        }
+
+        function getRedirectTarget() {
+          const path = window.location.pathname.split('/').pop() || 'index.html';
+          const search = window.location.search || '';
+          const hash = window.location.hash || '';
+          return `${path}${search}${hash}`;
+        }
+
+        function buildLoginUrl(options = {}) {
+          const params = new URLSearchParams();
+          if (options.redirect) {
+            params.set('redirect', options.redirect);
+          }
+          if (options.role) {
+            params.set('role', options.role);
+          }
+          if (options.intent) {
+            params.set('intent', options.intent);
+          }
+          const query = params.toString();
+          return `giris.html${query ? `?${query}` : ''}`;
+        }
+
+        function readListingsMap() {
+          try {
+            const raw = window.localStorage.getItem(LISTING_KEY);
+            if (!raw) {
+              return new Map();
+            }
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) {
+              return new Map();
+            }
+            return new Map(
+              parsed
+                .filter((item) => item && typeof item === 'object' && item.id)
+                .map((item) => [item.id, item])
+            );
+          } catch (error) {
+            console.warn('İlan verileri okunamadı', error);
+            return new Map();
+          }
+        }
+
+        function readConversations() {
+          try {
+            const raw = window.localStorage.getItem(CHAT_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            console.warn('Sohbet verileri okunamadı', error);
+            return [];
+          }
+        }
+
+        function resolveConversationOwner(conversation, listing, session) {
+          if (conversation && conversation.ownerId) {
+            return conversation.ownerId;
+          }
+          if (listing && listing.ownerId) {
+            return listing.ownerId;
+          }
+          if (
+            listing &&
+            session &&
+            listing.senderEmail &&
+            session.email &&
+            listing.senderEmail.toLowerCase() === session.email.toLowerCase()
+          ) {
+            return session.id;
+          }
+          return null;
+        }
+
+        function updateMessageBadges(session) {
+          if (!messageBadges.length && !messageLinks.length) {
+            return;
+          }
+          messageLinks.forEach((link) => link.removeAttribute('data-has-unread'));
+          if (!session || session.role !== 'sender') {
+            messageBadges.forEach((badge) => {
+              badge.hidden = true;
+            });
+            return;
+          }
+          const listings = readListingsMap();
+          const conversations = readConversations();
+          let unread = 0;
+          conversations.forEach((conversation) => {
+            const listing = listings.get(conversation.listingId);
+            const ownerId = resolveConversationOwner(conversation, listing, session);
+            if (ownerId === session.id && conversation.unreadForSender) {
+              unread += 1;
+            }
+          });
+          messageBadges.forEach((badge) => {
+            if (unread > 0) {
+              badge.textContent = unread > 9 ? '9+' : `${unread}`;
+              badge.hidden = false;
+            } else {
+              badge.hidden = true;
+            }
+          });
+          const hasUnread = unread > 0;
+          messageLinks.forEach((link) => {
+            if (hasUnread) {
+              link.setAttribute('data-has-unread', 'true');
+            } else {
+              link.removeAttribute('data-has-unread');
+            }
+          });
+        }
+
+        function closeProfileMenu() {
+          if (!profileTrigger || !profileMenu) {
+            return;
+          }
+          profileMenu.hidden = true;
+          profileTrigger.setAttribute('aria-expanded', 'false');
+          profileMenuOpen = false;
+        }
+
+        function openProfileMenu() {
+          if (!profileTrigger || !profileMenu) {
+            return;
+          }
+          profileMenu.hidden = false;
+          profileTrigger.setAttribute('aria-expanded', 'true');
+          profileMenuOpen = true;
+        }
+
+        function toggleProfileMenu() {
+          if (profileMenuOpen) {
+            closeProfileMenu();
+          } else {
+            openProfileMenu();
+          }
+        }
+
+        function syncRoleVisibility(session) {
+          roleVisibility.forEach((element) => {
+            const role = element.getAttribute('data-auth-visible');
+            if (!session) {
+              element.hidden = true;
+              return;
+            }
+            if (!role || session.role === role) {
+              element.hidden = false;
+            } else {
+              element.hidden = true;
+            }
+          });
+        }
+
+        function updateNav() {
+          const session = readSession();
+          const redirect = getRedirectTarget();
+
+          loginLinks.forEach((link) => {
+            if (session) {
+              link.hidden = true;
+              return;
+            }
+            link.hidden = false;
+            const role = link.getAttribute('data-auth-role') || undefined;
+            const intent = link.getAttribute('data-auth-intent') || 'login';
+            link.setAttribute(
+              'href',
+              buildLoginUrl({
+                role,
+                intent,
+                redirect
+              })
+            );
+          });
+
+          logoutButtons.forEach((button) => {
+            button.hidden = !session;
+          });
+
+          if (profileWrapper) {
+            profileWrapper.hidden = false;
+            if (profileTrigger) {
+              profileTrigger.setAttribute(
+                'aria-label',
+                session ? 'Hesap menüsünü aç' : 'Giriş seçeneklerini aç'
+              );
+            }
+            if (session) {
+              if (profileName) {
+                profileName.textContent = session.name || 'Hesabım';
+              }
+              if (profileRole) {
+                profileRole.textContent = ROLE_LABELS[session.role] || '';
+                profileRole.hidden = false;
+              }
+            } else {
+              if (profileName) {
+                profileName.textContent = 'GoGo hesabı';
+              }
+              if (profileRole) {
+                profileRole.textContent = '';
+                profileRole.hidden = true;
+              }
+            }
+            closeProfileMenu();
+          }
+
+          guardedElements.forEach((element) => {
+            element.removeAttribute('title');
+            const requiredRole = element.getAttribute('data-requires-auth');
+            if (!requiredRole) {
+              return;
+            }
+            if (session && session.role !== requiredRole) {
+              const message =
+                requiredRole === 'sender'
+                  ? 'Bu işlem için gönderici hesabı ile giriş yapmalısınız.'
+                  : 'Bu işlem için sürücü hesabı ile giriş yapmalısınız.';
+              element.setAttribute('title', message);
+            }
+          });
+
+          syncRoleVisibility(session);
+          updateMessageBadges(session);
+
+          window.YolkargoSession = session;
+          window.YolkargoAuth = {
+            getSession: readSession,
+            buildLoginUrl,
+            getRedirectTarget,
+            require(role, redirectTarget) {
+              const activeSession = readSession();
+              if (activeSession && (!role || activeSession.role === role)) {
+                return activeSession;
+              }
+              const intent = activeSession ? 'login' : 'register';
+              const destination = redirectTarget || getRedirectTarget();
+              const url = buildLoginUrl({
+                role: role || (activeSession ? activeSession.role : undefined),
+                intent,
+                redirect: destination
+              });
+              window.location.href = url;
+              return null;
+            }
+          };
+        }
+
+        function handleLogout(event) {
+          if (event) {
+            event.preventDefault();
+          }
+          try {
+            window.localStorage.removeItem(SESSION_KEY);
+          } catch (error) {
+            console.warn('Oturum kapatılamadı.', error);
+          }
+          closeProfileMenu();
+          updateNav();
+          window.location.href = buildLoginUrl({ intent: 'login', redirect: getRedirectTarget() });
+        }
+
+        function guardClick(event) {
+          const element = event.currentTarget;
+          const requiredRole = element.getAttribute('data-requires-auth');
+          const session = readSession();
+          if (session && (!requiredRole || session.role === requiredRole)) {
+            return;
+          }
+          event.preventDefault();
+          const intent = session ? 'login' : 'register';
+          const redirect = element.getAttribute('href') || getRedirectTarget();
+          window.location.href = buildLoginUrl({ role: requiredRole, intent, redirect });
+        }
+
+        logoutButtons.forEach((button) => {
+          button.addEventListener('click', handleLogout);
+        });
+
+        guardedElements.forEach((element) => {
+          element.addEventListener('click', guardClick);
+        });
+
+        if (profileTrigger) {
+          profileTrigger.addEventListener('click', (event) => {
+            event.preventDefault();
+            toggleProfileMenu();
+          });
+        }
+
+        document.addEventListener('click', (event) => {
+          if (!profileMenuOpen || !profileWrapper) {
+            return;
+          }
+          if (!profileWrapper.contains(event.target)) {
+            closeProfileMenu();
+          }
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && profileMenuOpen) {
+            closeProfileMenu();
+          }
+        });
+
+        window.addEventListener('storage', (event) => {
+          if (event.key === SESSION_KEY) {
+            updateNav();
+          }
+          if (event.key === CHAT_KEY) {
+            updateMessageBadges(window.YolkargoSession || readSession());
+          }
+        });
+
+        document.addEventListener('nav:messages-updated', () => {
+          updateMessageBadges(window.YolkargoSession || readSession());
+        });
+
+        updateNav();
+      })();
+    </script>
+
+    <script>
+      (function () {
+        const CHAT_KEY = 'yolkargoChats';
+        const LISTING_KEY = 'yolkargoListings';
+        const loginRedirect = 'giris.html?role=sender&intent=login&redirect=mesajlarim.html';
+        const listEl = document.getElementById('conversationList');
+        const emptyListEl = document.getElementById('conversationEmpty');
+        const threadEmpty = document.getElementById('threadEmpty');
+        const threadHeader = document.getElementById('threadHeader');
+        const threadTitle = document.querySelector('[data-thread-title]');
+        const threadDriver = document.querySelector('[data-thread-driver]');
+        const threadStatus = document.querySelector('[data-thread-status]');
+        const threadRoute = document.querySelector('[data-thread-route]');
+        const messageFeed = document.getElementById('messageFeed');
+        const replyForm = document.getElementById('replyForm');
+        const replyInput = document.getElementById('replyInput');
+
+        let allConversations = [];
+        let listings = new Map();
+        let session = null;
+        let activeConversationId = null;
+        let activeConversation = null;
+        let cachedEntries = [];
+
+        function ensureSession() {
+          const current = window.YolkargoSession;
+          if (current && current.role === 'sender') {
+            return current;
+          }
+          window.location.href = loginRedirect;
+          return null;
+        }
+
+        function readListings() {
+          try {
+            const raw = window.localStorage.getItem(LISTING_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            console.warn('İlan verileri okunamadı', error);
+            return [];
+          }
+        }
+
+        function readChats() {
+          try {
+            const raw = window.localStorage.getItem(CHAT_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            console.warn('Sohbet verileri okunamadı', error);
+            return [];
+          }
+        }
+
+        function writeChats(conversations) {
+          try {
+            window.localStorage.setItem(CHAT_KEY, JSON.stringify(conversations));
+            document.dispatchEvent(new CustomEvent('nav:messages-updated'));
+          } catch (error) {
+            console.error('Sohbetler kaydedilemedi', error);
+          }
+        }
+
+        function createId(prefix) {
+          const random = Math.random().toString(36).slice(2, 10);
+          return `${prefix}-${Date.now().toString(36)}-${random}`;
+        }
+
+        function normalizeMessage(message, defaultRole) {
+          const normalized = message && typeof message === 'object' ? message : {};
+          if (!normalized.id) {
+            normalized.id = createId('msg');
+          }
+          if (!normalized.createdAt) {
+            normalized.createdAt = new Date().toISOString();
+          }
+          if (!normalized.authorRole) {
+            if (normalized.sender === 'me') {
+              normalized.authorRole = defaultRole === 'driver' ? 'driver' : 'sender';
+            } else if (normalized.sender === 'sender') {
+              normalized.authorRole = 'sender';
+            } else {
+              normalized.authorRole = defaultRole || 'driver';
+            }
+          }
+          return normalized;
+        }
+
+        function normalizeConversation(conversation, listing) {
+          if (!conversation || typeof conversation !== 'object') {
+            return null;
+          }
+          if (!conversation.id) {
+            conversation.id = createId('chat');
+          }
+          if (!Array.isArray(conversation.messages)) {
+            conversation.messages = [];
+          }
+          conversation.messages = conversation.messages.map((message) =>
+            normalizeMessage(message, 'driver')
+          );
+          if (listing && listing.ownerId && !conversation.ownerId) {
+            conversation.ownerId = listing.ownerId;
+          }
+          if (typeof conversation.unreadForSender !== 'boolean') {
+            conversation.unreadForSender = false;
+          }
+          if (typeof conversation.unreadForDriver !== 'boolean') {
+            conversation.unreadForDriver = false;
+          }
+          return conversation;
+        }
+
+        function formatDate(value) {
+          try {
+            const date = value ? new Date(value) : new Date();
+            return new Intl.DateTimeFormat('tr-TR', {
+              day: '2-digit',
+              month: 'short',
+              hour: '2-digit',
+              minute: '2-digit'
+            }).format(date);
+          } catch (error) {
+            return value || '';
+          }
+        }
+
+        function escapeHtml(value) {
+          if (value === undefined || value === null) {
+            return '';
+          }
+          return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+        }
+
+        function refreshData(selectId) {
+          session = ensureSession();
+          if (!session) {
+            return;
+          }
+          listings = new Map(readListings().map((item) => [item.id, item]));
+          allConversations = readChats();
+          cachedEntries = allConversations
+            .map((conversation) => {
+              const listing = listings.get(conversation.listingId);
+              const normalized = normalizeConversation(conversation, listing);
+              if (
+                !normalized.ownerId &&
+                listing &&
+                listing.senderEmail &&
+                session.email &&
+                listing.senderEmail.toLowerCase() === session.email.toLowerCase()
+              ) {
+                normalized.ownerId = session.id;
+              }
+              return { conversation: normalized, listing };
+            })
+            .filter((entry) => entry.conversation && entry.conversation.ownerId === session.id)
+            .sort((a, b) => {
+              const aTime = new Date(a.conversation.updatedAt || 0).getTime();
+              const bTime = new Date(b.conversation.updatedAt || 0).getTime();
+              return bTime - aTime;
+            });
+
+          renderConversationList(cachedEntries);
+          if (cachedEntries.length) {
+            const targetId = selectId || cachedEntries[0].conversation.id;
+            selectConversation(targetId);
+          } else {
+            showThread(null);
+          }
+        }
+
+        function renderConversationList(items) {
+          if (!items.length) {
+            if (listEl) {
+              listEl.innerHTML = '';
+            }
+            if (emptyListEl) {
+              emptyListEl.hidden = false;
+            }
+            return;
+          }
+          emptyListEl.hidden = true;
+          listEl.innerHTML = items
+            .map(({ conversation, listing }) => {
+              const lastMessage = conversation.messages[conversation.messages.length - 1];
+              const excerpt = lastMessage
+                ? `${lastMessage.authorRole === 'driver' ? 'Sürücü' : 'Siz'}: ${escapeHtml(
+                    lastMessage.text
+                  ).slice(0, 80)}`
+                : 'Mesaj yok';
+              const route = listing
+                ? `${escapeHtml(listing.pickupCity || '?')} ➜ ${escapeHtml(listing.dropoffCity || '?')}`
+                : 'İlan';
+              const unreadBadge = conversation.unreadForSender
+                ? '<span class="conversation-card__badge">Yeni</span>'
+                : '';
+              const ownerName = listing && listing.senderName ? listing.senderName : 'İlan sahibiyim';
+              return `
+                <button class="conversation-card" type="button" data-conversation-id="${conversation.id}">
+                  <div class="conversation-card__title">${route}</div>
+                  <div class="conversation-card__meta">${escapeHtml(ownerName)} · ${formatDate(
+                conversation.updatedAt
+              )}</div>
+                  <div class="conversation-card__excerpt">${excerpt}</div>
+                  ${unreadBadge}
+                </button>
+              `;
+            })
+            .join('');
+        }
+
+        function markActiveConversation(conversationId) {
+          const items = document.querySelectorAll('[data-conversation-id]');
+          items.forEach((button) => {
+            const isActive = button.getAttribute('data-conversation-id') === conversationId;
+            button.classList.toggle('conversation-card--active', Boolean(isActive));
+          });
+        }
+
+        function showThread(entry) {
+          if (!entry || !entry.conversation) {
+            if (threadHeader) {
+              threadHeader.hidden = true;
+            }
+            if (threadEmpty) {
+              threadEmpty.hidden = false;
+            }
+            if (messageFeed) {
+              messageFeed.hidden = true;
+              messageFeed.innerHTML = '';
+            }
+            if (replyForm) {
+              replyForm.hidden = true;
+            }
+            return;
+          }
+
+          const { conversation, listing } = entry;
+          const routeText = listing
+            ? `${listing.pickupCity || 'Çıkış'} ➜ ${listing.dropoffCity || 'Varış'}`
+            : 'İlan sohbeti';
+          const driverLabel = conversation.driverName || 'Sürücü bilgisi paylaşılmadı';
+          const statusLabel = listing && listing.status ? listing.status : 'Beklemede';
+          const addresses = listing
+            ? `${listing.pickupAddress || listing.pickupCity || ''} → ${listing.dropoffAddress || listing.dropoffCity || ''}`
+            : 'Konum bilgisi yok';
+
+          if (threadHeader && threadTitle && threadDriver && threadStatus && threadRoute) {
+            threadHeader.hidden = false;
+            threadTitle.textContent = routeText;
+            threadDriver.textContent = driverLabel;
+            threadStatus.textContent = statusLabel;
+            threadRoute.textContent = addresses;
+          }
+
+          if (threadEmpty) {
+            threadEmpty.hidden = true;
+          }
+          if (messageFeed) {
+            messageFeed.hidden = false;
+            if (!conversation.messages.length) {
+              messageFeed.innerHTML = '<div class="conversation-empty">Henüz mesaj yok. İlk yanıtı gönder.</div>';
+            } else {
+              messageFeed.innerHTML = conversation.messages
+                .map((message) => {
+                  const roleClass =
+                    message.authorRole === 'sender'
+                      ? 'message-bubble message-bubble--me'
+                      : 'message-bubble';
+                  const safeText = escapeHtml(message.text || '').replace(/\n/g, '<br />');
+                  return `
+                    <div class="${roleClass}">
+                      <div>${safeText}</div>
+                      <small>${formatDate(message.createdAt)}</small>
+                    </div>
+                  `;
+                })
+                .join('');
+              messageFeed.scrollTop = messageFeed.scrollHeight;
+            }
+          }
+          if (replyForm) {
+            replyForm.hidden = false;
+          }
+        }
+
+        function persistConversation(conversation, options = {}) {
+          if (options.touch !== false) {
+            conversation.updatedAt = new Date().toISOString();
+          }
+          const others = allConversations.filter((item) => item.id !== conversation.id);
+          allConversations = [conversation, ...others];
+          writeChats(allConversations);
+        }
+
+        function selectConversation(conversationId) {
+          const entry = cachedEntries.find((item) => item.conversation.id === conversationId);
+          if (!entry) {
+            activeConversation = null;
+            activeConversationId = null;
+            showThread(null);
+            return;
+          }
+          activeConversationId = conversationId;
+          activeConversation = entry.conversation;
+          if (activeConversation.unreadForSender) {
+            activeConversation.unreadForSender = false;
+            persistConversation(activeConversation, { touch: false });
+          }
+          markActiveConversation(conversationId);
+          showThread(entry);
+        }
+
+        if (listEl) {
+          listEl.addEventListener('click', (event) => {
+            const button = event.target.closest('[data-conversation-id]');
+            if (!button) {
+              return;
+            }
+            const conversationId = button.getAttribute('data-conversation-id');
+            selectConversation(conversationId);
+          });
+        }
+
+        if (replyForm) {
+          replyForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (!activeConversation || !replyInput || !session) {
+              return;
+            }
+            const value = replyInput.value.trim();
+            if (!value) {
+              return;
+            }
+            activeConversation.messages.push({
+              id: createId('msg'),
+              authorRole: 'sender',
+              authorName: session.name || 'Gönderici',
+              text: value,
+              createdAt: new Date().toISOString()
+            });
+            activeConversation.unreadForDriver = true;
+            activeConversation.unreadForSender = false;
+            replyInput.value = '';
+            persistConversation(activeConversation, { touch: true });
+            showThread({
+              conversation: activeConversation,
+              listing: listings.get(activeConversation.listingId)
+            });
+          });
+        }
+
+        window.addEventListener('storage', (event) => {
+          if (event.key === CHAT_KEY) {
+            refreshData(activeConversationId);
+          }
+        });
+
+        refreshData();
+      })();
+    </script>
+  </body>
+</html>

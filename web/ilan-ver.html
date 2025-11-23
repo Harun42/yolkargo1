@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>İlan Oluştur | GoGo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-page: #f3f6fc;
+        --bg-card: #ffffff;
+        --text-dark: #0f172a;
+        --text-muted: #475569;
+        --accent: #ff7a00;
+        --accent-dark: #ff6700;
+        --border: #d9deea;
+        --radius-lg: 24px;
+        --radius-md: 16px;
+        --radius-sm: 12px;
+        --shadow-card: 0 32px 55px rgba(15, 23, 42, 0.12);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: var(--bg-page);
+        color: var(--text-dark);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(1080px, 92vw);
+        margin: 0 auto;
+      }
+
+      .page-header {
+        background: radial-gradient(circle at top left, #ff8a1f, #ff7a00 34%, #6b2cff);
+        color: #fff;
+        padding: 2.4rem 0 3rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .page-header::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(9, 15, 29, 0.2), rgba(9, 15, 29, 0.85));
+        opacity: 0.9;
+      }
+
+      .page-header__inner {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .logo img {
+        height: 42px;
+        width: auto;
+        display: block;
+      }
+
+      .page-header__actions {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+      }
+
+      .page-header__back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      .page-header__back::before {
+        content: "←";
+        font-size: 1.1rem;
+      }
+
+      .nav__profile {
+        position: relative;
+      }
+
+      .nav__profile-trigger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .nav__profile-trigger:hover,
+      .nav__profile-trigger[aria-expanded="true"] {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.18);
+        border-color: rgba(255, 255, 255, 0.6);
+      }
+
+      .nav__profile-trigger svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .nav__profile-menu {
+        position: absolute;
+        top: calc(100% + 0.75rem);
+        right: 0;
+        min-width: 230px;
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        background: #fff;
+        color: var(--text-dark);
+        box-shadow: var(--shadow-card);
+        display: grid;
+        gap: 0.35rem;
+        z-index: 30;
+      }
+
+      .nav__profile-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        margin-bottom: 0.35rem;
+      }
+
+      .nav__profile-name {
+        font-weight: 600;
+        font-size: 0.98rem;
+      }
+
+      .nav__profile-role {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+      }
+
+      .nav__profile-divider {
+        height: 1px;
+        background: rgba(15, 23, 42, 0.08);
+        margin: 0.25rem 0 0.35rem;
+      }
+
+      .nav__profile-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.55rem 0.65rem;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 0.92rem;
+        color: inherit;
+        transition: background 0.2s ease;
+      }
+
+      .nav__profile-link svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .nav__profile-link:hover {
+        background: rgba(15, 23, 42, 0.08);
+      }
+
+      .nav__profile-link--danger {
+        color: #dc2626;
+      }
+
+      .nav__profile-link--danger:hover {
+        background: rgba(220, 38, 38, 0.1);
+      }
+
+      .nav__profile-link--primary {
+        background: rgba(255, 122, 0, 0.12);
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .nav__profile-link--primary:hover {
+        background: rgba(255, 122, 0, 0.22);
+      }
+
+      .header-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.6rem 1.2rem;
+        border-radius: 999px;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.32);
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .header-button:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      .header-button--logout {
+        background: rgba(255, 255, 255, 0.22);
+        border-color: rgba(255, 255, 255, 0.35);
+      }
+
+      .intro {
+        margin-top: 2.6rem;
+        position: relative;
+      }
+
+      .intro__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.16);
+        color: #fff;
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .intro__title {
+        margin: 1rem 0 0.8rem;
+        font-size: clamp(2rem, 2.4vw + 1.2rem, 2.6rem);
+        max-width: 620px;
+      }
+
+      .intro__text {
+        margin: 0;
+        font-size: 1.05rem;
+        max-width: 640px;
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      .form-section {
+        margin-top: -4.8rem;
+        padding-bottom: 4rem;
+      }
+
+      .form-shell {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-card);
+        padding: clamp(2rem, 2vw + 1.5rem, 3rem);
+        display: grid;
+        grid-template-columns: 1.25fr 0.85fr;
+        gap: clamp(2rem, 3vw, 3.5rem);
+        position: relative;
+      }
+
+      .form-shell::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        background: linear-gradient(135deg, rgba(255, 122, 0, 0.25), rgba(75, 85, 99, 0.1));
+        z-index: -1;
+        opacity: 0.7;
+      }
+
+      .form {
+        display: grid;
+        gap: 2rem;
+      }
+
+      .fieldset {
+        border: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 1.2rem;
+      }
+
+      .fieldset__legend {
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+
+      .input-grid {
+        display: grid;
+        gap: 1.1rem 1.4rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--text-dark);
+      }
+
+      input,
+      select,
+      textarea {
+        padding: 0.85rem 1rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        font: inherit;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        background: #fff;
+      }
+
+      textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.15);
+      }
+
+      .checkbox-row {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-weight: 600;
+        font-size: 0.92rem;
+      }
+
+      .checkbox-row input {
+        width: 1.1rem;
+        height: 1.1rem;
+        accent-color: var(--accent);
+      }
+
+      .form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        padding: 0.95rem 1.8rem;
+        border-radius: 999px;
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 14px 35px rgba(255, 122, 0, 0.32);
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 40px rgba(255, 122, 0, 0.4);
+      }
+
+      .form-note {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        max-width: 420px;
+      }
+
+      .sidebar {
+        background: linear-gradient(160deg, rgba(255, 122, 0, 0.12), rgba(9, 15, 29, 0.05));
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(255, 122, 0, 0.25);
+        padding: 1.8rem 1.6rem;
+        display: grid;
+        gap: 1.2rem;
+        height: fit-content;
+      }
+
+      .sidebar h3 {
+        margin: 0;
+        font-size: 1.1rem;
+      }
+
+      .sidebar p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+
+      .sidebar ul {
+        margin: 0;
+        padding-left: 1.2rem;
+        color: var(--text-muted);
+        display: grid;
+        gap: 0.5rem;
+      }
+
+      .success-message {
+        display: none;
+        margin-top: 1rem;
+        padding: 0.9rem 1rem;
+        border-radius: var(--radius-sm);
+        background: rgba(56, 189, 98, 0.12);
+        color: #166534;
+        border: 1px solid rgba(22, 163, 74, 0.24);
+        font-size: 0.95rem;
+      }
+
+      .success-message--visible {
+        display: block;
+      }
+
+      @media (max-width: 960px) {
+        .page-header__inner {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1.2rem;
+        }
+
+        .page-header__actions {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .form-shell {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          order: -1;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .page-header {
+          padding: 2rem 0 2.6rem;
+        }
+
+        .page-header__actions {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.75rem;
+        }
+
+        .page-header__back {
+          width: 100%;
+          justify-content: center;
+          background: rgba(255, 255, 255, 0.12);
+          border-radius: 999px;
+          padding: 0.65rem 0.85rem;
+        }
+
+        .nav__profile {
+          align-self: flex-end;
+        }
+
+        .intro__title {
+          font-size: 1.8rem;
+        }
+
+        .form-actions {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .page-header__inner {
+          gap: 1rem;
+        }
+
+        .form-shell {
+          padding: 1.6rem;
+        }
+
+        .sidebar {
+          padding: 1.4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="page-header">
+      <div class="container">
+        <div class="page-header__inner">
+          <a class="logo" href="index.html" aria-label="GoGo ana sayfa">
+            <img src="assets/gogo-logo.svg" alt="GoGo" />
+          </a>
+          <div class="page-header__actions">
+            <a class="page-header__back" href="ilanlar.html">İlan listesine dön</a>
+            <div class="nav__profile" data-auth-profile hidden>
+              <button
+                class="nav__profile-trigger"
+                type="button"
+                data-auth-profile-trigger
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-label="Hesap menüsünü aç"
+              >
+                <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4 0-7 2-7 4.2 0 1.1.9 1.8 2.5 1.8h9c1.6 0 2.5-.7 2.5-1.8C19 16 16 14 12 14Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+              <div class="nav__profile-menu" data-auth-profile-menu hidden role="menu">
+                <div class="nav__profile-header">
+                  <span class="nav__profile-name" data-auth-name>Hesabım</span>
+                  <span class="nav__profile-role" data-auth-role hidden></span>
+                </div>
+                <div class="nav__profile-divider"></div>
+                <a
+                  class="nav__profile-link nav__profile-link--primary"
+                  data-auth-trigger="login"
+                  data-auth-role="sender"
+                  href="giris.html"
+                  role="menuitem"
+                >
+                  <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M14 3h7v18h-7v-2h5V5h-5ZM3.29 11.29l3-3 1.42 1.42L6.41 11H16v2H6.41l1.3 1.29-1.42 1.42-3-3a1 1 0 0 1 0-1.42Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Giriş Yap / Kayıt Ol
+                </a>
+                <a class="nav__profile-link" href="ilanlar.html#my" data-auth-visible="sender" role="menuitem">
+                  <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M5 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Zm2 0h10v1H7Zm0 3h10v9H7Zm2 2v2h6v-2Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  İlanlarım
+                </a>
+                <a class="nav__profile-link" href="randevu.html" data-auth-visible="sender" role="menuitem">
+                  <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M7 3h2v2h6V3h2v2h3v16H4V5h3Zm12 6H5v10h14Zm-9 3h2v2H10Zm4 0h2v2h-2Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Kargo Durumlarım
+                </a>
+                <a class="nav__profile-link" href="randevu.html#hareket" data-auth-visible="driver" role="menuitem">
+                  <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M4 5h4l2 3h10v6h-3l-2 3H4Zm2 2v8h8.17l2-3H18V10H9.83l-2-3Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Kargo Hareket Durumu
+                </a>
+                <a class="nav__profile-link" href="giris.html#ayarlar" role="menuitem">
+                  <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M12 15a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm8-3a1 1 0 0 0-.52-.88l-1.54-.88.06-1.78a1 1 0 0 0-.29-.73l-1.5-1.5a1 1 0 0 0-.73-.29l-1.78.06-.88-1.54A1 1 0 0 0 12 2h-2a1 1 0 0 0-.88.52l-.88 1.54-1.78-.06a1 1 0 0 0-.73.29l-1.5 1.5a1 1 0 0 0-.29.73l.06 1.78-1.54.88A1 1 0 0 0 2 12v2a1 1 0 0 0 .52.88l1.54.88-.06 1.78a1 1 0 0 0 .29.73l1.5 1.5a1 1 0 0 0 .73.29l1.78-.06.88 1.54A1 1 0 0 0 10 22h2a1 1 0 0 0 .88-.52l.88-1.54 1.78.06a1 1 0 0 0 .73-.29l1.5-1.5a1 1 0 0 0 .29-.73l-.06-1.78 1.54-.88A1 1 0 0 0 20 14Zm-2 1.38-1.22.7a1 1 0 0 0-.49.91l.05 1.42-1 .95-1.42-.05a1 1 0 0 0-.91.49L12.88 20h-1.76l-.69-1.22a1 1 0 0 0-.91-.49l-1.42.05-1-.95.05-1.42a1 1 0 0 0-.49-.91L5 15.38V13l1.22-.7a1 1 0 0 0 .49-.91l-.05-1.42 1-.95 1.42.05a1 1 0 0 0 .91-.49L11.12 4h1.76l.69 1.22a1 1 0 0 0 .91.49l1.42-.05 1 .95-.05 1.42a1 1 0 0 0 .49.91L19 11.05Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Ayarlar
+                </a>
+                <button
+                  class="nav__profile-link nav__profile-link--danger"
+                  type="button"
+                  data-auth-trigger="logout"
+                  role="menuitem"
+                >
+                  <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9 21H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4v2H6v14h3Zm10.71-9.71-3-3-1.42 1.42L16.59 11H10v2h6.59l-1.3 1.29 1.42 1.42 3-3a1 1 0 0 0 0-1.42Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Çıkış Yap
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="intro">
+          <span class="intro__badge">Yeni ilan</span>
+          <h1 class="intro__title">Gönderini sürücülerle buluşturmak için ilanını hazırla</h1>
+          <p class="intro__text">
+            Aşağıdaki formu doldurarak çıkış ve varış bilgilerini, kargonun detaylarını ve seni en
+            hızlı şekilde ulaşabileceğimiz bilgileri paylaş. İlanın birkaç saniye içinde ana sayfada
+            yayınlanır.
+          </p>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section class="form-section">
+        <div class="container form-shell">
+          <form class="form" id="listingCreateForm">
+            <fieldset class="fieldset">
+              <legend class="fieldset__legend">Gönderici Bilgileri</legend>
+              <div class="input-grid">
+                <label for="sender-name">
+                  Ad Soyad
+                  <input id="sender-name" name="senderName" type="text" autocomplete="name" placeholder="Örn: Ayşe Kılıç" required />
+                </label>
+                <label for="sender-phone">
+                  Telefon
+                  <input id="sender-phone" name="senderPhone" type="tel" autocomplete="tel" placeholder="Örn: 05xx xxx xx xx" required />
+                </label>
+                <label for="sender-email">
+                  E-posta
+                  <input id="sender-email" name="senderEmail" type="email" autocomplete="email" placeholder="opsiyonel" />
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend class="fieldset__legend">Adres ve Rota Bilgileri</legend>
+              <div class="input-grid">
+                <label for="pickup-city">
+                  Çıkış İli
+                  <input id="pickup-city" name="pickupCity" type="text" placeholder="Örn: İstanbul" required />
+                </label>
+                <label for="pickup-address">
+                  Çıkış Adresi
+                  <input id="pickup-address" name="pickupAddress" type="text" placeholder="Mahalle, ilçe, açık adres" required />
+                </label>
+                <label for="dropoff-city">
+                  Varış İli
+                  <input id="dropoff-city" name="dropoffCity" type="text" placeholder="Örn: Ankara" required />
+                </label>
+                <label for="dropoff-address">
+                  Varış Adresi
+                  <input id="dropoff-address" name="dropoffAddress" type="text" placeholder="Mahalle, ilçe, açık adres" required />
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend class="fieldset__legend">Kargo Detayları</legend>
+              <div class="input-grid">
+                <label for="cargo-date">
+                  Gönderim Tarihi
+                  <input id="cargo-date" name="cargoDate" type="date" required />
+                </label>
+                <label class="checkbox-row" for="date-flexible">
+                  <input id="date-flexible" name="dateFlexible" type="checkbox" />
+                  Tarihim esnek olabilir
+                </label>
+                <label for="package-size">
+                  Paket Boyutu
+                  <select id="package-size" name="packageSize" required>
+                    <option value="" disabled selected>Seçiniz</option>
+                    <option value="Küçük paket (0-10 kg)">Küçük paket (0-10 kg)</option>
+                    <option value="Orta paket (10-25 kg)">Orta paket (10-25 kg)</option>
+                    <option value="Büyük paket (25-40 kg)">Büyük paket (25-40 kg)</option>
+                    <option value="Ekstra hacimli (40 kg üzeri)">Ekstra hacimli (40 kg üzeri)</option>
+                  </select>
+                </label>
+                <label for="cargo-weight">
+                  Tahmini Ağırlık (kg)
+                  <input id="cargo-weight" name="cargoWeight" type="number" min="0" step="0.5" placeholder="Örn: 18" />
+                </label>
+                <label for="budget">
+                  Bütçe (₺)
+                  <input id="budget" name="budget" type="number" min="0" step="25" placeholder="Örn: 500" required />
+                </label>
+              </div>
+              <label for="cargo-notes">
+                Kargonun içeriği ve özel notlar
+                <textarea id="cargo-notes" name="cargoNotes" placeholder="Kırılacak ürünler, teslimat saatleri veya diğer beklentiler"></textarea>
+              </label>
+            </fieldset>
+
+            <div class="form-actions">
+              <button class="button" type="submit">İlanı oluştur ve yayına al</button>
+              <p class="form-note">
+                İlanınız GoGo ana sayfasında hemen görünür ve rota ile eşleşen sürücülere bildirim
+                gönderilir.
+              </p>
+            </div>
+            <div class="success-message" id="formSuccess">İlanınız kaydedildi, ilanlar sayfasına yönlendiriliyorsunuz…</div>
+          </form>
+
+          <aside class="sidebar">
+            <h3>İlan verirken dikkat edilecekler</h3>
+            <p>
+              Sürücülerin hızlıca dönüş yapabilmesi için rota ve kargo detaylarını mümkün olduğunca
+              açık girin.
+            </p>
+            <ul>
+              <li>Çıkış ve varış adreslerini mahalle ve ilçe belirterek yazın.</li>
+              <li>Hassas paketler için özel not alanını doldurun.</li>
+              <li>Telefon numaranızın güncel olduğundan emin olun.</li>
+              <li>Bütçe beklentinizi gerçekçi belirleyerek daha çok teklif alın.</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        const SESSION_KEY = "yolkargoSession";
+        const loginLinks = Array.from(document.querySelectorAll('[data-auth-trigger="login"]'));
+        const logoutButtons = Array.from(
+          document.querySelectorAll('[data-auth-trigger="logout"]')
+        );
+        const guardedElements = Array.from(document.querySelectorAll('[data-requires-auth]'));
+        const profileWrapper = document.querySelector('[data-auth-profile]');
+        const profileTrigger = profileWrapper
+          ? profileWrapper.querySelector('[data-auth-profile-trigger]')
+          : null;
+        const profileMenu = profileWrapper
+          ? profileWrapper.querySelector('[data-auth-profile-menu]')
+          : null;
+        if (profileMenu) {
+          profileMenu.hidden = true;
+        }
+        const profileName = document.querySelector('[data-auth-name]');
+        const profileRole = document.querySelector('[data-auth-role]');
+        const roleVisibility = Array.from(document.querySelectorAll('[data-auth-visible]'));
+        const ROLE_LABELS = {
+          sender: "Gönderici",
+          driver: "Sürücü",
+          admin: "Yönetici"
+        };
+        let profileMenuOpen = false;
+
+        function readSession() {
+          try {
+            const raw = window.localStorage.getItem(SESSION_KEY);
+            if (!raw) {
+              return null;
+            }
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== "object") {
+              return null;
+            }
+            if (!parsed.role || !parsed.id) {
+              return null;
+            }
+            return parsed;
+          } catch (error) {
+            console.warn("Oturum bilgisi okunamadı.", error);
+            return null;
+          }
+        }
+
+        function getRedirectTarget() {
+          const path = window.location.pathname.split("/").pop() || "ilan-ver.html";
+          const search = window.location.search || "";
+          const hash = window.location.hash || "";
+          return `${path}${search}${hash}`;
+        }
+
+        function buildLoginUrl(options = {}) {
+          const params = new URLSearchParams();
+          if (options.redirect) {
+            params.set("redirect", options.redirect);
+          }
+          if (options.role) {
+            params.set("role", options.role);
+          }
+          if (options.intent) {
+            params.set("intent", options.intent);
+          }
+          const query = params.toString();
+          return `giris.html${query ? `?${query}` : ""}`;
+        }
+
+        function closeProfileMenu() {
+          if (!profileTrigger || !profileMenu) {
+            return;
+          }
+          profileMenu.hidden = true;
+          profileTrigger.setAttribute("aria-expanded", "false");
+          profileMenuOpen = false;
+        }
+
+        function openProfileMenu() {
+          if (!profileTrigger || !profileMenu) {
+            return;
+          }
+          profileMenu.hidden = false;
+          profileTrigger.setAttribute("aria-expanded", "true");
+          profileMenuOpen = true;
+        }
+
+        function toggleProfileMenu() {
+          if (profileMenuOpen) {
+            closeProfileMenu();
+          } else {
+            openProfileMenu();
+          }
+        }
+
+        function syncRoleVisibility(session) {
+          roleVisibility.forEach((element) => {
+            const role = element.getAttribute("data-auth-visible");
+            if (!session) {
+              element.hidden = true;
+              return;
+            }
+            if (!role || session.role === role) {
+              element.hidden = false;
+            } else {
+              element.hidden = true;
+            }
+          });
+        }
+
+        function updateNav() {
+          const session = readSession();
+          const redirect = getRedirectTarget();
+
+          loginLinks.forEach((link) => {
+            if (session) {
+              link.hidden = true;
+              return;
+            }
+            link.hidden = false;
+            const role = link.getAttribute("data-auth-role") || undefined;
+            const intent = link.getAttribute("data-auth-intent") || "login";
+            link.setAttribute(
+              "href",
+              buildLoginUrl({
+                role,
+                intent,
+                redirect
+              })
+            );
+          });
+
+          logoutButtons.forEach((button) => {
+            button.hidden = !session;
+          });
+
+          if (profileWrapper) {
+            profileWrapper.hidden = false;
+            if (profileTrigger) {
+              profileTrigger.setAttribute(
+                "aria-label",
+                session ? "Hesap menüsünü aç" : "Giriş seçeneklerini aç"
+              );
+            }
+            if (session) {
+              if (profileName) {
+                profileName.textContent = session.name || "Hesabım";
+              }
+              if (profileRole) {
+                profileRole.textContent = ROLE_LABELS[session.role] || "";
+                profileRole.hidden = false;
+              }
+            } else {
+              if (profileName) {
+                profileName.textContent = "GoGo hesabı";
+              }
+              if (profileRole) {
+                profileRole.textContent = "";
+                profileRole.hidden = true;
+              }
+            }
+            closeProfileMenu();
+          }
+
+          guardedElements.forEach((element) => {
+            element.removeAttribute("title");
+            const requiredRole = element.getAttribute("data-requires-auth");
+            if (!requiredRole) {
+              return;
+            }
+            if (session && session.role !== requiredRole) {
+              const message =
+                requiredRole === "sender"
+                  ? "İlan vermek için gönderici hesabı ile giriş yapmalısınız."
+                  : "Bu işlem için sürücü hesabı ile giriş yapmalısınız.";
+              element.setAttribute("title", message);
+            }
+          });
+
+          syncRoleVisibility(session);
+
+          window.YolkargoSession = session;
+          window.YolkargoAuth = {
+            getSession: readSession,
+            buildLoginUrl,
+            getRedirectTarget,
+            require(role, redirectTarget) {
+              const activeSession = readSession();
+              if (activeSession && (!role || activeSession.role === role)) {
+                return activeSession;
+              }
+              const intent = activeSession ? "login" : "register";
+              const destination = redirectTarget || getRedirectTarget();
+              const url = buildLoginUrl({
+                role: role || (activeSession ? activeSession.role : undefined),
+                intent,
+                redirect: destination
+              });
+              window.location.href = url;
+              return null;
+            }
+          };
+        }
+
+        function handleLogout(event) {
+          if (event) {
+            event.preventDefault();
+          }
+          try {
+            window.localStorage.removeItem(SESSION_KEY);
+          } catch (error) {
+            console.warn("Oturum kapatılamadı.", error);
+          }
+          closeProfileMenu();
+          updateNav();
+          window.location.reload();
+        }
+
+        function guardClick(event) {
+          const element = event.currentTarget;
+          const requiredRole = element.getAttribute("data-requires-auth");
+          const session = readSession();
+          if (session && (!requiredRole || session.role === requiredRole)) {
+            return;
+          }
+          event.preventDefault();
+          if (session && requiredRole && session.role !== requiredRole) {
+            const message =
+              requiredRole === "sender"
+                ? "İlan vermek için gönderici hesabı ile giriş yapmalısınız."
+                : "Bu işlem için sürücü hesabı ile giriş yapmalısınız.";
+            alert(message);
+          }
+          const href = element.getAttribute("href") || getRedirectTarget();
+          const intent = session ? "login" : "register";
+          const url = buildLoginUrl({
+            role: requiredRole || (session ? session.role : undefined),
+            intent,
+            redirect: href
+          });
+          window.location.href = url;
+        }
+
+        logoutButtons.forEach((button) => {
+          button.addEventListener("click", handleLogout);
+        });
+
+        guardedElements.forEach((element) => {
+          element.addEventListener("click", guardClick);
+        });
+
+        if (profileTrigger) {
+          profileTrigger.addEventListener("click", (event) => {
+            event.preventDefault();
+            toggleProfileMenu();
+          });
+        }
+
+        if (profileWrapper) {
+          profileWrapper.addEventListener("focusout", (event) => {
+            if (!profileWrapper.contains(event.relatedTarget)) {
+              closeProfileMenu();
+            }
+          });
+        }
+
+        document.addEventListener("click", (event) => {
+          if (!profileMenuOpen || !profileWrapper) {
+            return;
+          }
+          if (!profileWrapper.contains(event.target)) {
+            closeProfileMenu();
+          }
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && profileMenuOpen) {
+            closeProfileMenu();
+          }
+        });
+
+        window.addEventListener("storage", (event) => {
+          if (event.key === SESSION_KEY) {
+            updateNav();
+          }
+        });
+
+        updateNav();
+      })();
+    </script>
+
+    <script>
+      (function () {
+        const STORAGE_KEY = "yolkargoListings";
+        const FLASH_KEY = "listingFlash";
+        const form = document.getElementById("listingCreateForm");
+        const successMessage = document.getElementById("formSuccess");
+        const loginRedirect = "giris.html?role=sender&intent=login&redirect=ilan-ver.html";
+
+        function ensureSession() {
+          if (typeof window === "undefined") {
+            return null;
+          }
+          const session = window.YolkargoSession;
+          if (session && session.role === "sender") {
+            return session;
+          }
+          window.location.href = loginRedirect;
+          return null;
+        }
+
+        if (!ensureSession() || !form) {
+          return;
+        }
+
+        const clean = (value) => (typeof value === "string" ? value.trim() : "");
+
+        function createId(prefix = "listing") {
+          const random = Math.random().toString(36).slice(2, 10);
+          return `${prefix}-${Date.now().toString(36)}-${random}`;
+        }
+
+        function readExistingListings() {
+          try {
+            const raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) {
+              return [];
+            }
+
+            let mutated = false;
+            const withIds = parsed.map((item) => {
+              if (!item || typeof item !== "object") {
+                return item;
+              }
+
+              const updated = { ...item };
+              let itemMutated = false;
+
+              if (!updated.id) {
+                updated.id = createId("user");
+                itemMutated = true;
+              }
+
+              if (!updated.status) {
+                updated.status = "pending";
+                itemMutated = true;
+              }
+
+              if (!Array.isArray(updated.statusHistory) || !updated.statusHistory.length) {
+                const createdAt = updated.createdAt || new Date().toISOString();
+                updated.statusHistory = [
+                  {
+                    status: updated.status,
+                    note: "İlan kaydı oluşturuldu",
+                    timestamp: createdAt
+                  }
+                ];
+                itemMutated = true;
+              }
+
+              if (!updated.statusUpdatedAt) {
+                const lastEntry =
+                  updated.statusHistory[updated.statusHistory.length - 1]?.timestamp ||
+                  new Date().toISOString();
+                updated.statusUpdatedAt = lastEntry;
+                itemMutated = true;
+              }
+
+              if (itemMutated) {
+                mutated = true;
+                return updated;
+              }
+
+              return updated;
+            });
+
+            if (mutated) {
+              try {
+                window.localStorage.setItem(STORAGE_KEY, JSON.stringify(withIds));
+              } catch (error) {
+                console.warn("Güncellenmiş ilanlar kaydedilemedi.", error);
+              }
+            }
+
+            return withIds;
+          } catch (error) {
+            console.warn("Kayıtlı ilanlar okunamadı.", error);
+            return [];
+          }
+        }
+
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          const sessionCheck = ensureSession();
+          if (!sessionCheck) {
+            return;
+          }
+
+          if (!form.reportValidity()) {
+            return;
+          }
+
+          const formData = new FormData(form);
+          const now = new Date();
+          const createdAt = new Intl.DateTimeFormat("tr-TR", {
+            day: "2-digit",
+            month: "long"
+          }).format(now);
+
+          const rawBudget = formData.get("budget");
+          const budgetValue = Number(rawBudget);
+
+          const statusTimestamp = new Date().toISOString();
+          const listing = {
+            id: createId("user"),
+            senderName: clean(formData.get("senderName")),
+            senderPhone: clean(formData.get("senderPhone")),
+            senderEmail: clean(formData.get("senderEmail")),
+            pickupCity: clean(formData.get("pickupCity")),
+            pickupAddress: clean(formData.get("pickupAddress")),
+            dropoffCity: clean(formData.get("dropoffCity")),
+            dropoffAddress: clean(formData.get("dropoffAddress")),
+            cargoDate: formData.get("cargoDate"),
+            isFlexible: formData.get("dateFlexible") === "on",
+            packageSize: formData.get("packageSize"),
+            cargoWeight: clean(formData.get("cargoWeight")),
+            cargoNotes: clean(formData.get("cargoNotes")),
+            budget: Number.isFinite(budgetValue) ? budgetValue : rawBudget,
+            createdAt: `Bugün (${createdAt})`,
+            source: "user",
+            status: "pending",
+            statusUpdatedAt: statusTimestamp,
+            statusHistory: [
+              {
+                status: "pending",
+                note: "İlan oluşturuldu",
+                timestamp: statusTimestamp
+              }
+            ]
+          };
+
+          const listings = readExistingListings();
+          listings.unshift(listing);
+
+          try {
+            window.localStorage.setItem(STORAGE_KEY, JSON.stringify(listings));
+          } catch (error) {
+            console.error("İlan kaydedilirken hata oluştu.", error);
+            alert("İlan kaydedilirken bir sorun oluştu. Lütfen tekrar deneyin.");
+            return;
+          }
+
+          try {
+            window.sessionStorage.setItem(FLASH_KEY, "İlanınız başarıyla oluşturuldu!");
+          } catch (error) {
+            console.warn("Bilgilendirme mesajı oluşturulamadı.", error);
+          }
+
+          if (successMessage) {
+            successMessage.classList.add("success-message--visible");
+          }
+
+          window.setTimeout(() => {
+            const targetUrl = new URL("ilanlar.html", window.location.origin);
+            targetUrl.hash = "son-ilan";
+            targetUrl.searchParams.set("highlight", listing.id);
+            window.location.href = targetUrl.toString();
+          }, 700);
+        });
+      })();
+    </script>
+  </body>
+</html>

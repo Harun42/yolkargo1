@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Canlı Sohbet | GoGo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-dark: #0b1224;
+        --bg-page: #f3f6fc;
+        --bg-card: #ffffff;
+        --accent: #ff7a00;
+        --accent-dark: #ff6700;
+        --text-dark: #0f172a;
+        --text-muted: #475569;
+        --border: #d6dae6;
+        --radius-lg: 26px;
+        --radius-md: 18px;
+        --radius-sm: 12px;
+        --shadow-card: 0 24px 45px rgba(15, 23, 42, 0.14);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: linear-gradient(180deg, var(--bg-dark) 0%, #17203a 50%, var(--bg-page) 50%);
+        color: var(--text-dark);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      header {
+        padding: clamp(1.5rem, 1.5vw + 1.2rem, 2.4rem) clamp(1.5rem, 3vw, 4rem);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #fff;
+      }
+
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .logo img {
+        height: 42px;
+        width: auto;
+        display: block;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .nav__profile {
+        position: relative;
+      }
+
+      .nav__profile-trigger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .nav__profile-trigger:hover,
+      .nav__profile-trigger[aria-expanded="true"] {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.18);
+        border-color: rgba(255, 255, 255, 0.6);
+      }
+
+      .nav__profile-trigger svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .nav__profile-menu {
+        position: absolute;
+        top: calc(100% + 0.75rem);
+        right: 0;
+        min-width: 230px;
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        background: #fff;
+        color: var(--text-dark);
+        box-shadow: var(--shadow-card);
+        display: grid;
+        gap: 0.35rem;
+        z-index: 28;
+      }
+
+      .nav__profile-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        margin-bottom: 0.35rem;
+      }
+
+      .nav__profile-name {
+        font-weight: 600;
+        font-size: 0.98rem;
+      }
+
+      .nav__profile-role {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+      }
+
+      .nav__profile-divider {
+        height: 1px;
+        background: rgba(15, 23, 42, 0.08);
+        margin: 0.25rem 0 0.35rem;
+      }
+
+      .nav__profile-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.55rem 0.65rem;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 0.92rem;
+        color: inherit;
+        transition: background 0.2s ease;
+      }
+
+      .nav__profile-link svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .nav__profile-link:hover {
+        background: rgba(15, 23, 42, 0.08);
+      }
+
+      .nav__profile-link--danger {
+        color: #dc2626;
+      }
+
+      .nav__profile-link--danger:hover {
+        background: rgba(220, 38, 38, 0.1);
+      }
+
+      .nav__profile-link--primary {
+        background: rgba(255, 122, 0, 0.12);
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .nav__profile-link--primary:hover {
+        background: rgba(255, 122, 0, 0.22);
+      }
+
+      .header-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.55rem 1.2rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.32);
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .header-button:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .header-button--logout {
+        background: rgba(255, 255, 255, 0.22);
+        border-color: rgba(255, 255, 255, 0.34);
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.4rem;
+        border-radius: 999px;
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 18px 40px rgba(255, 122, 0, 0.35);
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 22px 48px rgba(255, 122, 0, 0.42);
+      }
+
+      .button--ghost {
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: none;
+      }
+
+      main {
+        padding: 0 clamp(1.5rem, 3vw, 4rem) clamp(3rem, 5vw, 4.4rem);
+        flex: 1;
+        display: flex;
+        align-items: stretch;
+      }
+
+      .layout {
+        width: min(1140px, 100%);
+        margin: clamp(-6rem, -8vw, -4rem) auto 0;
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-card);
+        display: grid;
+        grid-template-columns: 0.85fr 1.15fr;
+        overflow: hidden;
+      }
+
+      .sidebar {
+        background: linear-gradient(180deg, rgba(255, 122, 0, 0.14), rgba(255, 122, 0, 0.04));
+        padding: clamp(1.8rem, 2vw + 1.4rem, 2.6rem);
+        display: grid;
+        gap: 1.5rem;
+        border-right: 1px solid rgba(15, 23, 42, 0.08);
+      }
+
+      .sidebar h2 {
+        margin: 0;
+        font-size: clamp(1.6rem, 1.3vw + 1.3rem, 1.9rem);
+      }
+
+      .sidebar p {
+        margin: 0;
+        color: var(--text-muted);
+        line-height: 1.7;
+      }
+
+      .summary-card {
+        background: #fff;
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        padding: clamp(1.4rem, 2vw + 1.1rem, 2rem);
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .summary-card h3 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+
+      .summary-card dl {
+        margin: 0;
+        display: grid;
+        gap: 0.6rem;
+        font-size: 0.95rem;
+      }
+
+      .summary-card dt {
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+
+      .summary-card dd {
+        margin: 0;
+        color: var(--text-muted);
+      }
+
+      .chat {
+        padding: clamp(1.8rem, 2vw + 1.3rem, 2.6rem);
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+      }
+
+      .chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .chat-meta {
+        display: grid;
+        gap: 0.3rem;
+      }
+
+      .chat-meta strong {
+        font-size: 1.2rem;
+      }
+
+      .chat-meta span {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+
+      .chat-actions {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .chat-area {
+        flex: 1;
+        min-height: 320px;
+        background: rgba(243, 246, 252, 0.8);
+        border-radius: var(--radius-md);
+        padding: 1.4rem;
+        overflow-y: auto;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .message {
+        display: grid;
+        gap: 0.35rem;
+        max-width: 80%;
+        padding: 0.85rem 1rem;
+        border-radius: 18px;
+        line-height: 1.55;
+        position: relative;
+      }
+
+      .message--sender {
+        background: #fff;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        color: var(--text-dark);
+      }
+
+      .message--me {
+        margin-left: auto;
+        background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        color: #fff;
+        box-shadow: 0 16px 32px rgba(255, 122, 0, 0.32);
+      }
+
+      .message small {
+        font-size: 0.78rem;
+        opacity: 0.75;
+      }
+
+      .chat-form {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .chat-form textarea {
+        font: inherit;
+        padding: 0.9rem 1.1rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid rgba(15, 23, 42, 0.14);
+        min-height: 110px;
+        resize: vertical;
+        background: #fff;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .chat-form textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.18);
+      }
+
+      .chat-empty {
+        text-align: center;
+        color: var(--text-muted);
+        padding: 3rem 1rem;
+      }
+
+      @media (max-width: 1024px) {
+        header {
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+
+        .header-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+        }
+
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          border-right: none;
+          border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        }
+      }
+
+      @media (max-width: 640px) {
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
+        .header-actions {
+          width: 100%;
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .header-actions .nav__profile {
+          align-self: flex-end;
+        }
+
+        .chat-actions {
+          width: 100%;
+        }
+
+        .chat-actions .button {
+          flex: 1;
+        }
+
+        .chat-form {
+          grid-template-columns: 1fr;
+        }
+
+        .button {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        main {
+          padding-inline: 1.2rem;
+        }
+
+        .layout {
+          margin-top: -4.6rem;
+        }
+
+        .sidebar,
+        .chat {
+          padding: 1.4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo" aria-label="GoGo ana sayfa">
+        <img src="assets/gogo-logo.svg" alt="GoGo" />
+      </div>
+      <div class="header-actions">
+        <a class="button button--ghost" href="ilanlar.html">İlanlara geri dön</a>
+        <div class="nav__profile" data-auth-profile hidden>
+          <button
+            class="nav__profile-trigger"
+            type="button"
+            data-auth-profile-trigger
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-label="Hesap menüsünü aç"
+          >
+            <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4 0-7 2-7 4.2 0 1.1.9 1.8 2.5 1.8h9c1.6 0 2.5-.7 2.5-1.8C19 16 16 14 12 14Z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <div class="nav__profile-menu" data-auth-profile-menu hidden role="menu">
+            <div class="nav__profile-header">
+              <span class="nav__profile-name" data-auth-name>Hesabım</span>
+              <span class="nav__profile-role" data-auth-role hidden></span>
+            </div>
+              <div class="nav__profile-divider"></div>
+              <a
+                class="nav__profile-link nav__profile-link--primary"
+                data-auth-trigger="login"
+                data-auth-role="sender"
+                href="giris.html"
+                role="menuitem"
+              >
+                <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M14 3h7v18h-7v-2h5V5h-5ZM3.29 11.29l3-3 1.42 1.42L6.41 11H16v2H6.41l1.3 1.29-1.42 1.42-3-3a1 1 0 0 1 0-1.42Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Giriş Yap / Kayıt Ol
+              </a>
+              <a class="nav__profile-link" href="ilanlar.html#my" data-auth-visible="sender" role="menuitem">
+              <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M5 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Zm2 0h10v1H7Zm0 3h10v9H7Zm2 2v2h6v-2Z"
+                  fill="currentColor"
+                />
+              </svg>
+              İlanlarım
+            </a>
+            <a class="nav__profile-link" href="randevu.html" data-auth-visible="sender" role="menuitem">
+              <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M7 3h2v2h6V3h2v2h3v16H4V5h3Zm12 6H5v10h14Zm-9 3h2v2H10Zm4 0h2v2h-2Z"
+                  fill="currentColor"
+                />
+              </svg>
+              Kargo Durumlarım
+            </a>
+            <a class="nav__profile-link" href="randevu.html#hareket" data-auth-visible="driver" role="menuitem">
+              <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M4 5h4l2 3h10v6h-3l-2 3H4Zm2 2v8h8.17l2-3H18V10H9.83l-2-3Z"
+                  fill="currentColor"
+                />
+              </svg>
+              Kargo Hareket Durumu
+            </a>
+            <a class="nav__profile-link" href="giris.html#ayarlar" role="menuitem">
+              <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 15a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm8-3a1 1 0 0 0-.52-.88l-1.54-.88.06-1.78a1 1 0 0 0-.29-.73l-1.5-1.5a1 1 0 0 0-.73-.29l-1.78.06-.88-1.54A1 1 0 0 0 12 2h-2a1 1 0 0 0-.88.52l-.88 1.54-1.78-.06a1 1 0 0 0-.73.29l-1.5 1.5a1 1 0 0 0-.29.73l.06 1.78-1.54.88A1 1 0 0 0 2 12v2a1 1 0 0 0 .52.88l1.54.88-.06 1.78a1 1 0 0 0 .29.73l1.5 1.5a1 1 0 0 0 .73.29l1.78-.06.88 1.54A1 1 0 0 0 10 22h2a1 1 0 0 0 .88-.52l.88-1.54 1.78.06a1 1 0 0 0 .73-.29l1.5-1.5a1 1 0 0 0 .29-.73l-.06-1.78 1.54-.88A1 1 0 0 0 20 14Zm-2 1.38-1.22.7a1 1 0 0 0-.49.91l.05 1.42-1 .95-1.42-.05a1 1 0 0 0-.91.49L12.88 20h-1.76l-.69-1.22a1 1 0 0 0-.91-.49l-1.42.05-1-.95.05-1.42a1 1 0 0 0-.49-.91L5 15.38V13l1.22-.7a1 1 0 0 0 .49-.91l-.05-1.42 1-.95 1.42.05a1 1 0 0 0 .91-.49L11.12 4h1.76l.69 1.22a1 1 0 0 0 .91.49l1.42-.05 1 .95-.05 1.42a1 1 0 0 0 .49.91L19 11.05Z"
+                  fill="currentColor"
+                />
+              </svg>
+              Ayarlar
+            </a>
+            <button
+              class="nav__profile-link nav__profile-link--danger"
+              type="button"
+              data-auth-trigger="logout"
+              role="menuitem"
+            >
+              <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M9 21H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4v2H6v14h3Zm10.71-9.71-3-3-1.42 1.42L16.59 11H10v2h6.59l-1.3 1.29 1.42 1.42 3-3a1 1 0 0 0 0-1.42Z"
+                  fill="currentColor"
+                />
+              </svg>
+              Çıkış Yap
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="layout" id="chatLayout">
+        <aside class="sidebar">
+          <h2>Gönderici ile iletişim</h2>
+          <p>
+            Sohbet üzerinden göndericiyle detayları netleştirebilir, teslimat koşullarını konuşabilir ve gerekirse
+            randevu planlayabilirsiniz.
+          </p>
+          <div class="summary-card" id="listingSummary">
+            <h3>İlan bilgileri yükleniyor…</h3>
+            <dl id="listingFacts"></dl>
+          </div>
+        </aside>
+        <section class="chat" aria-live="polite">
+          <header class="chat-header">
+            <div class="chat-meta">
+              <strong id="chatTitle">Sohbet yükleniyor…</strong>
+              <span id="chatSubtitle"></span>
+            </div>
+            <div class="chat-actions">
+              <button class="button button--ghost" id="openDetails">Detayları Gör</button>
+              <button class="button" id="planMeeting">Randevu Planla</button>
+            </div>
+          </header>
+          <div class="chat-area" id="chatMessages"></div>
+          <form class="chat-form" id="chatForm" autocomplete="off">
+            <textarea id="messageInput" name="message" placeholder="Mesajınızı yazın" required></textarea>
+            <button class="button" type="submit">Gönder</button>
+          </form>
+        </section>
+      </div>
+    </main>
+    <script>
+      (function () {
+        const SESSION_KEY = "yolkargoSession";
+        const loginLinks = Array.from(document.querySelectorAll('[data-auth-trigger="login"]'));
+        const logoutButtons = Array.from(
+          document.querySelectorAll('[data-auth-trigger="logout"]')
+        );
+        const guardedElements = Array.from(document.querySelectorAll('[data-requires-auth]'));
+        const profileWrapper = document.querySelector('[data-auth-profile]');
+        const profileTrigger = profileWrapper
+          ? profileWrapper.querySelector('[data-auth-profile-trigger]')
+          : null;
+        const profileMenu = profileWrapper
+          ? profileWrapper.querySelector('[data-auth-profile-menu]')
+          : null;
+        if (profileMenu) {
+          profileMenu.hidden = true;
+        }
+        const profileName = document.querySelector('[data-auth-name]');
+        const profileRole = document.querySelector('[data-auth-role]');
+        const roleVisibility = Array.from(document.querySelectorAll('[data-auth-visible]'));
+        const redirectTarget = `sohbet.html${window.location.search || ""}`;
+        const ROLE_LABELS = {
+          sender: "Gönderici",
+          driver: "Sürücü",
+          admin: "Yönetici"
+        };
+        let profileMenuOpen = false;
+
+        function readSession() {
+          try {
+            const raw = window.localStorage.getItem(SESSION_KEY);
+            if (!raw) {
+              return null;
+            }
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== "object") {
+              return null;
+            }
+            if (!parsed.role || !parsed.id) {
+              return null;
+            }
+            return parsed;
+          } catch (error) {
+            console.warn("Oturum bilgisi okunamadı.", error);
+            return null;
+          }
+        }
+
+        function buildLoginUrl(options = {}) {
+          const params = new URLSearchParams();
+          if (options.redirect) {
+            params.set("redirect", options.redirect);
+          }
+          if (options.role) {
+            params.set("role", options.role);
+          }
+          if (options.intent) {
+            params.set("intent", options.intent);
+          }
+          const query = params.toString();
+          return `giris.html${query ? `?${query}` : ""}`;
+        }
+
+        function closeProfileMenu() {
+          if (!profileTrigger || !profileMenu) {
+            return;
+          }
+          profileMenu.hidden = true;
+          profileTrigger.setAttribute("aria-expanded", "false");
+          profileMenuOpen = false;
+        }
+
+        function openProfileMenu() {
+          if (!profileTrigger || !profileMenu) {
+            return;
+          }
+          profileMenu.hidden = false;
+          profileTrigger.setAttribute("aria-expanded", "true");
+          profileMenuOpen = true;
+        }
+
+        function toggleProfileMenu() {
+          if (profileMenuOpen) {
+            closeProfileMenu();
+          } else {
+            openProfileMenu();
+          }
+        }
+
+        function syncRoleVisibility(session) {
+          roleVisibility.forEach((element) => {
+            const role = element.getAttribute("data-auth-visible");
+            if (!session) {
+              element.hidden = true;
+              return;
+            }
+            if (!role || session.role === role) {
+              element.hidden = false;
+            } else {
+              element.hidden = true;
+            }
+          });
+        }
+
+        function updateNav() {
+          const session = readSession();
+
+          loginLinks.forEach((link) => {
+            if (session) {
+              link.hidden = true;
+              return;
+            }
+            link.hidden = false;
+            const role = link.getAttribute("data-auth-role") || undefined;
+            const intent = link.getAttribute("data-auth-intent") || "login";
+            link.setAttribute(
+              "href",
+              buildLoginUrl({
+                role,
+                intent,
+                redirect: redirectTarget
+              })
+            );
+          });
+
+          logoutButtons.forEach((button) => {
+            button.hidden = !session;
+          });
+
+          if (profileWrapper) {
+            profileWrapper.hidden = false;
+            if (profileTrigger) {
+              profileTrigger.setAttribute(
+                "aria-label",
+                session ? "Hesap menüsünü aç" : "Giriş seçeneklerini aç"
+              );
+            }
+            if (session) {
+              if (profileName) {
+                profileName.textContent = session.name || "Hesabım";
+              }
+              if (profileRole) {
+                profileRole.textContent = ROLE_LABELS[session.role] || "";
+                profileRole.hidden = false;
+              }
+            } else {
+              if (profileName) {
+                profileName.textContent = "GoGo hesabı";
+              }
+              if (profileRole) {
+                profileRole.textContent = "";
+                profileRole.hidden = true;
+              }
+            }
+            closeProfileMenu();
+          }
+
+          guardedElements.forEach((element) => {
+            element.removeAttribute("title");
+            const requiredRole = element.getAttribute("data-requires-auth");
+            if (!requiredRole) {
+              return;
+            }
+            if (session && session.role !== requiredRole) {
+              const message =
+                requiredRole === "sender"
+                  ? "İlan vermek için gönderici hesabı ile giriş yapmalısınız."
+                  : "Bu işlem için sürücü hesabı ile giriş yapmalısınız.";
+              element.setAttribute("title", message);
+            }
+          });
+
+          syncRoleVisibility(session);
+
+          window.YolkargoSession = session;
+        }
+
+        function redirectToLogin(intent) {
+          const url = buildLoginUrl({
+            role: "driver",
+            intent,
+            redirect: redirectTarget
+          });
+          window.location.href = url;
+        }
+
+        function ensureDriverSession() {
+          const session = readSession();
+          if (session && session.role === "driver") {
+            return session;
+          }
+          if (session && session.role !== "driver") {
+            alert("Sohbeti başlatmak için sürücü hesabı ile giriş yapmalısınız.");
+          }
+          redirectToLogin(session ? "login" : "register");
+          return null;
+        }
+
+        function handleLogout(event) {
+          if (event) {
+            event.preventDefault();
+          }
+          try {
+            window.localStorage.removeItem(SESSION_KEY);
+          } catch (error) {
+            console.warn("Oturum kapatılamadı.", error);
+          }
+          closeProfileMenu();
+          updateNav();
+          redirectToLogin("login");
+        }
+
+        function guardClick(event) {
+          const element = event.currentTarget;
+          const requiredRole = element.getAttribute("data-requires-auth");
+          const session = readSession();
+          if (session && (!requiredRole || session.role === requiredRole)) {
+            return;
+          }
+          event.preventDefault();
+          if (session && requiredRole && session.role !== requiredRole) {
+            alert("Sohbeti başlatmak için sürücü hesabı ile giriş yapmalısınız.");
+          }
+          redirectToLogin(session ? "login" : "register");
+        }
+
+        logoutButtons.forEach((button) => {
+          button.addEventListener("click", handleLogout);
+        });
+
+        guardedElements.forEach((element) => {
+          element.addEventListener("click", guardClick);
+        });
+
+        if (profileTrigger) {
+          profileTrigger.addEventListener("click", (event) => {
+            event.preventDefault();
+            toggleProfileMenu();
+          });
+        }
+
+        if (profileWrapper) {
+          profileWrapper.addEventListener("focusout", (event) => {
+            if (!profileWrapper.contains(event.relatedTarget)) {
+              closeProfileMenu();
+            }
+          });
+        }
+
+        document.addEventListener("click", (event) => {
+          if (!profileMenuOpen || !profileWrapper) {
+            return;
+          }
+          if (!profileWrapper.contains(event.target)) {
+            closeProfileMenu();
+          }
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && profileMenuOpen) {
+            closeProfileMenu();
+          }
+        });
+
+        window.addEventListener("storage", (event) => {
+          if (event.key === SESSION_KEY) {
+            const current = readSession();
+            if (!current || current.role !== "driver") {
+              redirectToLogin(current ? "login" : "register");
+              return;
+            }
+            window.YolkargoSession = current;
+            updateNav();
+          }
+        });
+
+        updateNav();
+        const activeSession = ensureDriverSession();
+        if (!activeSession) {
+          return;
+        }
+      })();
+    </script>
+    <script>
+      (function () {
+        const STORAGE_KEY = "yolkargoListings";
+        const CHAT_KEY = "yolkargoChats";
+        const FLASH_KEY = "listingFlash";
+        const seedListings = [
+          {
+            id: "seed-istanbul-ankara",
+            senderName: "Ayşe K.",
+            senderPhone: "0 532 123 45 67",
+            senderEmail: "",
+            pickupCity: "İstanbul",
+            pickupAddress: "Kadıköy, Moda Caddesi",
+            dropoffCity: "Ankara",
+            dropoffAddress: "Çankaya, Atatürk Bulvarı",
+            cargoDate: "2024-05-12",
+            isFlexible: true,
+            packageSize: "Orta paket (10-25 kg)",
+            cargoNotes: "Cam şişe içerir, dik taşınması önemli.",
+            cargoWeight: "12",
+            budget: 450,
+            createdAt: "Bugün",
+            source: "seed",
+          },
+          {
+            id: "seed-izmir-bursa",
+            senderName: "Mehmet T.",
+            senderPhone: "0 505 987 65 43",
+            senderEmail: "",
+            pickupCity: "İzmir",
+            pickupAddress: "Konak, Gazi Osman Paşa Bulvarı",
+            dropoffCity: "Bursa",
+            dropoffAddress: "Nilüfer, Ataevler Mah.",
+            cargoDate: "2024-05-15",
+            isFlexible: false,
+            packageSize: "Küçük paket (0-10 kg)",
+            cargoNotes: "Laptop ve aksesuar kutusu.",
+            cargoWeight: "6",
+            budget: 320,
+            createdAt: "Dün",
+            source: "seed",
+          },
+          {
+            id: "seed-antalya-istanbul",
+            senderName: "Selin D.",
+            senderPhone: "0 531 222 33 44",
+            senderEmail: "",
+            pickupCity: "Antalya",
+            pickupAddress: "Muratpaşa, Atatürk Caddesi",
+            dropoffCity: "İstanbul",
+            dropoffAddress: "Üsküdar, Çengelköy Mah.",
+            cargoDate: "2024-05-22",
+            isFlexible: true,
+            packageSize: "Büyük paket (25-40 kg)",
+            cargoNotes: "Dikkatli taşınması gereken spor ekipmanları",
+            cargoWeight: "28",
+            budget: 780,
+            createdAt: "3 gün önce",
+            source: "seed",
+          },
+        ];
+
+        const params = new URLSearchParams(window.location.search);
+        const listingId = params.get("id");
+
+        const summary = document.getElementById("listingSummary");
+        const facts = document.getElementById("listingFacts");
+        const chatTitle = document.getElementById("chatTitle");
+        const chatSubtitle = document.getElementById("chatSubtitle");
+        const chatMessages = document.getElementById("chatMessages");
+        const chatForm = document.getElementById("chatForm");
+        const messageInput = document.getElementById("messageInput");
+        const planMeeting = document.getElementById("planMeeting");
+        const openDetails = document.getElementById("openDetails");
+        const redirectTarget = `sohbet.html${window.location.search || ""}`;
+        const loginRedirect = `giris.html?role=driver&intent=login&redirect=${encodeURIComponent(
+          redirectTarget
+        )}`;
+
+        function ensureDriverSession() {
+          if (typeof window === "undefined") {
+            return null;
+          }
+          const session = window.YolkargoSession;
+          if (session && session.role === "driver") {
+            return session;
+          }
+          return null;
+        }
+
+        if (!ensureDriverSession()) {
+          return;
+        }
+
+        function createId(prefix = "msg") {
+          const random = Math.random().toString(36).slice(2, 10);
+          return `${prefix}-${Date.now().toString(36)}-${random}`;
+        }
+
+        function readListings() {
+          try {
+            const raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) {
+              return [];
+            }
+            let mutated = false;
+            const cleaned = parsed
+              .filter((item) => item && typeof item === "object")
+              .map((item) => {
+                if (item.id) {
+                  return item;
+                }
+                mutated = true;
+                return { ...item, id: createId("listing") };
+              });
+            if (mutated) {
+              try {
+                window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cleaned));
+              } catch (error) {
+                console.warn("İlanlar güncellenemedi", error);
+              }
+            }
+            return cleaned;
+          } catch (error) {
+            console.warn("İlan verileri okunamadı", error);
+            return [];
+          }
+        }
+
+        function readConversations() {
+          try {
+            const raw = window.localStorage.getItem(CHAT_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            console.warn("Sohbet verileri okunamadı", error);
+            return [];
+          }
+        }
+
+        function writeConversations(conversations) {
+          try {
+            window.localStorage.setItem(CHAT_KEY, JSON.stringify(conversations));
+          } catch (error) {
+            console.error("Sohbet kaydedilemedi", error);
+          }
+        }
+
+        function escapeHtml(value) {
+          if (value === undefined || value === null) {
+            return "";
+          }
+          return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+        }
+
+        const listings = [...readListings(), ...seedListings];
+        const listing = listings.find((item) => item.id === listingId);
+
+        if (!listing) {
+          if (summary) {
+            summary.innerHTML = `<h3>İlan bulunamadı</h3><p>Seçili ilana ulaşılamadı. Lütfen ilanlar sayfasından tekrar deneyin.</p>`;
+          }
+          if (chatTitle) {
+            chatTitle.textContent = "Sohbet başlatılamadı";
+          }
+          if (chatSubtitle) {
+            chatSubtitle.textContent = "İlan bilgisine ulaşılamıyor.";
+          }
+          if (chatForm) {
+            chatForm.querySelectorAll("textarea, button").forEach((el) => {
+              el.disabled = true;
+            });
+          }
+          return;
+        }
+
+        function formatDate(value) {
+          if (!value) {
+            return "Belirtilmedi";
+          }
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) {
+            return value;
+          }
+          return new Intl.DateTimeFormat("tr-TR", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+          }).format(date);
+        }
+
+        function formatTime(value) {
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) {
+            return value;
+          }
+          return new Intl.DateTimeFormat("tr-TR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }).format(date);
+        }
+
+        function renderSummary() {
+          if (!summary || !facts) {
+            return;
+          }
+          const title = summary.querySelector("h3");
+          if (title) {
+            title.textContent = `${listing.pickupCity || "Bilinmiyor"} → ${listing.dropoffCity || "Bilinmiyor"}`;
+          }
+          if (facts) {
+            facts.innerHTML = "";
+            const pairs = [
+              ["Gönderici", listing.senderName || "Belirtilmedi"],
+              ["İletişim", listing.senderPhone || listing.senderEmail || "Belirtilmedi"],
+              ["Gönderim tarihi", formatDate(listing.cargoDate)],
+              ["Paket", listing.packageSize || "Belirtilmedi"],
+            ];
+            pairs.forEach(([label, value]) => {
+              const dt = document.createElement("dt");
+              dt.textContent = label;
+              const dd = document.createElement("dd");
+              dd.textContent = value;
+              facts.append(dt, dd);
+            });
+          }
+        }
+
+        renderSummary();
+
+        if (chatTitle) {
+          chatTitle.textContent = `${listing.senderName || "Gönderici"} ile sohbet`;
+        }
+        if (chatSubtitle) {
+          const dateLabel = formatDate(listing.cargoDate);
+          chatSubtitle.textContent = `${listing.pickupCity || "?"} → ${listing.dropoffCity || "?"} · ${
+            dateLabel
+          }`;
+        }
+
+        const conversations = readConversations();
+        let conversation = conversations.find((item) => item && item.listingId === listing.id);
+
+        if (!conversation) {
+          conversation = {
+            listingId: listing.id,
+            updatedAt: new Date().toISOString(),
+            messages: [
+              {
+                id: createId("msg"),
+                sender: "sender",
+                text: "Merhaba! İstanbul'dan Ankara'ya paket göndermek istiyorum, uygun musunuz?",
+                createdAt: new Date().toISOString(),
+              },
+              {
+                id: createId("msg"),
+                sender: "me",
+                text: "Merhaba Ayşe Hanım, rotam Ankara'ya uygun. Paket ölçüleri hakkında bilgi alabilir miyim?",
+                createdAt: new Date().toISOString(),
+              },
+            ],
+          };
+          conversations.push(conversation);
+          writeConversations(conversations);
+        }
+
+        function renderMessages() {
+          if (!chatMessages) {
+            return;
+          }
+
+          if (!conversation.messages.length) {
+            chatMessages.innerHTML = '<div class="chat-empty">Henüz mesaj yok. İlk mesajınızı gönderin.</div>';
+            return;
+          }
+
+          chatMessages.innerHTML = conversation.messages
+            .map((message) => {
+              const roleClass = message.sender === "me" ? "message message--me" : "message message--sender";
+              const text = escapeHtml(message.text).replace(/\n/g, "<br />");
+              const time = escapeHtml(formatTime(message.createdAt));
+              return `
+                <div class="${roleClass}">
+                  <div>${text}</div>
+                  <small>${time}</small>
+                </div>
+              `;
+            })
+            .join("");
+
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        renderMessages();
+
+        function persistConversation() {
+          const others = conversations.filter((item) => item.listingId !== listing.id);
+          conversation.updatedAt = new Date().toISOString();
+          writeConversations([conversation, ...others]);
+        }
+
+        if (chatForm) {
+          chatForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            if (!ensureDriverSession()) {
+              alert("Oturumunuz sona erdi. Lütfen yeniden giriş yapın.");
+              window.location.href = loginRedirect;
+              return;
+            }
+            if (!messageInput || !messageInput.value.trim()) {
+              return;
+            }
+            const text = messageInput.value.trim();
+            conversation.messages.push({
+              id: createId("msg"),
+              sender: "me",
+              text,
+              createdAt: new Date().toISOString(),
+            });
+            messageInput.value = "";
+            renderMessages();
+            persistConversation();
+
+            window.setTimeout(() => {
+              conversation.messages.push({
+                id: createId("msg"),
+                sender: "sender",
+                text: "Teşekkürler, detayları ilettim. Uygun saat için haberleşelim.",
+                createdAt: new Date().toISOString(),
+              });
+              renderMessages();
+              persistConversation();
+            }, 1200);
+          });
+        }
+
+        if (planMeeting) {
+          planMeeting.addEventListener("click", () => {
+            if (!ensureDriverSession()) {
+              window.location.href = loginRedirect;
+              return;
+            }
+            const url = new URL("randevu.html", window.location.origin);
+            url.searchParams.set("id", listing.id);
+            window.location.href = url.toString();
+          });
+        }
+
+        if (openDetails) {
+          openDetails.addEventListener("click", () => {
+            const url = new URL("ilanlar.html", window.location.origin);
+            url.searchParams.set("highlight", listing.id);
+            url.hash = "son-ilan";
+            window.sessionStorage.setItem(FLASH_KEY, "İlan detaylarına yönlendiriliyorsunuz…");
+            window.location.href = url.toString();
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

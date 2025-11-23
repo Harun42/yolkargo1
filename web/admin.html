@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Yönetici Paneli | GoGo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f3f6fc;
+        --surface: #ffffff;
+        --accent: #ff7a00;
+        --accent-dark: #ff6700;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: rgba(15, 23, 42, 0.08);
+        --shadow: 0 18px 40px rgba(15, 23, 42, 0.14);
+        --radius-lg: 18px;
+        --radius-md: 14px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .auth {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 2rem 1.5rem;
+      }
+
+      .card {
+        width: min(420px, 92vw);
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: 2.4rem 2.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+        box-shadow: var(--shadow);
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        font-size: 0.92rem;
+      }
+
+      label span {
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      input,
+      select,
+      textarea {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.75rem 0.85rem;
+        font-size: 0.95rem;
+        font-family: inherit;
+        color: inherit;
+        background: #fff;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: rgba(255, 122, 0, 0.7);
+        box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.16);
+      }
+
+      textarea {
+        min-height: 110px;
+        resize: vertical;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        border-radius: 999px;
+        border: none;
+        padding: 0.75rem 1.6rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        background: var(--accent);
+        color: #fff;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 30px rgba(255, 122, 0, 0.35);
+      }
+
+      .button--ghost {
+        background: rgba(15, 23, 42, 0.05);
+        color: var(--text);
+      }
+
+      .button--danger {
+        background: rgba(220, 38, 38, 0.12);
+        color: #b91c1c;
+      }
+
+      .message {
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+        color: #b91c1c;
+        background: rgba(220, 38, 38, 0.12);
+        border: 1px solid rgba(220, 38, 38, 0.18);
+        display: none;
+      }
+
+      .dashboard {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .dashboard header {
+        background: #0f172a;
+        color: #fff;
+        padding: 1.2rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+      }
+
+      .dashboard header h1 {
+        font-size: 1.2rem;
+        letter-spacing: 0.04em;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+
+      .dashboard header h1 img {
+        height: 40px;
+        width: auto;
+        display: block;
+      }
+
+      .dashboard header h1 span {
+        font-weight: 500;
+      }
+
+      .header-user {
+        display: flex;
+        flex-direction: column;
+        font-size: 0.88rem;
+        text-align: right;
+      }
+
+      .header-user span {
+        font-weight: 600;
+      }
+
+      .wrapper {
+        width: min(1180px, 94vw);
+        margin: 0 auto;
+        padding: 2.2rem 0 3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      section {
+        background: var(--surface);
+        border-radius: var(--radius-md);
+        box-shadow: 0 14px 32px rgba(15, 23, 42, 0.12);
+        padding: 1.6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+
+      .section-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .stat-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+
+      .stat-card {
+        background: rgba(15, 23, 42, 0.04);
+        border-radius: 14px;
+        padding: 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+
+      .stat-card span {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+      }
+
+      .stat-card strong {
+        font-size: 1.6rem;
+      }
+
+      .table-wrapper {
+        overflow-x: auto;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.92rem;
+        background: #fff;
+      }
+
+      th,
+      td {
+        padding: 0.75rem 0.9rem;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        font-size: 0.78rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      tbody tr:hover {
+        background: rgba(15, 23, 42, 0.03);
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.25rem 0.65rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        background: rgba(15, 23, 42, 0.08);
+      }
+
+      .status-badge svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      .status-badge--pending { background: rgba(251, 191, 36, 0.18); color: #92400e; }
+      .status-badge--approved { background: rgba(34, 197, 94, 0.18); color: #166534; }
+      .status-badge--in_transit { background: rgba(59, 130, 246, 0.18); color: #1d4ed8; }
+      .status-badge--delivered { background: rgba(16, 185, 129, 0.18); color: #0f766e; }
+      .status-badge--cancelled { background: rgba(248, 113, 113, 0.18); color: #b91c1c; }
+      .status-badge--archived { background: rgba(148, 163, 184, 0.22); color: #475569; }
+
+      .form-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+
+      .listing-detail {
+        background: rgba(15, 23, 42, 0.04);
+        border-radius: 14px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+
+      .list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+
+      .list__item {
+        background: rgba(15, 23, 42, 0.04);
+        border-radius: 12px;
+        padding: 0.8rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        font-size: 0.9rem;
+      }
+
+      .toast {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        background: var(--surface);
+        border-radius: 12px;
+        padding: 0.85rem 1rem;
+        box-shadow: 0 18px 36px rgba(15, 23, 42, 0.18);
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        display: none;
+        font-size: 0.92rem;
+      }
+
+      .toast--show {
+        display: block;
+      }
+
+      .muted {
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      @media (max-width: 960px) {
+        .dashboard header {
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+
+        .dashboard header .header-user {
+          width: 100%;
+          text-align: left;
+        }
+
+        .dashboard header .button {
+          margin-left: auto;
+        }
+
+        .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .dashboard header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
+        .dashboard header .button {
+          width: 100%;
+        }
+
+        .wrapper {
+          padding-top: 1.6rem;
+        }
+
+        .card {
+          padding: 2rem 1.6rem;
+        }
+      }
+
+      @media (max-width: 540px) {
+        .auth {
+          padding: 1.6rem 1.2rem;
+        }
+
+        .card {
+          padding: 1.8rem 1.4rem;
+        }
+
+        section {
+          padding: 1.4rem;
+        }
+
+        .toast {
+          right: 16px;
+          left: 16px;
+          bottom: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="auth" data-view="auth">
+      <form class="card" id="adminLoginForm">
+        <div>
+          <h1>Yönetici girişi</h1>
+          <p>
+            Platform verilerini yönetmek için yönetici hesabınızla giriş yapın. Varsayılan hesap:
+            <strong>admin@gogo.com</strong> / <strong>admin123</strong>
+          </p>
+        </div>
+        <div class="message" id="adminLoginMessage"></div>
+        <label for="adminEmail">
+          <span>E-posta</span>
+          <input id="adminEmail" name="email" type="email" autocomplete="email" required />
+        </label>
+        <label for="adminPassword">
+          <span>Şifre</span>
+          <input
+            id="adminPassword"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          />
+        </label>
+        <button class="button" type="submit">Panele giriş yap</button>
+        <p class="muted">
+          Oturum bilgileriniz tarayıcıda saklanır. Ortak cihazlarda işleminiz bittiğinde çıkış yapmayı unutmayın.
+        </p>
+      </form>
+    </div>
+    <div class="dashboard" data-view="dashboard" hidden>
+      <header>
+        <h1 aria-label="GoGo Yönetici Paneli">
+          <img src="assets/gogo-logo.svg" alt="GoGo" />
+          <span>Yönetici Paneli</span>
+        </h1>
+        <div class="header-user">
+          <span data-admin-name>Yönetici</span>
+          <small data-admin-email>admin@gogo.com</small>
+        </div>
+        <button class="button button--ghost" id="adminLogout" type="button">Çıkış yap</button>
+      </header>
+      <main class="wrapper">
+        <section>
+          <div class="section-header">
+            <div>
+              <h2>Genel görünüm</h2>
+              <p>İlanlar, kullanıcılar ve aktiviteler hakkında hızlı özet.</p>
+            </div>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <span>Toplam ilan</span>
+              <strong data-stat="listings-total">0</strong>
+              <small class="muted" data-stat="listings-pending">0 beklemede</small>
+            </div>
+            <div class="stat-card">
+              <span>Gönderici hesapları</span>
+              <strong data-stat="accounts-senders">0</strong>
+              <small class="muted" data-stat="accounts-verified-senders">0 doğrulandı</small>
+            </div>
+            <div class="stat-card">
+              <span>Sürücü hesapları</span>
+              <strong data-stat="accounts-drivers">0</strong>
+              <small class="muted" data-stat="accounts-verified-drivers">0 doğrulandı</small>
+            </div>
+            <div class="stat-card">
+              <span>Aktiviteler</span>
+              <strong data-stat="appointments-total">0</strong>
+              <small class="muted" data-stat="chats-total">0 sohbet</small>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-header">
+            <div>
+              <h2>İlan yönetimi</h2>
+              <p>Göndericilerin oluşturduğu ilanları düzenleyin, durumlarını güncelleyin ve not ekleyin.</p>
+            </div>
+            <div>
+              <label class="muted">
+                Durum filtresi
+                <select id="listingStatusFilter">
+                  <option value="">Tümü</option>
+                  <option value="pending">Onay bekliyor</option>
+                  <option value="approved">Yayınlandı</option>
+                  <option value="in_transit">Yolda</option>
+                  <option value="delivered">Teslim edildi</option>
+                  <option value="cancelled">İptal edildi</option>
+                  <option value="archived">Arşivlendi</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table data-table="listings">
+              <thead>
+                <tr>
+                  <th scope="col">Rota</th>
+                  <th scope="col">Durum</th>
+                  <th scope="col">Durum güncelle</th>
+                  <th scope="col">Gönderici</th>
+                  <th scope="col">Son güncelleme</th>
+                  <th scope="col">İşlem</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="muted" data-listings-empty hidden>Henüz kayıtlı ilan bulunmuyor.</p>
+          <div class="listing-detail" id="listingDetail" hidden>
+            <h3>İlan detayı</h3>
+            <form id="listingForm" class="form-grid">
+              <label>
+                <span>Gönderici adı</span>
+                <input name="senderName" type="text" />
+              </label>
+              <label>
+                <span>Telefon</span>
+                <input name="senderPhone" type="text" />
+              </label>
+              <label>
+                <span>E-posta</span>
+                <input name="senderEmail" type="email" />
+              </label>
+              <label>
+                <span>Bütçe (₺)</span>
+                <input name="budget" type="number" min="0" step="25" />
+              </label>
+              <label>
+                <span>Paket boyutu</span>
+                <input name="packageSize" type="text" />
+              </label>
+              <label>
+                <span>Ağırlık (kg)</span>
+                <input name="cargoWeight" type="number" min="0" step="1" />
+              </label>
+              <label>
+                <span>Çıkış ili</span>
+                <input name="pickupCity" type="text" />
+              </label>
+              <label>
+                <span>Varış ili</span>
+                <input name="dropoffCity" type="text" />
+              </label>
+              <label>
+                <span>Çıkış adresi</span>
+                <input name="pickupAddress" type="text" />
+              </label>
+              <label>
+                <span>Varış adresi</span>
+                <input name="dropoffAddress" type="text" />
+              </label>
+              <label>
+                <span>Gönderim tarihi</span>
+                <input name="cargoDate" type="date" />
+              </label>
+              <label class="muted">
+                <input name="isFlexible" type="checkbox" />
+                <span>Tarih esnek</span>
+              </label>
+              <label class="form-grid" style="grid-template-columns: 1fr;">
+                <span>Notlar</span>
+                <textarea name="cargoNotes"></textarea>
+              </label>
+              <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                <button class="button" type="submit">Bilgileri kaydet</button>
+                <button class="button button--ghost" id="addHistoryNote" type="button">
+                  Durum notu ekle
+                </button>
+              </div>
+            </form>
+            <div>
+              <h4>Durum geçmişi</h4>
+              <div id="historyList" class="list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-header">
+            <div>
+              <h2>Kullanıcı hesapları</h2>
+              <p>Gönderici ve sürücü hesaplarını doğrulayın veya gerekirse kaldırın.</p>
+            </div>
+          </div>
+          <div style="display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+            <div>
+              <h3>Göndericiler</h3>
+              <div id="sendersList" class="list"></div>
+              <p class="muted" data-senders-empty hidden>Gönderici kaydı bulunmuyor.</p>
+            </div>
+            <div>
+              <h3>Sürücüler</h3>
+              <div id="driversList" class="list"></div>
+              <p class="muted" data-drivers-empty hidden>Sürücü kaydı bulunmuyor.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-header">
+            <div>
+              <h2>Aktivite akışı</h2>
+              <p>Randevu talepleri ve sohbet geçmişlerini inceleyerek süreci takip edin.</p>
+            </div>
+          </div>
+          <div style="display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+            <div>
+              <h3>Randevu talepleri</h3>
+              <ul class="list" id="appointmentsList"></ul>
+              <p class="muted" data-appointments-empty hidden>Henüz randevu talebi yok.</p>
+            </div>
+            <div>
+              <h3>Sohbetler</h3>
+              <ul class="list" id="chatsList"></ul>
+              <p class="muted" data-chats-empty hidden>Henüz sohbet kaydı yok.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <div class="toast" id="adminToast" role="status" aria-live="polite"></div>
+    <script>
+      (function () {
+        const STORAGE_KEY = "yolkargoListings";
+        const ACCOUNT_KEY = "yolkargoAccounts";
+        const APPOINTMENT_KEY = "yolkargoAppointments";
+        const CHAT_KEY = "yolkargoChats";
+        const ADMIN_ACCOUNT_KEY = "yolkargoAdminAccounts";
+        const ADMIN_SESSION_KEY = "yolkargoAdminSession";
+
+        const DEFAULT_ADMINS = [
+          { id: "admin-root", name: "Yönetici", email: "admin@gogo.com", password: "admin123" }
+        ];
+
+        const STATUS_OPTIONS = [
+          { value: "pending", label: "Onay bekliyor" },
+          { value: "approved", label: "Yayınlandı" },
+          { value: "in_transit", label: "Yolda" },
+          { value: "delivered", label: "Teslim edildi" },
+          { value: "cancelled", label: "İptal edildi" },
+          { value: "archived", label: "Arşivlendi" }
+        ];
+
+        const views = Array.from(document.querySelectorAll('[data-view]'));
+        const loginForm = document.getElementById('adminLoginForm');
+        const loginMessage = document.getElementById('adminLoginMessage');
+        const logoutButton = document.getElementById('adminLogout');
+        const toast = document.getElementById('adminToast');
+        const nameField = document.querySelector('[data-admin-name]');
+        const emailField = document.querySelector('[data-admin-email]');
+
+        const listingsTableBody = document.querySelector('[data-table="listings"] tbody');
+        const listingsEmpty = document.querySelector('[data-listings-empty]');
+        const listingsFilter = document.getElementById('listingStatusFilter');
+        const detailPanel = document.getElementById('listingDetail');
+        const listingForm = document.getElementById('listingForm');
+        const historyList = document.getElementById('historyList');
+        const addHistoryNoteButton = document.getElementById('addHistoryNote');
+
+        const sendersList = document.getElementById('sendersList');
+        const driversList = document.getElementById('driversList');
+        const sendersEmpty = document.querySelector('[data-senders-empty]');
+        const driversEmpty = document.querySelector('[data-drivers-empty]');
+
+        const appointmentsList = document.getElementById('appointmentsList');
+        const chatsList = document.getElementById('chatsList');
+        const appointmentsEmpty = document.querySelector('[data-appointments-empty]');
+        const chatsEmpty = document.querySelector('[data-chats-empty]');
+
+        const statsMap = {
+          listingsTotal: document.querySelector('[data-stat="listings-total"]'),
+          listingsPending: document.querySelector('[data-stat="listings-pending"]'),
+          accountsSenders: document.querySelector('[data-stat="accounts-senders"]'),
+          accountsDrivers: document.querySelector('[data-stat="accounts-drivers"]'),
+          accountsVerifiedSenders: document.querySelector('[data-stat="accounts-verified-senders"]'),
+          accountsVerifiedDrivers: document.querySelector('[data-stat="accounts-verified-drivers"]'),
+          appointmentsTotal: document.querySelector('[data-stat="appointments-total"]'),
+          chatsTotal: document.querySelector('[data-stat="chats-total"]')
+        };
+
+        const state = {
+          listings: [],
+          accounts: { senders: [], drivers: [] },
+          appointments: [],
+          chats: [],
+          selectedListingId: ''
+        };
+
+        function showView(name) {
+          views.forEach((view) => {
+            view.hidden = view.dataset.view !== name;
+          });
+        }
+
+        function setLoginMessage(message) {
+          if (!loginMessage) {
+            return;
+          }
+          if (!message) {
+            loginMessage.style.display = 'none';
+            loginMessage.textContent = '';
+            return;
+          }
+          loginMessage.style.display = 'block';
+          loginMessage.textContent = message;
+        }
+
+        function showToast(message, type = 'success') {
+          if (!toast) {
+            return;
+          }
+          toast.textContent = message;
+          toast.classList.remove('toast--show');
+          toast.classList.remove('toast--danger');
+          if (type === 'danger') {
+            toast.classList.add('toast--danger');
+          } else {
+            toast.classList.remove('toast--danger');
+          }
+          window.requestAnimationFrame(() => {
+            toast.classList.add('toast--show');
+            window.setTimeout(() => {
+              toast.classList.remove('toast--show');
+            }, 2500);
+          });
+        }
+
+        function escapeHtml(value) {
+          if (value === undefined || value === null) {
+            return '';
+          }
+          return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+        }
+
+        function clean(value) {
+          return typeof value === 'string' ? value.trim() : '';
+        }
+
+        function createId(prefix = 'adm') {
+          const random = Math.random().toString(36).slice(2, 10);
+          return `${prefix}-${Date.now().toString(36)}-${random}`;
+        }
+
+        function formatDate(value) {
+          if (!value) {
+            return 'Belirtilmedi';
+          }
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) {
+            return value;
+          }
+          return new Intl.DateTimeFormat('tr-TR', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+          }).format(date);
+        }
+
+        function formatDateTime(value) {
+          if (!value) {
+            return 'Belirtilmedi';
+          }
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) {
+            return value;
+          }
+          return new Intl.DateTimeFormat('tr-TR', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          }).format(date);
+        }
+
+        function formatCurrency(value) {
+          if (value === undefined || value === null || value === '') {
+            return 'Belirtilmedi';
+          }
+          const amount = Number(value);
+          if (!Number.isFinite(amount)) {
+            return String(value);
+          }
+          return new Intl.NumberFormat('tr-TR', {
+            style: 'currency',
+            currency: 'TRY',
+            maximumFractionDigits: 0
+          }).format(amount);
+        }
+
+        function normaliseListing(listing) {
+          const updated = { ...listing };
+          let mutated = false;
+          if (!updated.id) {
+            updated.id = createId('listing');
+            mutated = true;
+          }
+          if (!updated.status) {
+            updated.status = 'pending';
+            mutated = true;
+          }
+          if (!Array.isArray(updated.statusHistory) || !updated.statusHistory.length) {
+            const createdAt = updated.createdAt || new Date().toISOString();
+            updated.statusHistory = [
+              { status: updated.status, note: 'İlan kaydı oluşturuldu', timestamp: createdAt }
+            ];
+            mutated = true;
+          }
+          if (!updated.statusUpdatedAt) {
+            const lastEntry =
+              updated.statusHistory[updated.statusHistory.length - 1]?.timestamp || new Date().toISOString();
+            updated.statusUpdatedAt = lastEntry;
+            mutated = true;
+          }
+          return { updated, mutated };
+        }
+
+        function readListings() {
+          try {
+            const raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) {
+              return [];
+            }
+            let mutated = false;
+            const prepared = parsed
+              .filter((item) => item && typeof item === 'object')
+              .map((item) => {
+                const result = normaliseListing(item);
+                if (result.mutated) {
+                  mutated = true;
+                }
+                return result.updated;
+              });
+            if (mutated) {
+              window.localStorage.setItem(STORAGE_KEY, JSON.stringify(prepared));
+            }
+            return prepared;
+          } catch (error) {
+            console.warn('İlan verileri okunamadı', error);
+            return [];
+          }
+        }
+
+        function writeListings(listings) {
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(listings));
+        }
+
+        function readAccounts() {
+          try {
+            const raw = window.localStorage.getItem(ACCOUNT_KEY);
+            if (!raw) {
+              return { senders: [], drivers: [] };
+            }
+            const parsed = JSON.parse(raw);
+            const senders = Array.isArray(parsed?.senders) ? parsed.senders : [];
+            const drivers = Array.isArray(parsed?.drivers) ? parsed.drivers : [];
+            return {
+              senders: senders.map((item) => ({ ...item, verified: Boolean(item?.verified) })),
+              drivers: drivers.map((item) => ({ ...item, verified: Boolean(item?.verified) }))
+            };
+          } catch (error) {
+            console.warn('Hesaplar okunamadı', error);
+            return { senders: [], drivers: [] };
+          }
+        }
+
+        function writeAccounts(data) {
+          window.localStorage.setItem(ACCOUNT_KEY, JSON.stringify(data));
+        }
+
+        function readAppointments() {
+          try {
+            const raw = window.localStorage.getItem(APPOINTMENT_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            console.warn('Randevu verileri okunamadı', error);
+            return [];
+          }
+        }
+
+        function readChats() {
+          try {
+            const raw = window.localStorage.getItem(CHAT_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            console.warn('Sohbet verileri okunamadı', error);
+            return [];
+          }
+        }
+
+        function readAdminAccounts() {
+          try {
+            const raw = window.localStorage.getItem(ADMIN_ACCOUNT_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            console.warn('Yönetici hesapları okunamadı', error);
+            return [];
+          }
+        }
+
+        function writeAdminAccounts(accounts) {
+          window.localStorage.setItem(ADMIN_ACCOUNT_KEY, JSON.stringify(accounts));
+        }
+
+        function ensureAdminAccounts() {
+          const existing = readAdminAccounts();
+          if (!existing.length) {
+            writeAdminAccounts(DEFAULT_ADMINS);
+            return DEFAULT_ADMINS;
+          }
+          const missing = DEFAULT_ADMINS.filter(
+            (admin) => !existing.some((item) => item.email === admin.email)
+          );
+          if (missing.length) {
+            writeAdminAccounts([...existing, ...missing]);
+            return readAdminAccounts();
+          }
+          return existing;
+        }
+
+        function readAdminSession() {
+          try {
+            const raw = window.localStorage.getItem(ADMIN_SESSION_KEY);
+            if (!raw) {
+              return null;
+            }
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== 'object') {
+              return null;
+            }
+            if (!parsed.id || !parsed.email) {
+              return null;
+            }
+            return parsed;
+          } catch (error) {
+            console.warn('Yönetici oturumu okunamadı', error);
+            return null;
+          }
+        }
+
+        function setAdminSession(admin) {
+          const session = {
+            id: admin.id,
+            email: admin.email,
+            name: admin.name || 'Yönetici'
+          };
+          window.localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(session));
+          return session;
+        }
+
+        function clearAdminSession() {
+          window.localStorage.removeItem(ADMIN_SESSION_KEY);
+        }
+
+        function syncAdminHeader(session) {
+          if (nameField) {
+            nameField.textContent = session?.name || 'Yönetici';
+          }
+          if (emailField) {
+            emailField.textContent = session?.email || '-';
+          }
+        }
+        function renderStats() {
+          const total = state.listings.length;
+          const pending = state.listings.filter((item) => item.status === 'pending').length;
+          if (statsMap.listingsTotal) statsMap.listingsTotal.textContent = String(total);
+          if (statsMap.listingsPending) statsMap.listingsPending.textContent = `${pending} beklemede`;
+          const senderVerified = state.accounts.senders.filter((item) => item.verified).length;
+          const driverVerified = state.accounts.drivers.filter((item) => item.verified).length;
+          if (statsMap.accountsSenders) statsMap.accountsSenders.textContent = String(state.accounts.senders.length);
+          if (statsMap.accountsDrivers) statsMap.accountsDrivers.textContent = String(state.accounts.drivers.length);
+          if (statsMap.accountsVerifiedSenders)
+            statsMap.accountsVerifiedSenders.textContent = `${senderVerified} doğrulandı`;
+          if (statsMap.accountsVerifiedDrivers)
+            statsMap.accountsVerifiedDrivers.textContent = `${driverVerified} doğrulandı`;
+          if (statsMap.appointmentsTotal)
+            statsMap.appointmentsTotal.textContent = String(state.appointments.length);
+          if (statsMap.chatsTotal) statsMap.chatsTotal.textContent = String(state.chats.length);
+        }
+
+        function renderListings() {
+          if (!listingsTableBody) return;
+          const filter = listingsFilter ? listingsFilter.value : '';
+          const filtered = state.listings.filter((listing) => (filter ? listing.status === filter : true));
+          listingsTableBody.innerHTML = '';
+          if (!filtered.length) {
+            if (listingsEmpty) listingsEmpty.hidden = false;
+            return;
+          }
+          if (listingsEmpty) listingsEmpty.hidden = true;
+          filtered.forEach((listing) => {
+            const row = document.createElement('tr');
+            row.dataset.id = listing.id;
+            const statusLabel =
+              STATUS_OPTIONS.find((option) => option.value === listing.status)?.label || listing.status;
+            const statusClass = `status-badge status-badge--${listing.status}`;
+            const options = STATUS_OPTIONS.map(
+              (option) =>
+                `<option value="${option.value}" ${option.value === listing.status ? 'selected' : ''}>${option.label}</option>`
+            ).join('');
+            row.innerHTML = `
+              <td>
+                <strong>${escapeHtml(listing.pickupCity || '?')} → ${escapeHtml(listing.dropoffCity || '?')}</strong>
+                <div class="muted">${escapeHtml(formatDate(listing.cargoDate))}</div>
+              </td>
+              <td>
+                <span class="${statusClass}">
+                  <svg viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                    <circle cx="4" cy="4" r="3" fill="currentColor" />
+                  </svg>
+                  ${escapeHtml(statusLabel)}
+                </span>
+              </td>
+              <td>
+                <select data-action="status">${options}</select>
+              </td>
+              <td>
+                <div>${escapeHtml(listing.senderName || 'Gönderici')}</div>
+                <div class="muted">${escapeHtml(listing.senderPhone || '-')}</div>
+                <div class="muted">${escapeHtml(listing.senderEmail || '-')}</div>
+              </td>
+              <td class="muted">${escapeHtml(formatDateTime(listing.statusUpdatedAt))}</td>
+              <td>
+                <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+                  <button class="button button--ghost" type="button" data-action="edit">Düzenle</button>
+                  <button class="button button--danger" type="button" data-action="delete">Sil</button>
+                </div>
+              </td>
+            `;
+            listingsTableBody.appendChild(row);
+          });
+        }
+
+        function renderHistory(listing) {
+          if (!historyList) return;
+          historyList.innerHTML = '';
+          if (!listing || !Array.isArray(listing.statusHistory)) return;
+          listing.statusHistory
+            .slice()
+            .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+            .forEach((entry) => {
+              const div = document.createElement('div');
+              div.className = 'list__item';
+              const label = STATUS_OPTIONS.find((opt) => opt.value === entry.status)?.label || entry.status;
+              div.innerHTML = `
+                <strong>${escapeHtml(label || 'Durum')}</strong>
+                <span>${escapeHtml(entry.note || 'Not eklenmedi')}</span>
+                <span class="muted">${escapeHtml(formatDateTime(entry.timestamp))}</span>
+              `;
+              historyList.appendChild(div);
+            });
+        }
+
+        function populateListingDetail(listing) {
+          if (!detailPanel || !listingForm) return;
+          detailPanel.hidden = false;
+          Array.from(listingForm.elements).forEach((field) => {
+            if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) return;
+            if (field.name === 'isFlexible') {
+              field.checked = Boolean(listing.isFlexible);
+              return;
+            }
+            if (field.name === 'cargoDate') {
+              field.value = listing.cargoDate ? String(listing.cargoDate).slice(0, 10) : '';
+              return;
+            }
+            const value = listing[field.name];
+            field.value = value === undefined || value === null ? '' : value;
+          });
+          renderHistory(listing);
+          if (addHistoryNoteButton) addHistoryNoteButton.disabled = false;
+        }
+
+        function clearListingDetail() {
+          if (detailPanel) detailPanel.hidden = true;
+          if (historyList) historyList.innerHTML = '';
+          if (addHistoryNoteButton) addHistoryNoteButton.disabled = true;
+        }
+
+        function setSelectedListing(id) {
+          state.selectedListingId = id || '';
+          const listing = state.listings.find((item) => item.id === id);
+          if (listing) {
+            populateListingDetail(listing);
+          } else {
+            clearListingDetail();
+          }
+        }
+
+        function updateListingStatus(id, status, note) {
+          const listings = [...state.listings];
+          const index = listings.findIndex((item) => item.id === id);
+          if (index === -1) return;
+          const listing = { ...listings[index] };
+          listing.status = status;
+          const timestamp = new Date().toISOString();
+          listing.statusUpdatedAt = timestamp;
+          const historyEntry = {
+            status,
+            note: note || `${STATUS_OPTIONS.find((opt) => opt.value === status)?.label || status} olarak güncellendi`,
+            timestamp
+          };
+          listing.statusHistory = Array.isArray(listing.statusHistory)
+            ? [...listing.statusHistory, historyEntry]
+            : [historyEntry];
+          listings[index] = listing;
+          state.listings = listings;
+          writeListings(listings);
+          renderListings();
+          renderStats();
+          if (state.selectedListingId === id) populateListingDetail(listing);
+          showToast('İlan durumu güncellendi');
+        }
+
+        function deleteListing(id) {
+          if (!window.confirm('Bu ilanı silmek istediğinize emin misiniz?')) return;
+          state.listings = state.listings.filter((item) => item.id !== id);
+          writeListings(state.listings);
+          if (state.selectedListingId === id) setSelectedListing('');
+          renderListings();
+          renderStats();
+          showToast('İlan silindi');
+        }
+
+        function handleListingFormSubmit(event) {
+          event.preventDefault();
+          const id = state.selectedListingId;
+          if (!id) return;
+          const index = state.listings.findIndex((item) => item.id === id);
+          if (index === -1) return;
+          const formData = new FormData(listingForm);
+          const listing = { ...state.listings[index] };
+          listing.senderName = clean(formData.get('senderName'));
+          listing.senderPhone = clean(formData.get('senderPhone'));
+          listing.senderEmail = clean(formData.get('senderEmail'));
+          const rawBudget = clean(formData.get('budget'));
+          const parsedBudget = Number(rawBudget);
+          listing.budget = Number.isFinite(parsedBudget) ? parsedBudget : rawBudget;
+          listing.packageSize = clean(formData.get('packageSize'));
+          listing.cargoWeight = clean(formData.get('cargoWeight'));
+          listing.pickupCity = clean(formData.get('pickupCity'));
+          listing.dropoffCity = clean(formData.get('dropoffCity'));
+          listing.pickupAddress = clean(formData.get('pickupAddress'));
+          listing.dropoffAddress = clean(formData.get('dropoffAddress'));
+          listing.cargoDate = clean(formData.get('cargoDate'));
+          listing.isFlexible = formData.get('isFlexible') === 'on';
+          listing.cargoNotes = clean(formData.get('cargoNotes'));
+          state.listings[index] = listing;
+          writeListings(state.listings);
+          renderListings();
+          renderStats();
+          populateListingDetail(listing);
+          showToast('İlan bilgileri kaydedildi');
+        }
+
+        function addHistoryNote() {
+          const id = state.selectedListingId;
+          if (!id) return;
+          const index = state.listings.findIndex((item) => item.id === id);
+          if (index === -1) return;
+          const note = window.prompt('Durum için kısa bir not ekleyin:');
+          if (note === null) return;
+          const listing = { ...state.listings[index] };
+          const timestamp = new Date().toISOString();
+          const entry = {
+            status: listing.status,
+            note: note.trim() ? note.trim() : 'Yönetici notu eklendi',
+            timestamp
+          };
+          listing.statusHistory = Array.isArray(listing.statusHistory)
+            ? [...listing.statusHistory, entry]
+            : [entry];
+          listing.statusUpdatedAt = timestamp;
+          state.listings[index] = listing;
+          writeListings(state.listings);
+          populateListingDetail(listing);
+          showToast('Durum notu eklendi');
+        }
+
+        function renderAccountList(role, list, container, emptyState) {
+          if (!container) return;
+          container.innerHTML = '';
+          if (!list.length) {
+            if (emptyState) emptyState.hidden = false;
+            return;
+          }
+          if (emptyState) emptyState.hidden = true;
+          list.forEach((account) => {
+            const item = document.createElement('div');
+            item.className = 'list__item';
+            item.dataset.id = account.id;
+            item.innerHTML = `
+              <strong>${escapeHtml(account.name || 'Kullanıcı')}</strong>
+              <span class="muted">${escapeHtml(account.email || '-')} · ${escapeHtml(account.phone || '-')}</span>
+              <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+                <button class="button button--ghost" type="button" data-role="${role}" data-action="verify">
+                  ${account.verified ? 'Doğrulamayı kaldır' : 'Doğrula'}
+                </button>
+                <button class="button button--danger" type="button" data-role="${role}" data-action="remove">
+                  Sil
+                </button>
+              </div>
+            `;
+            container.appendChild(item);
+          });
+        }
+
+        function renderAccounts() {
+          renderAccountList('senders', state.accounts.senders, sendersList, sendersEmpty);
+          renderAccountList('drivers', state.accounts.drivers, driversList, driversEmpty);
+        }
+
+        function toggleVerification(role, id) {
+          const accounts = { ...state.accounts };
+          const list = role === 'drivers' ? accounts.drivers : accounts.senders;
+          const index = list.findIndex((item) => item.id === id);
+          if (index === -1) return;
+          list[index] = { ...list[index], verified: !list[index].verified };
+          state.accounts = accounts;
+          writeAccounts(accounts);
+          renderAccounts();
+          renderStats();
+          showToast('Hesap durumu güncellendi');
+        }
+
+        function removeAccount(role, id) {
+          if (!window.confirm('Bu hesabı silmek istediğinize emin misiniz?')) return;
+          const accounts = { ...state.accounts };
+          const list = role === 'drivers' ? accounts.drivers : accounts.senders;
+          accounts[role] = list.filter((item) => item.id !== id);
+          state.accounts = accounts;
+          writeAccounts(accounts);
+          renderAccounts();
+          renderStats();
+          showToast('Hesap silindi');
+        }
+
+        function renderActivities() {
+          if (appointmentsList) {
+            appointmentsList.innerHTML = '';
+            if (!state.appointments.length) {
+              if (appointmentsEmpty) appointmentsEmpty.hidden = false;
+            } else {
+              if (appointmentsEmpty) appointmentsEmpty.hidden = true;
+              state.appointments.slice(0, 8).forEach((record) => {
+                const li = document.createElement('li');
+                li.className = 'list__item';
+                li.innerHTML = `
+                  <strong>${escapeHtml(record.fullName || 'Sürücü')}</strong>
+                  <span>${escapeHtml(formatDate(record.meetingDate))} • ${escapeHtml(record.meetingTime || '-')}</span>
+                  <span class="muted">${escapeHtml(record.meetingPlace || 'Lokasyon belirtilmedi')}</span>
+                `;
+                appointmentsList.appendChild(li);
+              });
+            }
+          }
+          if (chatsList) {
+            chatsList.innerHTML = '';
+            if (!state.chats.length) {
+              if (chatsEmpty) chatsEmpty.hidden = false;
+            } else {
+              if (chatsEmpty) chatsEmpty.hidden = true;
+              state.chats.slice(0, 8).forEach((conversation) => {
+                const li = document.createElement('li');
+                li.className = 'list__item';
+                li.innerHTML = `
+                  <strong>${escapeHtml(conversation.listingId || 'İlan')}</strong>
+                  <span>${escapeHtml(formatDateTime(conversation.updatedAt || conversation.createdAt))}</span>
+                  <span class="muted">${conversation.messages?.length || 0} mesaj</span>
+                `;
+                chatsList.appendChild(li);
+              });
+            }
+          }
+        }
+
+        function refreshAll() {
+          state.listings = readListings();
+          state.accounts = readAccounts();
+          state.appointments = readAppointments();
+          state.chats = readChats();
+          renderListings();
+          renderStats();
+          renderAccounts();
+          renderActivities();
+          if (state.selectedListingId) {
+            const listing = state.listings.find((item) => item.id === state.selectedListingId);
+            if (listing) {
+              populateListingDetail(listing);
+            } else {
+              setSelectedListing('');
+            }
+          }
+        }
+
+        function handleLoginSubmit(event) {
+          event.preventDefault();
+          const accounts = ensureAdminAccounts();
+          const formData = new FormData(loginForm);
+          const email = clean(formData.get('email')).toLowerCase();
+          const password = formData.get('password');
+          if (!email || !password) {
+            setLoginMessage('Lütfen e-posta ve şifre girin.');
+            return;
+          }
+          const admin = accounts.find((item) => item.email.toLowerCase() === email && item.password === password);
+          if (!admin) {
+            setLoginMessage('Bilgiler doğrulanamadı.');
+            return;
+          }
+          const session = setAdminSession(admin);
+          syncAdminHeader(session);
+          setLoginMessage('');
+          refreshAll();
+          showView('dashboard');
+          showToast('Hoş geldiniz');
+        }
+
+        function handleLogout() {
+          clearAdminSession();
+          showView('auth');
+          setSelectedListing('');
+          setLoginMessage('Oturum kapatıldı.');
+        }
+
+        ensureAdminAccounts();
+        const activeSession = readAdminSession();
+        if (activeSession) {
+          syncAdminHeader(activeSession);
+          refreshAll();
+          showView('dashboard');
+        } else {
+          showView('auth');
+        }
+
+        if (loginForm) loginForm.addEventListener('submit', handleLoginSubmit);
+        if (logoutButton) logoutButton.addEventListener('click', handleLogout);
+        if (listingsFilter) listingsFilter.addEventListener('change', renderListings);
+        if (listingForm) listingForm.addEventListener('submit', handleListingFormSubmit);
+        if (addHistoryNoteButton) addHistoryNoteButton.addEventListener('click', addHistoryNote);
+
+        if (listingsTableBody) {
+          listingsTableBody.addEventListener('change', (event) => {
+            const select = event.target.closest('select[data-action="status"]');
+            if (!select) return;
+            const row = select.closest('tr');
+            if (!row) return;
+            updateListingStatus(row.dataset.id, select.value);
+          });
+          listingsTableBody.addEventListener('click', (event) => {
+            const button = event.target.closest('button[data-action]');
+            if (!button) return;
+            const row = button.closest('tr');
+            if (!row) return;
+            const id = row.dataset.id;
+            if (!id) return;
+            if (button.dataset.action === 'edit') {
+              setSelectedListing(id);
+            } else if (button.dataset.action === 'delete') {
+              deleteListing(id);
+            }
+          });
+        }
+
+        function handleAccountAction(event) {
+          const button = event.target.closest('button[data-action][data-role]');
+          if (!button) return;
+          const container = button.closest('.list__item');
+          if (!container) return;
+          const { action, role } = button.dataset;
+          const id = container.dataset.id;
+          if (!id) return;
+          if (action === 'verify') {
+            toggleVerification(role, id);
+          } else if (action === 'remove') {
+            removeAccount(role, id);
+          }
+        }
+
+        if (sendersList) sendersList.addEventListener('click', handleAccountAction);
+        if (driversList) driversList.addEventListener('click', handleAccountAction);
+
+        window.addEventListener('storage', (event) => {
+          if ([STORAGE_KEY, ACCOUNT_KEY, APPOINTMENT_KEY, CHAT_KEY].includes(event.key)) {
+            refreshAll();
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

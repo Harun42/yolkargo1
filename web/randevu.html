@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Randevu Oluştur | GoGo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-page: #f3f6fc;
+        --bg-card: #ffffff;
+        --accent: #ff7a00;
+        --accent-dark: #ff6700;
+        --text-dark: #0f172a;
+        --text-muted: #475569;
+        --border: #d6dae6;
+        --radius-lg: 26px;
+        --radius-md: 18px;
+        --radius-sm: 12px;
+        --shadow-card: 0 24px 45px rgba(15, 23, 42, 0.14);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: linear-gradient(180deg, #0b1224 0%, #161f36 40%, var(--bg-page) 40%);
+        color: var(--text-dark);
+        min-height: 100vh;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      header {
+        padding: clamp(1.5rem, 1.5vw + 1.2rem, 2.4rem) clamp(1.5rem, 3vw, 4rem);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #fff;
+      }
+
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .logo img {
+        height: 42px;
+        width: auto;
+        display: block;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .nav__profile {
+        position: relative;
+      }
+
+      .nav__profile-trigger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .nav__profile-trigger:hover,
+      .nav__profile-trigger[aria-expanded="true"] {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.18);
+        border-color: rgba(255, 255, 255, 0.6);
+      }
+
+      .nav__profile-trigger svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .nav__profile-menu {
+        position: absolute;
+        top: calc(100% + 0.75rem);
+        right: 0;
+        min-width: 230px;
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        background: #fff;
+        color: var(--text-dark);
+        box-shadow: var(--shadow-card);
+        display: grid;
+        gap: 0.35rem;
+        z-index: 28;
+      }
+
+      .nav__profile-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        margin-bottom: 0.35rem;
+      }
+
+      .nav__profile-name {
+        font-weight: 600;
+        font-size: 0.98rem;
+      }
+
+      .nav__profile-role {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+      }
+
+      .nav__profile-divider {
+        height: 1px;
+        background: rgba(15, 23, 42, 0.08);
+        margin: 0.25rem 0 0.35rem;
+      }
+
+      .nav__profile-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.55rem 0.65rem;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 0.92rem;
+        color: inherit;
+        transition: background 0.2s ease;
+      }
+
+      .nav__profile-link svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .nav__profile-link:hover {
+        background: rgba(15, 23, 42, 0.08);
+      }
+
+      .nav__profile-link--danger {
+        color: #dc2626;
+      }
+
+      .nav__profile-link--danger:hover {
+        background: rgba(220, 38, 38, 0.1);
+      }
+
+      .nav__profile-link--primary {
+        background: rgba(255, 122, 0, 0.12);
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .nav__profile-link--primary:hover {
+        background: rgba(255, 122, 0, 0.22);
+      }
+
+      .header-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.55rem 1.2rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.32);
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .header-button:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .header-button--logout {
+        background: rgba(255, 255, 255, 0.22);
+        border-color: rgba(255, 255, 255, 0.34);
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.85rem 1.6rem;
+        border-radius: 999px;
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 18px 40px rgba(255, 122, 0, 0.35);
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 22px 48px rgba(255, 122, 0, 0.42);
+      }
+
+      .button--ghost {
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: none;
+      }
+
+      main {
+        padding: 0 clamp(1.5rem, 3vw, 4rem) 4rem;
+      }
+
+      .shell {
+        width: min(1120px, 100%);
+        margin: 0 auto;
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-card);
+        margin-top: clamp(-7rem, -10vw, -5rem);
+        padding: clamp(1.8rem, 2vw + 1.4rem, 2.6rem);
+        display: grid;
+        gap: clamp(2rem, 4vw, 3rem);
+      }
+
+      .breadcrumbs {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+      }
+
+      .breadcrumbs a {
+        color: rgba(15, 23, 42, 0.6);
+        font-weight: 500;
+      }
+
+      .breadcrumbs span {
+        margin: 0 0.35rem;
+        opacity: 0.5;
+      }
+
+      .content {
+        display: grid;
+        gap: clamp(2.2rem, 4vw, 3rem);
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: start;
+      }
+
+      .panel {
+        background: linear-gradient(160deg, rgba(255, 122, 0, 0.12), rgba(255, 122, 0, 0.03));
+        border-radius: var(--radius-md);
+        padding: clamp(1.6rem, 2vw + 1.2rem, 2.2rem);
+        display: grid;
+        gap: 1.1rem;
+      }
+
+      .panel h2 {
+        margin: 0;
+        font-size: clamp(1.6rem, 1.2vw + 1.4rem, 2rem);
+        letter-spacing: -0.01em;
+      }
+
+      .panel p {
+        margin: 0;
+        color: var(--text-muted);
+        line-height: 1.7;
+      }
+
+      .listing-summary {
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: var(--radius-md);
+        padding: clamp(1.4rem, 2vw + 1rem, 2rem);
+        display: grid;
+        gap: 1rem;
+        background: #fff;
+      }
+
+      .listing-summary h3 {
+        margin: 0;
+        font-size: 1.25rem;
+      }
+
+      .summary-grid {
+        display: grid;
+        gap: 0.75rem;
+        font-size: 0.96rem;
+      }
+
+      .summary-grid span {
+        color: var(--text-muted);
+      }
+
+      .summary-grid strong {
+        color: var(--text-dark);
+        font-weight: 600;
+      }
+
+      form {
+        display: grid;
+        gap: 1.4rem;
+      }
+
+      fieldset {
+        border: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 1.2rem;
+      }
+
+      label {
+        display: grid;
+        gap: 0.45rem;
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+
+      input,
+      textarea,
+      select {
+        font: inherit;
+        padding: 0.85rem 1rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        background: rgba(243, 246, 252, 0.7);
+        color: var(--text-dark);
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.18);
+        background: #fff;
+      }
+
+      textarea {
+        min-height: 130px;
+        resize: vertical;
+      }
+
+      .form-row {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .form-note {
+        margin: 0;
+        font-size: 0.92rem;
+        color: var(--text-muted);
+      }
+
+      .alert {
+        background: rgba(56, 189, 98, 0.12);
+        color: #166534;
+        border: 1px solid rgba(22, 163, 74, 0.24);
+        padding: 1rem 1.2rem;
+        border-radius: var(--radius-sm);
+        font-weight: 500;
+        display: none;
+      }
+
+      .alert--visible {
+        display: block;
+      }
+
+      @media (max-width: 960px) {
+        header {
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+
+        .header-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+        }
+
+        .content {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
+        .header-actions {
+          width: 100%;
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .header-actions .nav__profile {
+          align-self: flex-end;
+        }
+
+        .form-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .button {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .shell {
+          padding: 1.6rem 1.4rem 2.2rem;
+        }
+
+        .panel,
+        .listing-summary {
+          padding: 1.4rem;
+        }
+
+        main {
+          padding-inline: 1.2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo" aria-label="GoGo ana sayfa">
+        <img src="assets/gogo-logo.svg" alt="GoGo" />
+      </div>
+      <div class="header-actions">
+        <a class="button button--ghost" href="ilanlar.html">İlanlara geri dön</a>
+        <div class="nav__profile" data-auth-profile hidden>
+          <button
+            class="nav__profile-trigger"
+            type="button"
+            data-auth-profile-trigger
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-label="Hesap menüsünü aç"
+          >
+            <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4 0-7 2-7 4.2 0 1.1.9 1.8 2.5 1.8h9c1.6 0 2.5-.7 2.5-1.8C19 16 16 14 12 14Z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <div class="nav__profile-menu" data-auth-profile-menu hidden role="menu">
+            <div class="nav__profile-header">
+              <span class="nav__profile-name" data-auth-name>Hesabım</span>
+              <span class="nav__profile-role" data-auth-role hidden></span>
+            </div>
+              <div class="nav__profile-divider"></div>
+              <a
+                class="nav__profile-link nav__profile-link--primary"
+                data-auth-trigger="login"
+                data-auth-role="sender"
+                href="giris.html"
+                role="menuitem"
+              >
+                <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M14 3h7v18h-7v-2h5V5h-5ZM3.29 11.29l3-3 1.42 1.42L6.41 11H16v2H6.41l1.3 1.29-1.42 1.42-3-3a1 1 0 0 1 0-1.42Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Giriş Yap / Kayıt Ol
+              </a>
+              <a class="nav__profile-link" href="ilanlar.html#my" data-auth-visible="sender" role="menuitem">
+              <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M5 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Zm2 0h10v1H7Zm0 3h10v9H7Zm2 2v2h6v-2Z"
+                  fill="currentColor"
+                />
+              </svg>
+              İlanlarım
+            </a>
+            <a class="nav__profile-link" href="randevu.html" data-auth-visible="sender" role="menuitem">
+              <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M7 3h2v2h6V3h2v2h3v16H4V5h3Zm12 6H5v10h14Zm-9 3h2v2H10Zm4 0h2v2h-2Z"
+                  fill="currentColor"
+                />
+              </svg>
+              Kargo Durumlarım
+            </a>
+            <a class="nav__profile-link" href="randevu.html#hareket" data-auth-visible="driver" role="menuitem">
+              <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M4 5h4l2 3h10v6h-3l-2 3H4Zm2 2v8h8.17l2-3H18V10H9.83l-2-3Z"
+                  fill="currentColor"
+                />
+              </svg>
+              Kargo Hareket Durumu
+            </a>
+            <a class="nav__profile-link" href="giris.html#ayarlar" role="menuitem">
+              <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 15a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm8-3a1 1 0 0 0-.52-.88l-1.54-.88.06-1.78a1 1 0 0 0-.29-.73l-1.5-1.5a1 1 0 0 0-.73-.29l-1.78.06-.88-1.54A1 1 0 0 0 12 2h-2a1 1 0 0 0-.88.52l-.88 1.54-1.78-.06a1 1 0 0 0-.73.29l-1.5 1.5a1 1 0 0 0-.29.73l.06 1.78-1.54.88A1 1 0 0 0 2 12v2a1 1 0 0 0 .52.88l1.54.88-.06 1.78a1 1 0 0 0 .29.73l1.5 1.5a1 1 0 0 0 .73.29l1.78-.06.88 1.54A1 1 0 0 0 10 22h2a1 1 0 0 0 .88-.52l.88-1.54 1.78.06a1 1 0 0 0 .73-.29l1.5-1.5a1 1 0 0 0 .29-.73l-.06-1.78 1.54-.88A1 1 0 0 0 20 14Zm-2 1.38-1.22.7a1 1 0 0 0-.49.91l.05 1.42-1 .95-1.42-.05a1 1 0 0 0-.91.49L12.88 20h-1.76l-.69-1.22a1 1 0 0 0-.91-.49l-1.42.05-1-.95.05-1.42a1 1 0 0 0-.49-.91L5 15.38V13l1.22-.7a1 1 0 0 0 .49-.91l-.05-1.42 1-.95 1.42.05a1 1 0 0 0 .91-.49L11.12 4h1.76l.69 1.22a1 1 0 0 0 .91.49l1.42-.05 1 .95-.05 1.42a1 1 0 0 0 .49.91L19 11.05Z"
+                  fill="currentColor"
+                />
+              </svg>
+              Ayarlar
+            </a>
+            <button
+              class="nav__profile-link nav__profile-link--danger"
+              type="button"
+              data-auth-trigger="logout"
+              role="menuitem"
+            >
+              <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M9 21H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4v2H6v14h3Zm10.71-9.71-3-3-1.42 1.42L16.59 11H10v2h6.59l-1.3 1.29 1.42 1.42 3-3a1 1 0 0 0 0-1.42Z"
+                  fill="currentColor"
+                />
+              </svg>
+              Çıkış Yap
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="shell">
+        <nav class="breadcrumbs">
+          <a href="index.html">Ana sayfa</a>
+          <span>/</span>
+          <a href="ilanlar.html">İlanlar</a>
+          <span>/</span>
+          <strong>Randevu oluştur</strong>
+        </nav>
+        <div class="content">
+          <section class="panel">
+            <h2>Gönderici ile randevu planlayın</h2>
+            <p>
+              Teslimat sürecini hızlandırmak için randevu bilgilerinizi gönderici ile paylaşalım. Tarih ve
+              konum tercihinizi belirterek hızlıca dönüş alabilirsiniz.
+            </p>
+            <div class="alert" id="successMessage">Randevu talebiniz iletildi, ilanlar sayfasına yönlendiriliyorsunuz…</div>
+            <form id="appointmentForm" novalidate>
+              <fieldset>
+                <legend class="visually-hidden">Kişisel bilgiler</legend>
+                <div class="form-row">
+                  <label for="full-name">
+                    Adınız Soyadınız
+                    <input id="full-name" name="fullName" type="text" autocomplete="name" required placeholder="Örn. Ahmet Demir" />
+                  </label>
+                  <label for="phone">
+                    Telefon numaranız
+                    <input id="phone" name="phone" type="tel" autocomplete="tel" required placeholder="05xx xxx xx xx" />
+                  </label>
+                </div>
+                <label for="email">
+                  E-posta adresiniz (isteğe bağlı)
+                  <input id="email" name="email" type="email" autocomplete="email" placeholder="ornek@eposta.com" />
+                </label>
+              </fieldset>
+              <fieldset>
+                <legend class="visually-hidden">Randevu seçenekleri</legend>
+                <div class="form-row">
+                  <label for="meeting-date">
+                    Tercih edilen tarih
+                    <input id="meeting-date" name="meetingDate" type="date" required />
+                  </label>
+                  <label for="meeting-time">
+                    Tercih edilen saat
+                    <input id="meeting-time" name="meetingTime" type="time" required />
+                  </label>
+                </div>
+                <label for="meeting-place">
+                  Buluşma adresi
+                  <input
+                    id="meeting-place"
+                    name="meetingPlace"
+                    type="text"
+                    placeholder="Örn. Kadıköy Rıhtım, vapur iskelesi önü"
+                    required
+                  />
+                </label>
+                <label for="notes">
+                  Ek notlar
+                  <textarea id="notes" name="notes" placeholder="Özel isteğiniz varsa paylaşabilirsiniz."></textarea>
+                </label>
+              </fieldset>
+              <div class="form-actions">
+                <button class="button" type="submit">Randevu talebini gönder</button>
+                <p class="form-note">Göndericiye randevu detaylarınız iletilir ve dönüş aldığınızda SMS ile bilgilendirilirsiniz.</p>
+              </div>
+            </form>
+          </section>
+          <aside class="listing-summary" id="listingSummary">
+            <h3>İlan bilgileri yükleniyor…</h3>
+            <div class="summary-grid" id="listingDetails"></div>
+          </aside>
+        </div>
+      </div>
+    </main>
+    <script>
+      (function () {
+        const SESSION_KEY = "yolkargoSession";
+        const loginLinks = Array.from(document.querySelectorAll('[data-auth-trigger="login"]'));
+        const logoutButtons = Array.from(
+          document.querySelectorAll('[data-auth-trigger="logout"]')
+        );
+        const guardedElements = Array.from(document.querySelectorAll('[data-requires-auth]'));
+        const profileWrapper = document.querySelector('[data-auth-profile]');
+        const profileTrigger = profileWrapper
+          ? profileWrapper.querySelector('[data-auth-profile-trigger]')
+          : null;
+        const profileMenu = profileWrapper
+          ? profileWrapper.querySelector('[data-auth-profile-menu]')
+          : null;
+        if (profileMenu) {
+          profileMenu.hidden = true;
+        }
+        const profileName = document.querySelector('[data-auth-name]');
+        const profileRole = document.querySelector('[data-auth-role]');
+        const roleVisibility = Array.from(document.querySelectorAll('[data-auth-visible]'));
+        const nameInput = document.getElementById("full-name");
+        const phoneInput = document.getElementById("phone");
+        const redirectTarget = `randevu.html${window.location.search || ""}`;
+        const ROLE_LABELS = {
+          sender: "Gönderici",
+          driver: "Sürücü",
+          admin: "Yönetici"
+        };
+        let profileMenuOpen = false;
+
+        function readSession() {
+          try {
+            const raw = window.localStorage.getItem(SESSION_KEY);
+            if (!raw) {
+              return null;
+            }
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== "object") {
+              return null;
+            }
+            if (!parsed.role || !parsed.id) {
+              return null;
+            }
+            return parsed;
+          } catch (error) {
+            console.warn("Oturum bilgisi okunamadı.", error);
+            return null;
+          }
+        }
+
+        function getRedirectTarget() {
+          const search = window.location.search || "";
+          const hash = window.location.hash || "";
+          return `randevu.html${search}${hash}`;
+        }
+
+        function buildLoginUrl(options = {}) {
+          const params = new URLSearchParams();
+          if (options.redirect) {
+            params.set("redirect", options.redirect);
+          }
+          if (options.role) {
+            params.set("role", options.role);
+          }
+          if (options.intent) {
+            params.set("intent", options.intent);
+          }
+          const query = params.toString();
+          return `giris.html${query ? `?${query}` : ""}`;
+        }
+
+        function closeProfileMenu() {
+          if (!profileTrigger || !profileMenu) {
+            return;
+          }
+          profileMenu.hidden = true;
+          profileTrigger.setAttribute("aria-expanded", "false");
+          profileMenuOpen = false;
+        }
+
+        function openProfileMenu() {
+          if (!profileTrigger || !profileMenu) {
+            return;
+          }
+          profileMenu.hidden = false;
+          profileTrigger.setAttribute("aria-expanded", "true");
+          profileMenuOpen = true;
+        }
+
+        function toggleProfileMenu() {
+          if (profileMenuOpen) {
+            closeProfileMenu();
+          } else {
+            openProfileMenu();
+          }
+        }
+
+        function syncRoleVisibility(session) {
+          roleVisibility.forEach((element) => {
+            const role = element.getAttribute("data-auth-visible");
+            if (!session) {
+              element.hidden = true;
+              return;
+            }
+            if (!role || session.role === role) {
+              element.hidden = false;
+            } else {
+              element.hidden = true;
+            }
+          });
+        }
+
+        function updateNav() {
+          const session = readSession();
+          const redirect = redirectTarget;
+
+          loginLinks.forEach((link) => {
+            if (session) {
+              link.hidden = true;
+              return;
+            }
+            link.hidden = false;
+            const role = link.getAttribute("data-auth-role") || undefined;
+            const intent = link.getAttribute("data-auth-intent") || "login";
+            link.setAttribute(
+              "href",
+              buildLoginUrl({
+                role,
+                intent,
+                redirect
+              })
+            );
+          });
+
+          logoutButtons.forEach((button) => {
+            button.hidden = !session;
+          });
+
+          if (profileWrapper) {
+            profileWrapper.hidden = false;
+            if (profileTrigger) {
+              profileTrigger.setAttribute(
+                "aria-label",
+                session ? "Hesap menüsünü aç" : "Giriş seçeneklerini aç"
+              );
+            }
+            if (session) {
+              if (profileName) {
+                profileName.textContent = session.name || "Hesabım";
+              }
+              if (profileRole) {
+                profileRole.textContent = ROLE_LABELS[session.role] || "";
+                profileRole.hidden = false;
+              }
+            } else {
+              if (profileName) {
+                profileName.textContent = "GoGo hesabı";
+              }
+              if (profileRole) {
+                profileRole.textContent = "";
+                profileRole.hidden = true;
+              }
+            }
+            closeProfileMenu();
+          }
+
+          guardedElements.forEach((element) => {
+            element.removeAttribute("title");
+            const requiredRole = element.getAttribute("data-requires-auth");
+            if (!requiredRole) {
+              return;
+            }
+            if (session && session.role !== requiredRole) {
+              const message =
+                requiredRole === "sender"
+                  ? "İlan vermek için gönderici hesabı ile giriş yapmalısınız."
+                  : "Bu işlem için sürücü hesabı ile giriş yapmalısınız.";
+              element.setAttribute("title", message);
+            }
+          });
+
+          syncRoleVisibility(session);
+
+          window.YolkargoSession = session;
+        }
+
+        function redirectToLogin(intent) {
+          const url = buildLoginUrl({
+            role: "driver",
+            intent,
+            redirect: redirectTarget
+          });
+          window.location.href = url;
+        }
+
+        function ensureDriverSession() {
+          const session = readSession();
+          if (session && session.role === "driver") {
+            return session;
+          }
+          if (session && session.role !== "driver") {
+            alert("Randevu oluşturmak için sürücü hesabı ile giriş yapmalısınız.");
+          }
+          redirectToLogin(session ? "login" : "register");
+          return null;
+        }
+
+        function handleLogout(event) {
+          if (event) {
+            event.preventDefault();
+          }
+          try {
+            window.localStorage.removeItem(SESSION_KEY);
+          } catch (error) {
+            console.warn("Oturum kapatılamadı.", error);
+          }
+          closeProfileMenu();
+          updateNav();
+          redirectToLogin("login");
+        }
+
+        function guardClick(event) {
+          const element = event.currentTarget;
+          const requiredRole = element.getAttribute("data-requires-auth");
+          const session = readSession();
+          if (session && (!requiredRole || session.role === requiredRole)) {
+            return;
+          }
+          event.preventDefault();
+          if (session && requiredRole && session.role !== requiredRole) {
+            const message =
+              requiredRole === "sender"
+                ? "İlan vermek için gönderici hesabı ile giriş yapmalısınız."
+                : "Bu işlem için sürücü hesabı ile giriş yapmalısınız.";
+            alert(message);
+          }
+          redirectToLogin(session ? "login" : "register");
+        }
+
+        logoutButtons.forEach((button) => {
+          button.addEventListener("click", handleLogout);
+        });
+
+        guardedElements.forEach((element) => {
+          element.addEventListener("click", guardClick);
+        });
+
+        if (profileTrigger) {
+          profileTrigger.addEventListener("click", (event) => {
+            event.preventDefault();
+            toggleProfileMenu();
+          });
+        }
+
+        if (profileWrapper) {
+          profileWrapper.addEventListener("focusout", (event) => {
+            if (!profileWrapper.contains(event.relatedTarget)) {
+              closeProfileMenu();
+            }
+          });
+        }
+
+        document.addEventListener("click", (event) => {
+          if (!profileMenuOpen || !profileWrapper) {
+            return;
+          }
+          if (!profileWrapper.contains(event.target)) {
+            closeProfileMenu();
+          }
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && profileMenuOpen) {
+            closeProfileMenu();
+          }
+        });
+
+        window.addEventListener("storage", (event) => {
+          if (event.key === SESSION_KEY) {
+            const current = readSession();
+            if (!current || current.role !== "driver") {
+              redirectToLogin(current ? "login" : "register");
+              return;
+            }
+            window.YolkargoSession = current;
+            updateNav();
+            if (nameInput && !nameInput.value) {
+              nameInput.value = current.name || "";
+            }
+            if (phoneInput && !phoneInput.value) {
+              phoneInput.value = current.phone || "";
+            }
+          }
+        });
+
+        updateNav();
+        const activeSession = ensureDriverSession();
+        if (!activeSession) {
+          return;
+        }
+
+        if (nameInput && !nameInput.value) {
+          nameInput.value = activeSession.name || "";
+        }
+        if (phoneInput && !phoneInput.value) {
+          phoneInput.value = activeSession.phone || "";
+        }
+      })();
+    </script>
+    <script>
+      (function () {
+        const STORAGE_KEY = "yolkargoListings";
+        const APPOINTMENT_KEY = "yolkargoAppointments";
+        const FLASH_KEY = "listingFlash";
+        const seedListings = [
+          {
+            id: "seed-istanbul-ankara",
+            senderName: "Ayşe K.",
+            senderPhone: "0 532 123 45 67",
+            senderEmail: "",
+            pickupCity: "İstanbul",
+            pickupAddress: "Kadıköy, Moda Caddesi",
+            dropoffCity: "Ankara",
+            dropoffAddress: "Çankaya, Atatürk Bulvarı",
+            cargoDate: "2024-05-12",
+            isFlexible: true,
+            packageSize: "Orta paket (10-25 kg)",
+            cargoNotes: "Cam şişe içerir, dik taşınması önemli.",
+            cargoWeight: "12",
+            budget: 450,
+            createdAt: "Bugün",
+            source: "seed",
+          },
+          {
+            id: "seed-izmir-bursa",
+            senderName: "Mehmet T.",
+            senderPhone: "0 505 987 65 43",
+            senderEmail: "",
+            pickupCity: "İzmir",
+            pickupAddress: "Konak, Gazi Osman Paşa Bulvarı",
+            dropoffCity: "Bursa",
+            dropoffAddress: "Nilüfer, Ataevler Mah.",
+            cargoDate: "2024-05-15",
+            isFlexible: false,
+            packageSize: "Küçük paket (0-10 kg)",
+            cargoNotes: "Laptop ve aksesuar kutusu.",
+            cargoWeight: "6",
+            budget: 320,
+            createdAt: "Dün",
+            source: "seed",
+          },
+          {
+            id: "seed-antalya-istanbul",
+            senderName: "Selin D.",
+            senderPhone: "0 531 222 33 44",
+            senderEmail: "",
+            pickupCity: "Antalya",
+            pickupAddress: "Muratpaşa, Atatürk Caddesi",
+            dropoffCity: "İstanbul",
+            dropoffAddress: "Üsküdar, Çengelköy Mah.",
+            cargoDate: "2024-05-22",
+            isFlexible: true,
+            packageSize: "Büyük paket (25-40 kg)",
+            cargoNotes: "Dikkatli taşınması gereken spor ekipmanları",
+            cargoWeight: "28",
+            budget: 780,
+            createdAt: "3 gün önce",
+            source: "seed",
+          },
+        ];
+
+        const summary = document.getElementById("listingSummary");
+        const details = document.getElementById("listingDetails");
+        const form = document.getElementById("appointmentForm");
+        const successMessage = document.getElementById("successMessage");
+        const redirectTarget = `randevu.html${window.location.search || ""}`;
+        const loginRedirect = `giris.html?role=driver&intent=login&redirect=${encodeURIComponent(
+          redirectTarget
+        )}`;
+
+        function ensureDriverSession() {
+          if (typeof window === "undefined") {
+            return null;
+          }
+          const session = window.YolkargoSession;
+          if (session && session.role === "driver") {
+            return session;
+          }
+          return null;
+        }
+
+        if (!ensureDriverSession()) {
+          return;
+        }
+
+        function createId(prefix = "apt") {
+          const random = Math.random().toString(36).slice(2, 10);
+          return `${prefix}-${Date.now().toString(36)}-${random}`;
+        }
+
+        function readListings() {
+          try {
+            const raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) {
+              return [];
+            }
+            let mutated = false;
+            const cleaned = parsed
+              .filter((item) => item && typeof item === "object")
+              .map((item) => {
+                if (item.id) {
+                  return item;
+                }
+                mutated = true;
+                return { ...item, id: createId("listing") };
+              });
+            if (mutated) {
+              try {
+                window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cleaned));
+              } catch (error) {
+                console.warn("İlanlar güncellenemedi", error);
+              }
+            }
+            return cleaned;
+          } catch (error) {
+            console.warn("İlan listesi okunamadı", error);
+            return [];
+          }
+        }
+
+        function readAppointments() {
+          try {
+            const raw = window.localStorage.getItem(APPOINTMENT_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            console.warn("Randevu kayıtları okunamadı", error);
+            return [];
+          }
+        }
+
+        function writeAppointments(records) {
+          try {
+            window.localStorage.setItem(APPOINTMENT_KEY, JSON.stringify(records));
+          } catch (error) {
+            console.error("Randevu kaydedilemedi", error);
+          }
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const listingId = params.get("id");
+        const listings = [...readListings(), ...seedListings];
+        const listing = listings.find((item) => item.id === listingId);
+
+        function formatDate(value) {
+          if (!value) {
+            return "Belirtilmedi";
+          }
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) {
+            return value;
+          }
+          return new Intl.DateTimeFormat("tr-TR", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+          }).format(date);
+        }
+
+        function renderSummary() {
+          if (!summary || !details) {
+            return;
+          }
+
+          if (!listing) {
+            summary.innerHTML = `<h3>İlan bulunamadı</h3><p>Seçili ilana ulaşılamadı. Lütfen ilanlar sayfasından tekrar deneyin.</p>`;
+            if (form) {
+              form.querySelectorAll("input, textarea, button").forEach((el) => {
+                el.disabled = true;
+              });
+            }
+            return;
+          }
+
+          const title = summary.querySelector("h3");
+          if (title) {
+            title.textContent = `${listing.pickupCity || "Bilinmiyor"} → ${listing.dropoffCity || "Bilinmiyor"}`;
+          }
+
+          const detailItems = [
+            { label: "Gönderici", value: listing.senderName || "Belirtilmedi" },
+            {
+              label: "İletişim",
+              value: listing.senderPhone || listing.senderEmail || "Belirtilmedi",
+            },
+            { label: "Gönderim tarihi", value: formatDate(listing.cargoDate) },
+            { label: "Tarih esnekliği", value: listing.isFlexible ? "Evet" : "Hayır" },
+            { label: "Paket", value: listing.packageSize || "Belirtilmedi" },
+            { label: "Bütçe", value: listing.budget ? `${listing.budget} ₺` : "Belirtilmedi" },
+          ];
+
+          details.innerHTML = "";
+          detailItems.forEach((item) => {
+            const wrapper = document.createElement("div");
+            const labelEl = document.createElement("span");
+            labelEl.textContent = item.label;
+            const valueEl = document.createElement("strong");
+            valueEl.textContent = item.value;
+            wrapper.append(labelEl, valueEl);
+            details.appendChild(wrapper);
+          });
+        }
+
+        renderSummary();
+
+        if (!form || !listing) {
+          return;
+        }
+
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          if (!ensureDriverSession()) {
+            alert("Oturumunuz sona erdi. Lütfen yeniden giriş yapın.");
+            window.location.href = loginRedirect;
+            return;
+          }
+
+          if (!form.reportValidity()) {
+            return;
+          }
+
+          const formData = new FormData(form);
+          const appointments = readAppointments();
+          const record = {
+            id: createId(),
+            listingId: listing.id,
+            fullName: formData.get("fullName"),
+            phone: formData.get("phone"),
+            email: formData.get("email"),
+            meetingDate: formData.get("meetingDate"),
+            meetingTime: formData.get("meetingTime"),
+            meetingPlace: formData.get("meetingPlace"),
+            notes: formData.get("notes"),
+            createdAt: new Date().toISOString(),
+          };
+
+          appointments.unshift(record);
+          writeAppointments(appointments);
+
+          if (successMessage) {
+            successMessage.classList.add("alert--visible");
+          }
+
+          try {
+            window.sessionStorage.setItem(
+              FLASH_KEY,
+              "Randevu talebiniz göndericiye iletildi!"
+            );
+          } catch (error) {
+            console.warn("Bilgilendirme mesajı kaydedilemedi", error);
+          }
+
+          const redirectUrl = new URL("ilanlar.html", window.location.origin);
+          redirectUrl.hash = "son-ilan";
+          redirectUrl.searchParams.set("highlight", listing.id);
+
+          window.setTimeout(() => {
+            window.location.href = redirectUrl.toString();
+          }, 900);
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GoGo | Giriş ve Kayıt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-page: #f3f6fc;
+        --bg-card: #ffffff;
+        --bg-dark: #090f1d;
+        --accent: #ff7a00;
+        --accent-dark: #ff6700;
+        --text-dark: #0f172a;
+        --text-muted: #475569;
+        --border: #d6dae6;
+        --radius-lg: 26px;
+        --radius-md: 18px;
+        --radius-sm: 12px;
+        --shadow-card: 0 28px 60px rgba(15, 23, 42, 0.14);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: var(--bg-page);
+        color: var(--text-dark);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .nav {
+        background: var(--bg-dark);
+        color: #fff;
+        padding: 1.2rem 0;
+      }
+
+      .nav__inner {
+        width: min(1080px, 92vw);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        font-size: 1.32rem;
+      }
+
+      .logo img {
+        height: 40px;
+        width: auto;
+        display: block;
+      }
+
+      .nav__back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.65rem 1.2rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .nav__back:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .auth {
+        width: min(1080px, 92vw);
+        margin: 3rem auto 4.5rem;
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-card);
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        min-height: 620px;
+      }
+
+      .auth__sidebar {
+        background: linear-gradient(160deg, #ff7a00, #ff6700 58%, #5d2fff);
+        color: #fff;
+        padding: 3rem 2.4rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .auth__sidebar h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 2vw + 1.2rem, 2.6rem);
+      }
+
+      .auth__sidebar p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.82);
+        line-height: 1.7;
+      }
+
+      .role-tabs {
+        display: flex;
+        gap: 0.6rem;
+      }
+
+      .role-tabs button {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        background: transparent;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+
+      .role-tabs button[aria-pressed="true"] {
+        background: #fff;
+        color: var(--text-dark);
+        transform: translateY(-1px);
+      }
+
+      .auth__content {
+        padding: 3rem 3.6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .panel-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+
+      .panel-header h2 {
+        margin: 0;
+        font-size: 1.75rem;
+      }
+
+      .panel-header p {
+        margin: 0;
+        color: var(--text-muted);
+      }
+
+      .auth-tabs {
+        display: inline-flex;
+        align-items: center;
+        background: rgba(15, 23, 42, 0.06);
+        border-radius: 999px;
+        padding: 0.25rem;
+        gap: 0.25rem;
+      }
+
+      .auth-tabs button {
+        padding: 0.55rem 1.35rem;
+        border-radius: 999px;
+        border: none;
+        background: transparent;
+        font-weight: 600;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .auth-tabs button[aria-pressed="true"] {
+        background: #fff;
+        color: var(--text-dark);
+        box-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
+      }
+
+      .auth-panel {
+        display: none;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .auth-panel[aria-hidden="false"] {
+        display: flex;
+      }
+
+      form {
+        display: grid;
+        gap: 1.1rem;
+        max-width: 520px;
+      }
+
+      label {
+        display: grid;
+        gap: 0.4rem;
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"],
+      input[type="password"] {
+        padding: 0.78rem 0.95rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        font-size: 1rem;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.2);
+        outline: none;
+      }
+
+      .checkbox-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.65rem;
+        font-weight: 500;
+        color: var(--text-muted);
+      }
+
+      .checkbox-row input {
+        width: 1.15rem;
+        height: 1.15rem;
+        margin-top: 0.25rem;
+      }
+
+      .button {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.85rem 1.6rem;
+        border-radius: 999px;
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 14px 35px rgba(255, 122, 0, 0.32);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+        background: var(--accent-dark);
+        box-shadow: 0 20px 45px rgba(255, 122, 0, 0.38);
+      }
+
+      .button--ghost {
+        background: transparent;
+        color: var(--text-dark);
+        border: 1px solid rgba(15, 23, 42, 0.16);
+        box-shadow: none;
+      }
+
+      .supporting-text {
+        font-size: 0.92rem;
+        color: var(--text-muted);
+        margin: 0;
+      }
+
+      .message {
+        border-radius: var(--radius-sm);
+        padding: 0.8rem 1rem;
+        font-size: 0.95rem;
+      }
+
+      .message--error {
+        background: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(220, 38, 38, 0.24);
+        color: #b91c1c;
+      }
+
+      .message--success {
+        background: rgba(34, 197, 94, 0.12);
+        border: 1px solid rgba(22, 163, 74, 0.24);
+        color: #166534;
+      }
+
+      .agreements {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+
+      .agreements a {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      @media (max-width: 720px) {
+        .nav__inner {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.75rem;
+        }
+
+        .nav__back {
+          width: 100%;
+          display: inline-flex;
+          justify-content: center;
+          padding: 0.6rem 0.9rem;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.08);
+          color: #fff;
+          font-weight: 600;
+        }
+      }
+
+      @media (max-width: 980px) {
+        .auth {
+          grid-template-columns: 1fr;
+        }
+
+        .auth__sidebar {
+          padding: 2.6rem 2.2rem 2rem;
+        }
+
+        .auth__content {
+          padding: 2.4rem 2rem 3rem;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .auth {
+          margin-top: 1.6rem;
+        }
+
+        .auth__sidebar {
+          gap: 1.6rem;
+        }
+
+        .auth__content {
+          padding: 2rem 1.6rem 2.6rem;
+        }
+
+        form {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .auth-tabs,
+        .role-tabs {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .auth-tabs button,
+        .role-tabs button {
+          width: 100%;
+        }
+
+        .agreements {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="nav">
+        <div class="nav__inner">
+          <a class="logo" href="index.html" aria-label="GoGo ana sayfa">
+            <img src="assets/gogo-logo.svg" alt="GoGo" />
+          </a>
+          <a class="nav__back" href="index.html">← Ana sayfaya dön</a>
+        </div>
+      </header>
+
+      <main class="auth">
+        <aside class="auth__sidebar">
+          <div>
+            <h1>Panel seçimini yap ve GoGo'ya katıl</h1>
+            <p>
+              Göndericiler ve sürücüler için ayrı hesaplar oluşturarak ilanlarını güvenle
+              yönetebilir, tekliflere hızlıca dönüş yapabilirsin. Giriş yapmadan işlem
+              yapılamaz.
+            </p>
+          </div>
+          <div>
+            <p class="supporting-text">Panel seç:</p>
+            <div class="role-tabs" role="tablist">
+              <button type="button" data-role-tab="sender" aria-pressed="true">
+                Gönderici Paneli
+              </button>
+              <button type="button" data-role-tab="driver" aria-pressed="false">
+                Sürücü Paneli
+              </button>
+            </div>
+          </div>
+          <div class="supporting-text">
+            <strong>Güvenli Topluluk</strong><br />
+            Tüm üyeler sözleşmeyi onaylamak ve doğrulanmış bilgilerle giriş yapmak zorundadır.
+            Böylece ilan verenler ve başvuranlar kendilerini güvende hisseder.
+          </div>
+        </aside>
+
+        <section class="auth__content">
+          <header class="panel-header">
+            <h2 data-role-title>Gönderici Paneli</h2>
+            <p data-role-description>
+              Kargon için ilan oluştur, sürücülerden teklif al ve süreci tek panelden yönet.
+            </p>
+          </header>
+
+          <div class="auth-tabs" role="tablist">
+            <button type="button" data-auth-tab="login" aria-pressed="true">
+              Giriş Yap
+            </button>
+            <button type="button" data-auth-tab="register" aria-pressed="false">
+              Kayıt Ol
+            </button>
+          </div>
+
+          <div class="auth-panel" data-role-panel="sender" aria-hidden="false">
+            <div data-feedback class="message" hidden></div>
+            <form data-auth-form="sender-login" autocomplete="on">
+              <label for="sender-login-email">
+                E-posta adresi
+                <input
+                  id="sender-login-email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  required
+                />
+              </label>
+              <label for="sender-login-password">
+                Şifre
+                <input
+                  id="sender-login-password"
+                  name="password"
+                  type="password"
+                  autocomplete="current-password"
+                  required
+                  minlength="6"
+                />
+              </label>
+              <button class="button" type="submit">Gönderici olarak giriş yap</button>
+              <p class="supporting-text">
+                Hesabın yok mu? "Kayıt Ol" sekmesinden yeni hesap oluşturabilirsin.
+              </p>
+            </form>
+
+            <form data-auth-form="sender-register" autocomplete="on" hidden>
+              <label for="sender-register-name">
+                Ad Soyad
+                <input
+                  id="sender-register-name"
+                  name="name"
+                  type="text"
+                  autocomplete="name"
+                  required
+                />
+              </label>
+              <label for="sender-register-email">
+                E-posta adresi
+                <input
+                  id="sender-register-email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  required
+                />
+              </label>
+              <label for="sender-register-phone">
+                Telefon numarası
+                <input
+                  id="sender-register-phone"
+                  name="phone"
+                  type="tel"
+                  autocomplete="tel"
+                  required
+                />
+              </label>
+              <label for="sender-register-password">
+                Şifre
+                <input
+                  id="sender-register-password"
+                  name="password"
+                  type="password"
+                  autocomplete="new-password"
+                  required
+                  minlength="6"
+                />
+              </label>
+              <label class="checkbox-row" for="sender-terms">
+                <input id="sender-terms" name="terms" type="checkbox" required />
+                <span>
+                  <strong>Sözleşmeyi okudum, onaylıyorum.</strong><br />
+                  <span class="agreements">
+                    <a href="#">Üyelik sözleşmesi</a>
+                    <a href="#">KVKK metni</a>
+                  </span>
+                </span>
+              </label>
+              <button class="button" type="submit">Gönderici hesabı oluştur</button>
+              <p class="supporting-text">
+                Hesabın kayıt olur olmaz aktifleşir. Aynı e-posta ile birden fazla hesap açılamaz.
+              </p>
+            </form>
+          </div>
+
+          <div class="auth-panel" data-role-panel="driver" aria-hidden="true">
+            <div data-feedback class="message" hidden></div>
+            <form data-auth-form="driver-login" autocomplete="on">
+              <label for="driver-login-email">
+                E-posta adresi
+                <input
+                  id="driver-login-email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  required
+                />
+              </label>
+              <label for="driver-login-password">
+                Şifre
+                <input
+                  id="driver-login-password"
+                  name="password"
+                  type="password"
+                  autocomplete="current-password"
+                  required
+                  minlength="6"
+                />
+              </label>
+              <button class="button" type="submit">Sürücü olarak giriş yap</button>
+              <p class="supporting-text">
+                Henüz üye değil misin? "Kayıt Ol" sekmesine geçerek hesabını oluştur.
+              </p>
+            </form>
+
+            <form data-auth-form="driver-register" autocomplete="on" hidden>
+              <label for="driver-register-name">
+                Ad Soyad
+                <input
+                  id="driver-register-name"
+                  name="name"
+                  type="text"
+                  autocomplete="name"
+                  required
+                />
+              </label>
+              <label for="driver-register-email">
+                E-posta adresi
+                <input
+                  id="driver-register-email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  required
+                />
+              </label>
+              <label for="driver-register-phone">
+                Telefon numarası
+                <input
+                  id="driver-register-phone"
+                  name="phone"
+                  type="tel"
+                  autocomplete="tel"
+                  required
+                />
+              </label>
+              <label for="driver-register-password">
+                Şifre
+                <input
+                  id="driver-register-password"
+                  name="password"
+                  type="password"
+                  autocomplete="new-password"
+                  required
+                  minlength="6"
+                />
+              </label>
+              <label class="checkbox-row" for="driver-terms">
+                <input id="driver-terms" name="terms" type="checkbox" required />
+                <span>
+                  <strong>Sözleşmeyi okudum, onaylıyorum.</strong><br />
+                  <span class="agreements">
+                    <a href="#">Sürücü kullanım şartları</a>
+                    <a href="#">KVKK metni</a>
+                  </span>
+                </span>
+              </label>
+              <button class="button" type="submit">Sürücü hesabı oluştur</button>
+              <p class="supporting-text">
+                Sözleşmeyi onaylamadan ilanlara başvuru yapamaz veya teklif gönderemezsin.
+              </p>
+            </form>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      (function () {
+        const ACCOUNT_KEY = "yolkargoAccounts";
+        const SESSION_KEY = "yolkargoSession";
+        const params = new URLSearchParams(window.location.search);
+        const defaultRole = params.get("role") === "driver" ? "driver" : "sender";
+        const defaultIntent = params.get("intent") === "register" ? "register" : "login";
+        const redirectTarget = params.get("redirect") || "ilanlar.html";
+
+        const roleButtons = document.querySelectorAll("[data-role-tab]");
+        const panels = document.querySelectorAll("[data-role-panel]");
+        const roleTitle = document.querySelector("[data-role-title]");
+        const roleDescription = document.querySelector("[data-role-description]");
+        const authTabs = document.querySelectorAll("[data-auth-tab]");
+
+        const descriptions = {
+          sender: "Kargon için ilan oluştur, sürücülerle mesajlaş ve tüm süreci yönet.",
+          driver: "Rotalarına uygun ilanları bul, randevu oluştur ve göndericilerle iletişime geç."
+        };
+
+        function readAccounts() {
+          try {
+            const raw = window.localStorage.getItem(ACCOUNT_KEY);
+            if (!raw) {
+              return { drivers: [], senders: [] };
+            }
+            const parsed = JSON.parse(raw);
+            const drivers = Array.isArray(parsed.drivers) ? parsed.drivers : [];
+            const senders = Array.isArray(parsed.senders) ? parsed.senders : [];
+            return { drivers, senders };
+          } catch (error) {
+            console.warn("Hesaplar okunamadı", error);
+            return { drivers: [], senders: [] };
+          }
+        }
+
+        function saveAccounts(data) {
+          try {
+            window.localStorage.setItem(ACCOUNT_KEY, JSON.stringify(data));
+          } catch (error) {
+            console.error("Hesaplar kaydedilemedi", error);
+            throw error;
+          }
+        }
+
+        function setSession(user) {
+          if (!user) {
+            return;
+          }
+          const session = {
+            id: user.id,
+            role: user.role,
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            verified: Boolean(user.verified)
+          };
+          try {
+            window.localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+          } catch (error) {
+            console.error("Oturum kaydedilemedi", error);
+            throw error;
+          }
+        }
+
+        function createId(prefix) {
+          const random = Math.random().toString(36).slice(2, 10);
+          return `${prefix}-${Date.now().toString(36)}-${random}`;
+        }
+
+        function getPanel(role) {
+          return Array.from(panels).find((panel) => panel.dataset.rolePanel === role);
+        }
+
+        function showMessage(panel, message, type) {
+          if (!panel) {
+            return;
+          }
+          const box = panel.querySelector("[data-feedback]");
+          if (!box) {
+            return;
+          }
+          if (!message) {
+            box.hidden = true;
+            box.textContent = "";
+            box.classList.remove("message--error", "message--success");
+            return;
+          }
+          box.textContent = message;
+          box.classList.remove("message--error", "message--success");
+          box.classList.add(type === "error" ? "message--error" : "message--success");
+          box.hidden = false;
+        }
+
+        function setActiveRole(role) {
+          roleButtons.forEach((button) => {
+            const isActive = button.dataset.roleTab === role;
+            button.setAttribute("aria-pressed", String(isActive));
+          });
+          panels.forEach((panel) => {
+            const isActive = panel.dataset.rolePanel === role;
+            panel.setAttribute("aria-hidden", String(!isActive));
+            if (!isActive) {
+              showMessage(panel, "", "success");
+            }
+          });
+          if (roleTitle) {
+            roleTitle.textContent = role === "sender" ? "Gönderici Paneli" : "Sürücü Paneli";
+          }
+          if (roleDescription) {
+            roleDescription.textContent = descriptions[role];
+          }
+          setActiveIntent(role, currentIntent);
+        }
+
+        let currentIntent = defaultIntent;
+
+        function setActiveIntent(role, intent) {
+          currentIntent = intent;
+          authTabs.forEach((tab) => {
+            const isActive = tab.dataset.authTab === intent;
+            tab.setAttribute("aria-pressed", String(isActive));
+          });
+          panels.forEach((panel) => {
+            const forms = panel.querySelectorAll("[data-auth-form]");
+            forms.forEach((form) => {
+              const [, formIntent] = form.dataset.authForm.split("-");
+              const isVisible =
+                panel.dataset.rolePanel === role &&
+                (formIntent === intent || (intent === "login" && formIntent === "login"));
+              form.hidden = !isVisible;
+              if (!isVisible) {
+                form.reset();
+              }
+            });
+          });
+        }
+
+        roleButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const role = button.dataset.roleTab;
+            setActiveRole(role);
+          });
+        });
+
+        authTabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            const intent = tab.dataset.authTab;
+            setActiveIntent(getCurrentRole(), intent);
+          });
+        });
+
+        function getCurrentRole() {
+          const active = Array.from(roleButtons).find((button) =>
+            button.getAttribute("aria-pressed") === "true"
+          );
+          return active ? active.dataset.roleTab : defaultRole;
+        }
+
+        function clean(value) {
+          return typeof value === "string" ? value.trim() : "";
+        }
+
+        function redirectAfterAuth() {
+          if (!redirectTarget) {
+            window.location.href = "ilanlar.html";
+            return;
+          }
+          window.location.href = redirectTarget;
+        }
+
+        function handleLogin(role, form) {
+          const panel = getPanel(role);
+          showMessage(panel, "", "success");
+          const formData = new FormData(form);
+          const email = clean(formData.get("email")).toLowerCase();
+          const password = clean(formData.get("password"));
+          if (!email || !password) {
+            showMessage(panel, "Lütfen e-posta ve şifreni gir.", "error");
+            return;
+          }
+          const accounts = readAccounts();
+          const list = role === "driver" ? accounts.drivers : accounts.senders;
+          const user = list.find(
+            (item) => item.email.toLowerCase() === email && item.password === password
+          );
+          if (!user) {
+            showMessage(panel, "Bilgiler doğrulanamadı. Lütfen tekrar dene.", "error");
+            return;
+          }
+          try {
+            setSession(user);
+          } catch (error) {
+            showMessage(
+              panel,
+              "Oturum açılırken bir sorun oluştu. Lütfen tarayıcı izinlerini kontrol et.",
+              "error"
+            );
+            return;
+          }
+          showMessage(panel, "Başarıyla giriş yapıldı, yönlendiriliyorsun…", "success");
+          window.setTimeout(redirectAfterAuth, 400);
+        }
+
+        function handleRegister(role, form) {
+          const panel = getPanel(role);
+          showMessage(panel, "", "success");
+          const formData = new FormData(form);
+          const name = clean(formData.get("name"));
+          const email = clean(formData.get("email")).toLowerCase();
+          const phone = clean(formData.get("phone"));
+          const password = clean(formData.get("password"));
+          const termsAccepted = formData.get("terms") === "on";
+
+          if (!termsAccepted) {
+            showMessage(panel, "Sözleşmeyi onaylamadan hesap oluşturamazsın.", "error");
+            return;
+          }
+
+          if (!name || !email || !phone || !password) {
+            showMessage(panel, "Tüm alanları doldurduğundan emin ol.", "error");
+            return;
+          }
+
+          const accounts = readAccounts();
+          const list = role === "driver" ? accounts.drivers : accounts.senders;
+          const exists = list.some((item) => item.email.toLowerCase() === email);
+          if (exists) {
+            showMessage(panel, "Bu e-posta ile daha önce hesap oluşturulmuş.", "error");
+            return;
+          }
+
+          const user = {
+            id: createId(role === "driver" ? "drv" : "snd"),
+            role,
+            name,
+            email,
+            phone,
+            password,
+            verified: false
+          };
+
+          list.push(user);
+
+          try {
+            saveAccounts({
+              drivers: role === "driver" ? list : accounts.drivers,
+              senders: role === "sender" ? list : accounts.senders
+            });
+            setSession(user);
+          } catch (error) {
+            showMessage(
+              panel,
+              "Hesap kaydedilirken bir hata oluştu. Tarayıcı depolama izinlerini kontrol et.",
+              "error"
+            );
+            return;
+          }
+
+          showMessage(panel, "Hesabın oluşturuldu, yönlendiriliyorsun…", "success");
+          window.setTimeout(redirectAfterAuth, 400);
+        }
+
+        document.querySelectorAll("[data-auth-form]").forEach((form) => {
+          form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const [role, intent] = form.dataset.authForm.split("-");
+            if (intent === "login") {
+              handleLogin(role, form);
+            } else if (intent === "register") {
+              handleRegister(role, form);
+            }
+          });
+        });
+
+        function initialise() {
+          setActiveRole(defaultRole);
+          setActiveIntent(defaultRole, defaultIntent);
+        }
+
+        initialise();
+      })();
+    </script>

@@ -1,0 +1,2301 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>İlanlar | GoGo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-dark: #090f1d;
+        --bg-page: #f3f6fc;
+        --bg-card: #ffffff;
+        --accent: #ff7a00;
+        --accent-dark: #ff6700;
+        --text-dark: #0f172a;
+        --text-muted: #475569;
+        --border: #d6dae6;
+        --radius-lg: 28px;
+        --radius-md: 18px;
+        --radius-sm: 12px;
+        --shadow-card: 0 24px 45px rgba(15, 23, 42, 0.14);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: var(--bg-page);
+        color: var(--text-dark);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      .container {
+        width: min(1120px, 92vw);
+        margin: 0 auto;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(255, 122, 0, 0.12);
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        padding: 0.85rem 1.8rem;
+        border-radius: 999px;
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 14px 35px rgba(255, 122, 0, 0.32);
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 42px rgba(255, 122, 0, 0.38);
+      }
+
+      .button--ghost {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: none;
+      }
+
+      .button--plain {
+        background: transparent;
+        color: var(--accent);
+        border: 1px solid rgba(255, 122, 0, 0.45);
+        box-shadow: none;
+      }
+
+      .button--secondary {
+        background: var(--bg-dark);
+        color: #fff;
+        box-shadow: 0 14px 35px rgba(9, 15, 29, 0.2);
+      }
+
+      .button--secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 42px rgba(9, 15, 29, 0.26);
+      }
+
+      .button--neutral {
+        background: transparent;
+        color: var(--text-dark);
+        border: 1px solid rgba(15, 23, 42, 0.14);
+        box-shadow: none;
+      }
+
+      .button--neutral:hover {
+        transform: translateY(-1px);
+        background: rgba(9, 15, 29, 0.05);
+      }
+
+      .button--wide {
+        min-width: 180px;
+      }
+
+      .hero {
+        background: radial-gradient(circle at top left, #ff8a1f, #ff7a00 34%, #6b2cff);
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(9, 15, 29, 0.2), rgba(9, 15, 29, 0.85));
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .hero__inner {
+        position: relative;
+        z-index: 1;
+        padding: 3rem 0 4.2rem;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        margin-bottom: 3.2rem;
+      }
+
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .logo img {
+        height: 42px;
+        width: auto;
+        display: block;
+      }
+
+      .nav__links {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .nav__profile {
+        position: relative;
+      }
+
+      .nav__profile-trigger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .nav__profile-trigger:hover,
+      .nav__profile-trigger[aria-expanded="true"] {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.18);
+        border-color: rgba(255, 255, 255, 0.6);
+      }
+
+      .nav__profile-trigger svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .nav__profile-menu {
+        position: absolute;
+        top: calc(100% + 0.75rem);
+        right: 0;
+        min-width: 230px;
+        padding: 1rem;
+        border-radius: var(--radius-sm);
+        background: #fff;
+        color: var(--text-dark);
+        box-shadow: var(--shadow-card);
+        display: grid;
+        gap: 0.35rem;
+        z-index: 24;
+      }
+
+      .nav__profile-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        margin-bottom: 0.35rem;
+      }
+
+      .nav__profile-name {
+        font-weight: 600;
+        font-size: 0.98rem;
+      }
+
+      .nav__profile-role {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+      }
+
+      .nav__profile-divider {
+        height: 1px;
+        background: rgba(15, 23, 42, 0.08);
+        margin: 0.25rem 0 0.35rem;
+      }
+
+      .nav__profile-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.55rem 0.65rem;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 0.92rem;
+        color: inherit;
+        transition: background 0.2s ease;
+      }
+
+      .nav__profile-link svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .nav__profile-link:hover {
+        background: rgba(15, 23, 42, 0.06);
+      }
+
+      .nav__profile-link[data-has-unread="true"] {
+        background: rgba(255, 122, 0, 0.15);
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .nav__profile-link[data-has-unread="true"] svg {
+        color: var(--accent);
+      }
+
+      .nav__profile-link--danger {
+        color: #dc2626;
+      }
+
+      .nav__profile-link--danger:hover {
+        background: rgba(220, 38, 38, 0.08);
+      }
+
+      .nav__profile-link--primary {
+        background: rgba(255, 122, 0, 0.12);
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .nav__profile-link--primary:hover {
+        background: rgba(255, 122, 0, 0.22);
+      }
+
+      .nav__badge {
+        margin-left: auto;
+        padding: 0 0.45rem;
+        min-width: 22px;
+        height: 22px;
+        border-radius: 999px;
+        background: var(--accent);
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .nav__link {
+        color: rgba(255, 255, 255, 0.78);
+        font-weight: 500;
+      }
+
+      .nav__link:hover {
+        color: #fff;
+      }
+
+      .hero__content {
+        max-width: 640px;
+        display: grid;
+        gap: 1.2rem;
+      }
+
+      .hero__content h1 {
+        margin: 0;
+        font-size: clamp(2.1rem, 2.8vw + 1.4rem, 3.1rem);
+      }
+
+      .hero__content p {
+        margin: 0;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.84);
+      }
+
+      .hero__cta {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      main {
+        padding-bottom: 4rem;
+      }
+
+      .filters {
+        margin-top: -3.2rem;
+      }
+
+      .filters__shell {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-card);
+        padding: clamp(1.8rem, 2vw + 1.6rem, 2.6rem);
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .filters__headline {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .filters__headline h2 {
+        margin: 0;
+        font-size: 1.4rem;
+      }
+
+      .filters__form {
+        display: grid;
+        gap: 1.2rem;
+      }
+
+      .filters__grid {
+        display: grid;
+        gap: 1.1rem 1.4rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--text-dark);
+      }
+
+      input,
+      select {
+        padding: 0.85rem 1rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        font: inherit;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        background: #fff;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.16);
+      }
+
+      .filters__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        justify-content: flex-end;
+      }
+
+      .filters__summary {
+        font-size: 0.92rem;
+        color: var(--text-muted);
+      }
+
+      .results {
+        padding: 4.5rem 0 0;
+      }
+
+      .results__header {
+        text-align: center;
+        display: grid;
+        gap: 0.8rem;
+        max-width: 680px;
+        margin: 0 auto 3rem;
+      }
+
+      .results__header h2 {
+        margin: 0;
+        font-size: clamp(1.9rem, 2.3vw + 1.2rem, 2.6rem);
+      }
+
+      .results__header p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+
+      .results__count {
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+
+      .alert {
+        padding: 1rem 1.2rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid transparent;
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .alert--success {
+        background: rgba(56, 189, 98, 0.12);
+        border-color: rgba(22, 163, 74, 0.24);
+        color: #166534;
+      }
+
+      .results__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.6rem;
+      }
+
+      .listing-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-md);
+        padding: 1.6rem;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+      }
+
+      .listing-card__meta {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+
+      .listing-card__chip {
+        align-self: flex-start;
+        background: rgba(255, 122, 0, 0.12);
+        color: var(--accent);
+        font-weight: 600;
+        border-radius: 999px;
+        padding: 0.3rem 0.75rem;
+        font-size: 0.82rem;
+      }
+
+      .listing-card__status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        border-radius: 999px;
+        padding: 0.3rem 0.75rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        background: rgba(15, 23, 42, 0.08);
+        color: var(--text-dark);
+      }
+
+      .listing-card__status svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .listing-card__status--pending {
+        background: rgba(251, 191, 36, 0.18);
+        color: #92400e;
+      }
+
+      .listing-card__status--approved {
+        background: rgba(34, 197, 94, 0.16);
+        color: #166534;
+      }
+
+      .listing-card__status--in_transit {
+        background: rgba(59, 130, 246, 0.16);
+        color: #1d4ed8;
+      }
+
+      .listing-card__status--delivered {
+        background: rgba(16, 185, 129, 0.18);
+        color: #0f766e;
+      }
+
+      .listing-card__status--cancelled {
+        background: rgba(248, 113, 113, 0.18);
+        color: #b91c1c;
+      }
+
+      .listing-card__status--archived {
+        background: rgba(148, 163, 184, 0.22);
+        color: #475569;
+      }
+
+      .listing-card__route {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+      }
+
+      .listing-card__route strong {
+        font-size: 1.1rem;
+      }
+
+      .listing-card__details {
+        display: grid;
+        gap: 0.35rem;
+        font-size: 0.92rem;
+        color: var(--text-muted);
+      }
+
+      .listing-card__note {
+        line-height: 1.55;
+      }
+
+      .listing-card__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 0.4rem;
+      }
+
+      .listing-card__actions .button {
+        flex: 1 1 160px;
+      }
+
+      .listing-card__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.88rem;
+        color: var(--text-muted);
+      }
+
+      .listing-card__footer strong {
+        color: var(--text-dark);
+        font-size: 1rem;
+      }
+
+      .listing-card--highlight {
+        outline: 3px solid rgba(255, 122, 0, 0.4);
+        box-shadow: 0 26px 60px rgba(255, 122, 0, 0.28);
+        transform: translateY(-2px);
+      }
+
+      .listing-card--highlight .listing-card__chip {
+        background: rgba(255, 122, 0, 0.18);
+      }
+
+      body.modal-open {
+        overflow: hidden;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(9, 15, 29, 0.52);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        z-index: 999;
+      }
+
+      .modal[hidden] {
+        display: none;
+      }
+
+      .modal__dialog {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        width: min(620px, 94vw);
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: clamp(1.8rem, 2vw + 1.6rem, 2.6rem);
+        position: relative;
+        box-shadow: 0 28px 55px rgba(9, 15, 29, 0.28);
+      }
+
+      .modal__close {
+        position: absolute;
+        top: 1.2rem;
+        right: 1.2rem;
+        background: rgba(15, 23, 42, 0.06);
+        border: none;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        color: var(--text-dark);
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        transition: background 0.2s ease;
+      }
+
+      .modal__close:hover {
+        background: rgba(15, 23, 42, 0.12);
+      }
+
+      .modal__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--accent);
+        background: rgba(255, 122, 0, 0.16);
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+      }
+
+      .modal__title {
+        margin: 0.9rem 0 0.6rem;
+        font-size: clamp(1.45rem, 1.6vw + 1.1rem, 1.85rem);
+        letter-spacing: -0.01em;
+      }
+
+      .modal__meta {
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+
+      .modal__contact {
+        margin: 1.1rem 0 0.4rem;
+        padding: 1rem;
+        border-radius: var(--radius-sm);
+        background: rgba(15, 23, 42, 0.04);
+        color: var(--text-dark);
+        font-weight: 500;
+      }
+
+      .modal__contact span {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 400;
+      }
+
+      .detail-list {
+        list-style: none;
+        padding: 0;
+        margin: 1.4rem 0 1.8rem;
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      .detail-list li {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        padding-bottom: 0.8rem;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      }
+
+      .detail-list li:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .detail-list span {
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: rgba(15, 23, 42, 0.55);
+      }
+
+      .detail-list strong {
+        font-size: 1.02rem;
+        color: var(--text-dark);
+        font-weight: 600;
+      }
+
+      .detail-list__note {
+        line-height: 1.6;
+      }
+
+      .modal__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      }
+
+      .modal__actions .button {
+        flex: 1 1 200px;
+      }
+
+      .empty-state {
+        text-align: center;
+        color: var(--text-muted);
+        padding: 2.4rem 1rem;
+        border: 2px dashed rgba(15, 23, 42, 0.12);
+        border-radius: var(--radius-md);
+        margin-top: 2rem;
+      }
+
+      footer {
+        padding: 3rem 0 3.6rem;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.92rem;
+      }
+
+      footer a {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      @media (max-width: 900px) {
+        .nav {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1.1rem;
+        }
+
+        .nav__links {
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+        }
+
+        .nav__links > a {
+          flex: 1 1 150px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.65rem 0.85rem;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.1);
+          color: #fff;
+          font-weight: 600;
+        }
+
+        .nav__profile {
+          margin-left: auto;
+        }
+
+        .hero__content {
+          gap: 1rem;
+        }
+
+        .filters__headline {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .hero__content h1 {
+          font-size: 1.9rem;
+        }
+
+        .hero__cta {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .nav__links {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .nav__links > a {
+          width: 100%;
+        }
+
+        .nav__profile {
+          align-self: flex-end;
+        }
+
+        .filters__actions {
+          justify-content: stretch;
+        }
+
+        .filters__actions .button {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .filters__grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero__content {
+          padding: 2.6rem 1.6rem 3.4rem;
+        }
+
+        .filters {
+          margin-top: -2.4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__inner">
+        <div class="container">
+          <nav class="nav">
+            <a class="logo" href="index.html" aria-label="GoGo ana sayfa">
+              <img src="assets/gogo-logo.svg" alt="GoGo" />
+            </a>
+            <div class="nav__links">
+              <a class="nav__link" href="index.html#features">Özellikler</a>
+              <a class="nav__link" href="index.html#process">Süreç</a>
+              <div class="nav__profile" data-auth-profile hidden>
+                <button
+                  class="nav__profile-trigger"
+                  type="button"
+                  data-auth-profile-trigger
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  aria-label="Hesap menüsünü aç"
+                >
+                  <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4 0-7 2-7 4.2 0 1.1.9 1.8 2.5 1.8h9c1.6 0 2.5-.7 2.5-1.8C19 16 16 14 12 14Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+                <div class="nav__profile-menu" data-auth-profile-menu hidden role="menu">
+                  <div class="nav__profile-header">
+                    <span class="nav__profile-name" data-auth-name>Hesabım</span>
+                    <span class="nav__profile-role" data-auth-role hidden></span>
+                  </div>
+                <div class="nav__profile-divider"></div>
+                <a
+                  class="nav__profile-link nav__profile-link--primary"
+                  data-auth-trigger="login"
+                  data-auth-role="sender"
+                  href="giris.html"
+                  role="menuitem"
+                >
+                  <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M14 3h7v18h-7v-2h5V5h-5ZM3.29 11.29l3-3 1.42 1.42L6.41 11H16v2H6.41l1.3 1.29-1.42 1.42-3-3a1 1 0 0 1 0-1.42Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Giriş Yap / Kayıt Ol
+                </a>
+                <a class="nav__profile-link" href="ilanlar.html#my" data-auth-visible="sender" role="menuitem">
+                    <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M5 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Zm2 0h10v1H7Zm0 3h10v9H7Zm2 2v2h6v-2Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    İlanlarım
+                  </a>
+                  <a
+                    class="nav__profile-link"
+                    href="mesajlarim.html"
+                    data-auth-visible="sender"
+                    data-requires-auth="sender"
+                    data-message-link
+                    role="menuitem"
+                  >
+                    <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M4 4h16a2 2 0 0 1 2 2v9.5a2 2 0 0 1-2 2H8.83L4 21.5V6a2 2 0 0 1 2-2Zm0 2v11.38L7.38 15H20V6Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    <span>Mesajlarım</span>
+                    <span class="nav__badge" data-message-badge hidden>0</span>
+                  </a>
+                  <a class="nav__profile-link" href="randevu.html" data-auth-visible="sender" role="menuitem">
+                    <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M7 3h2v2h6V3h2v2h3v16H4V5h3Zm12 6H5v10h14Zm-9 3h2v2H10Zm4 0h2v2h-2Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    Kargo Durumlarım
+                  </a>
+                  <a class="nav__profile-link" href="randevu.html#hareket" data-auth-visible="driver" role="menuitem">
+                    <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M4 5h4l2 3h10v6h-3l-2 3H4Zm2 2v8h8.17l2-3H18V10H9.83l-2-3Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    Kargo Hareket Durumu
+                  </a>
+                  <a class="nav__profile-link" href="giris.html#ayarlar" role="menuitem">
+                    <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M12 15a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm8-3a1 1 0 0 0-.52-.88l-1.54-.88.06-1.78a1 1 0 0 0-.29-.73l-1.5-1.5a1 1 0 0 0-.73-.29l-1.78.06-.88-1.54A1 1 0 0 0 12 2h-2a1 1 0 0 0-.88.52l-.88 1.54-1.78-.06a1 1 0 0 0-.73.29l-1.5 1.5a1 1 0 0 0-.29.73l.06 1.78-1.54.88A1 1 0 0 0 2 12v2a1 1 0 0 0 .52.88l1.54.88-.06 1.78a1 1 0 0 0 .29.73l1.5 1.5a1 1 0 0 0 .73.29l1.78-.06.88 1.54A1 1 0 0 0 10 22h2a1 1 0 0 0 .88-.52l.88-1.54 1.78.06a1 1 0 0 0 .73-.29l1.5-1.5a1 1 0 0 0 .29-.73l-.06-1.78 1.54-.88A1 1 0 0 0 20 14Zm-2 1.38-1.22.7a1 1 0 0 0-.49.91l.05 1.42-1 .95-1.42-.05a1 1 0 0 0-.91.49L12.88 20h-1.76l-.69-1.22a1 1 0 0 0-.91-.49l-1.42.05-1-.95.05-1.42a1 1 0 0 0-.49-.91L5 15.38V13l1.22-.7a1 1 0 0 0 .49-.91l-.05-1.42 1-.95 1.42.05a1 1 0 0 0 .91-.49L11.12 4h1.76l.69 1.22a1 1 0 0 0 .91.49l1.42-.05 1 .95-.05 1.42a1 1 0 0 0 .49.91L19 11.05Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    Ayarlar
+                  </a>
+                  <button
+                    class="nav__profile-link nav__profile-link--danger"
+                    type="button"
+                    data-auth-trigger="logout"
+                    role="menuitem"
+                  >
+                    <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M9 21H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4v2H6v14h3Zm10.71-9.71-3-3-1.42 1.42L16.59 11H10v2h6.59l-1.3 1.29 1.42 1.42 3-3a1 1 0 0 0 0-1.42Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    Çıkış Yap
+                  </button>
+                </div>
+              </div>
+              <a class="button button--secondary" href="ilan-ver.html" data-requires-auth="sender"
+                >İlan Ver</a
+              >
+            </div>
+          </nav>
+          <div class="hero__content">
+            <span class="badge">İlanlar</span>
+            <h1>Yayınlanan ilanları filtreleyin, size uyan rotayı bulun</h1>
+            <p>
+              Göndericilerin oluşturduğu aktif ilanları şehir, tarih ve paket özelliklerine göre
+              filtreleyerek anında inceleyin. Kendi rotanıza uygun ilanları seçip teklif vermeye
+              başlayın.
+            </p>
+            <div class="hero__cta">
+              <a class="button button--ghost" href="ilan-ver.html" data-requires-auth="sender"
+                >Yeni ilan oluştur</a
+              >
+              <a class="button" href="#filters">Filtrelere git</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section class="filters" id="filters">
+        <div class="container filters__shell">
+          <div class="filters__headline">
+            <h2>Aradığınız rotayı hızla bulun</h2>
+            <div class="filters__summary" id="resultsSummary">Toplam 0 ilan listeleniyor.</div>
+          </div>
+          <form class="filters__form" id="filtersForm">
+            <div class="filters__grid">
+              <label for="filter-pickup">
+                Çıkış ili
+                <input id="filter-pickup" name="pickup" type="text" placeholder="Örn: İstanbul" />
+              </label>
+              <label for="filter-dropoff">
+                Varış ili
+                <input id="filter-dropoff" name="dropoff" type="text" placeholder="Örn: Ankara" />
+              </label>
+              <label for="filter-date-from">
+                Gönderim tarihi (en erken)
+                <input id="filter-date-from" name="dateFrom" type="date" />
+              </label>
+              <label for="filter-date-to">
+                Gönderim tarihi (en geç)
+                <input id="filter-date-to" name="dateTo" type="date" />
+              </label>
+              <label for="filter-size">
+                Paket boyutu
+                <select id="filter-size" name="packageSize">
+                  <option value="">Tümü</option>
+                  <option value="Küçük paket (0-10 kg)">Küçük paket (0-10 kg)</option>
+                  <option value="Orta paket (10-25 kg)">Orta paket (10-25 kg)</option>
+                  <option value="Büyük paket (25-40 kg)">Büyük paket (25-40 kg)</option>
+                  <option value="Ekstra hacimli (40 kg üzeri)">Ekstra hacimli (40 kg üzeri)</option>
+                </select>
+              </label>
+              <label for="filter-flexible">
+                Tarih esnekliği
+                <select id="filter-flexible" name="flexible">
+                  <option value="any">Fark etmez</option>
+                  <option value="flex">Esnek tarihler</option>
+                  <option value="strict">Sabit tarihler</option>
+                </select>
+              </label>
+              <label for="filter-status">
+                İlan durumu
+                <select id="filter-status" name="status">
+                  <option value="published" selected>Yayınlanan ilanlar</option>
+                  <option value="all">Tüm ilanlar</option>
+                  <option value="approved">Onaylandı</option>
+                  <option value="in_transit">Yolda</option>
+                  <option value="delivered">Teslim edildi</option>
+                  <option value="pending">Onay bekliyor</option>
+                </select>
+              </label>
+              <label for="filter-min-budget">
+                Minimum bütçe (₺)
+                <input id="filter-min-budget" name="minBudget" type="number" min="0" step="25" />
+              </label>
+              <label for="filter-max-budget">
+                Maksimum bütçe (₺)
+                <input id="filter-max-budget" name="maxBudget" type="number" min="0" step="25" />
+              </label>
+            </div>
+            <div class="filters__actions">
+              <button class="button button--plain" type="reset">Filtreleri temizle</button>
+            </div>
+          </form>
+        </div>
+      </section>
+      <section class="results" id="son-ilan">
+        <div class="container">
+          <div class="results__header">
+            <span class="badge">Yayınlanan ilanlar</span>
+            <h2>Canlı ilan listesi</h2>
+            <p>
+              Filtreleri kullanarak belirli şehirler veya tarihler için ilanları daraltın. Yeni ilanlar
+              otomatik olarak eklenir ve bu sayfa üzerinden takip edilebilir.
+            </p>
+            <div class="results__count" id="resultsCount"></div>
+          </div>
+          <div class="alert alert--success" id="flashMessage" hidden></div>
+          <div class="results__grid" id="listingsResults" role="list"></div>
+          <div class="empty-state" id="resultsEmpty" hidden>
+            Seçili filtrelere uygun ilan bulunamadı. Filtreleri değiştirerek tekrar deneyebilirsiniz.
+          </div>
+        </div>
+      </section>
+      <div class="modal" id="detailsModal" hidden>
+        <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">
+          <button type="button" class="modal__close" data-close-modal aria-label="Pencereyi kapat">&times;</button>
+          <div class="modal__badge" id="detailsChip"></div>
+          <h3 class="modal__title" id="detailsTitle">İlan detayları</h3>
+          <p class="modal__meta">
+            <span id="detailsDate"></span>
+            <span id="detailsBudget"></span>
+          </p>
+          <div class="modal__contact" id="detailsContact">
+            <strong id="detailsContactName"></strong>
+            <span id="detailsContactInfo"></span>
+          </div>
+          <ul class="detail-list" id="detailsList"></ul>
+          <div class="modal__actions">
+            <button
+              type="button"
+              class="button button--secondary button--wide"
+              id="detailsAppointment"
+              data-modal-action="appointment"
+              data-modal-focus
+            >
+              Randevu Oluştur
+            </button>
+            <button
+              type="button"
+              class="button button--neutral button--wide"
+              id="detailsChat"
+              data-modal-action="chat"
+            >
+              Sohbet Başlat
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="container">
+        © 2024 GoGo. Daha fazla bilgi için
+        <a href="mailto:destek@gogo.com">destek@gogo.com</a>
+        ·
+        <a href="admin.html">Yönetici Paneli</a>
+      </div>
+    </footer>
+    <script>
+      (function () {
+        const SESSION_KEY = "yolkargoSession";
+        const CHAT_KEY = "yolkargoChats";
+        const LISTING_KEY = "yolkargoListings";
+        const loginLinks = Array.from(document.querySelectorAll('[data-auth-trigger="login"]'));
+        const logoutButtons = Array.from(
+          document.querySelectorAll('[data-auth-trigger="logout"]')
+        );
+        const guardedElements = Array.from(document.querySelectorAll('[data-requires-auth]'));
+        const profileWrapper = document.querySelector('[data-auth-profile]');
+        const profileTrigger = profileWrapper
+          ? profileWrapper.querySelector('[data-auth-profile-trigger]')
+          : null;
+        const profileMenu = profileWrapper
+          ? profileWrapper.querySelector('[data-auth-profile-menu]')
+          : null;
+        if (profileMenu) {
+          profileMenu.hidden = true;
+        }
+        const profileName = document.querySelector('[data-auth-name]');
+        const profileRole = document.querySelector('[data-auth-role]');
+        const roleVisibility = Array.from(document.querySelectorAll('[data-auth-visible]'));
+        const messageBadges = Array.from(document.querySelectorAll('[data-message-badge]'));
+        const messageLinks = Array.from(document.querySelectorAll('[data-message-link]'));
+        const ROLE_LABELS = {
+          sender: "Gönderici",
+          driver: "Sürücü",
+          admin: "Yönetici"
+        };
+        let profileMenuOpen = false;
+
+        function readSession() {
+          try {
+            const raw = window.localStorage.getItem(SESSION_KEY);
+            if (!raw) {
+              return null;
+            }
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== "object") {
+              return null;
+            }
+            if (!parsed.role || !parsed.id) {
+              return null;
+            }
+            return parsed;
+          } catch (error) {
+            console.warn("Oturum bilgisi okunamadı.", error);
+            return null;
+          }
+        }
+
+        function getRedirectTarget() {
+          const path = window.location.pathname.split("/").pop() || "ilanlar.html";
+          const search = window.location.search || "";
+          const hash = window.location.hash || "";
+          return `${path}${search}${hash}`;
+        }
+
+        function buildLoginUrl(options = {}) {
+          const params = new URLSearchParams();
+          if (options.redirect) {
+            params.set("redirect", options.redirect);
+          }
+          if (options.role) {
+            params.set("role", options.role);
+          }
+          if (options.intent) {
+            params.set("intent", options.intent);
+          }
+          const query = params.toString();
+          return `giris.html${query ? `?${query}` : ""}`;
+        }
+
+        function readListingsMap() {
+          try {
+            const raw = window.localStorage.getItem(LISTING_KEY);
+            if (!raw) {
+              return new Map();
+            }
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) {
+              return new Map();
+            }
+            return new Map(
+              parsed
+                .filter((item) => item && typeof item === "object" && item.id)
+                .map((item) => [item.id, item])
+            );
+          } catch (error) {
+            console.warn("İlan verileri okunamadı", error);
+            return new Map();
+          }
+        }
+
+        function readConversations() {
+          try {
+            const raw = window.localStorage.getItem(CHAT_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (error) {
+            console.warn("Sohbet verileri okunamadı", error);
+            return [];
+          }
+        }
+
+        function resolveConversationOwner(conversation, listing, session) {
+          if (conversation && conversation.ownerId) {
+            return conversation.ownerId;
+          }
+          if (listing && listing.ownerId) {
+            return listing.ownerId;
+          }
+          if (
+            listing &&
+            session &&
+            listing.senderEmail &&
+            session.email &&
+            listing.senderEmail.toLowerCase() === session.email.toLowerCase()
+          ) {
+            return session.id;
+          }
+          return null;
+        }
+
+        function updateMessageBadges(session) {
+          if (!messageBadges.length && !messageLinks.length) {
+            return;
+          }
+          messageLinks.forEach((link) => link.removeAttribute('data-has-unread'));
+          if (!session || session.role !== "sender") {
+            messageBadges.forEach((badge) => {
+              badge.hidden = true;
+            });
+            return;
+          }
+          const listings = readListingsMap();
+          const conversations = readConversations();
+          let unread = 0;
+          conversations.forEach((conversation) => {
+            const listing = listings.get(conversation.listingId);
+            const ownerId = resolveConversationOwner(conversation, listing, session);
+            if (ownerId === session.id && conversation.unreadForSender) {
+              unread += 1;
+            }
+          });
+          messageBadges.forEach((badge) => {
+            if (unread > 0) {
+              badge.textContent = unread > 9 ? "9+" : `${unread}`;
+              badge.hidden = false;
+            } else {
+              badge.hidden = true;
+            }
+          });
+          const hasUnread = unread > 0;
+          messageLinks.forEach((link) => {
+            if (hasUnread) {
+              link.setAttribute('data-has-unread', 'true');
+            } else {
+              link.removeAttribute('data-has-unread');
+            }
+          });
+        }
+
+        function closeProfileMenu() {
+          if (!profileTrigger || !profileMenu) {
+            return;
+          }
+          profileMenu.hidden = true;
+          profileTrigger.setAttribute("aria-expanded", "false");
+          profileMenuOpen = false;
+        }
+
+        function openProfileMenu() {
+          if (!profileTrigger || !profileMenu) {
+            return;
+          }
+          profileMenu.hidden = false;
+          profileTrigger.setAttribute("aria-expanded", "true");
+          profileMenuOpen = true;
+        }
+
+        function toggleProfileMenu() {
+          if (profileMenuOpen) {
+            closeProfileMenu();
+          } else {
+            openProfileMenu();
+          }
+        }
+
+        function syncRoleVisibility(session) {
+          roleVisibility.forEach((element) => {
+            const role = element.getAttribute("data-auth-visible");
+            if (!session) {
+              element.hidden = true;
+              return;
+            }
+            if (!role || session.role === role) {
+              element.hidden = false;
+            } else {
+              element.hidden = true;
+            }
+          });
+        }
+
+        function updateNav() {
+          const session = readSession();
+          const redirect = getRedirectTarget();
+
+          loginLinks.forEach((link) => {
+            if (session) {
+              link.hidden = true;
+              return;
+            }
+            link.hidden = false;
+            const role = link.getAttribute("data-auth-role") || undefined;
+            const intent = link.getAttribute("data-auth-intent") || "login";
+            link.setAttribute(
+              "href",
+              buildLoginUrl({
+                role,
+                intent,
+                redirect
+              })
+            );
+          });
+
+          logoutButtons.forEach((button) => {
+            button.hidden = !session;
+          });
+
+          if (profileWrapper) {
+            profileWrapper.hidden = false;
+            if (profileTrigger) {
+              profileTrigger.setAttribute(
+                "aria-label",
+                session ? "Hesap menüsünü aç" : "Giriş seçeneklerini aç"
+              );
+            }
+            if (session) {
+              if (profileName) {
+                profileName.textContent = session.name || "Hesabım";
+              }
+              if (profileRole) {
+                profileRole.textContent = ROLE_LABELS[session.role] || "";
+                profileRole.hidden = false;
+              }
+            } else {
+              if (profileName) {
+                profileName.textContent = "GoGo hesabı";
+              }
+              if (profileRole) {
+                profileRole.textContent = "";
+                profileRole.hidden = true;
+              }
+            }
+            closeProfileMenu();
+          }
+
+          guardedElements.forEach((element) => {
+            element.removeAttribute("title");
+            const requiredRole = element.getAttribute("data-requires-auth");
+            if (!requiredRole) {
+              return;
+            }
+            if (session && session.role !== requiredRole) {
+              const message =
+                requiredRole === "sender"
+                  ? "İlan vermek için gönderici hesabı ile giriş yapmalısınız."
+                  : "Bu işlem için sürücü hesabı ile giriş yapmalısınız.";
+              element.setAttribute("title", message);
+            }
+          });
+
+          syncRoleVisibility(session);
+          updateMessageBadges(session);
+
+          window.YolkargoSession = session;
+          window.YolkargoAuth = {
+            getSession: readSession,
+            buildLoginUrl,
+            getRedirectTarget,
+            require(role, redirectTarget) {
+              const activeSession = readSession();
+              if (activeSession && (!role || activeSession.role === role)) {
+                return activeSession;
+              }
+              const intent = activeSession ? "login" : "register";
+              const destination = redirectTarget || getRedirectTarget();
+              const url = buildLoginUrl({
+                role: role || (activeSession ? activeSession.role : undefined),
+                intent,
+                redirect: destination
+              });
+              window.location.href = url;
+              return null;
+            }
+          };
+        }
+
+        function handleLogout(event) {
+          if (event) {
+            event.preventDefault();
+          }
+          try {
+            window.localStorage.removeItem(SESSION_KEY);
+          } catch (error) {
+            console.warn("Oturum kapatılırken hata oluştu.", error);
+          }
+          closeProfileMenu();
+          updateNav();
+          window.location.reload();
+        }
+
+        function guardClick(event) {
+          const element = event.currentTarget;
+          const requiredRole = element.getAttribute("data-requires-auth");
+          const session = readSession();
+          if (session && (!requiredRole || session.role === requiredRole)) {
+            return;
+          }
+          event.preventDefault();
+          if (session && requiredRole && session.role !== requiredRole) {
+            const message =
+              requiredRole === "sender"
+                ? "İlan vermek için gönderici hesabı ile giriş yapmalısınız."
+                : "Bu işlem için sürücü hesabı ile giriş yapmalısınız.";
+            alert(message);
+          }
+          const href = element.getAttribute("href") || getRedirectTarget();
+          const intent = session ? "login" : "register";
+          const url = buildLoginUrl({
+            role: requiredRole || (session ? session.role : undefined),
+            intent,
+            redirect: href
+          });
+          window.location.href = url;
+        }
+
+        logoutButtons.forEach((button) => {
+          button.addEventListener("click", handleLogout);
+        });
+
+        guardedElements.forEach((element) => {
+          element.addEventListener("click", guardClick);
+        });
+
+        if (profileTrigger) {
+          profileTrigger.addEventListener("click", (event) => {
+            event.preventDefault();
+            toggleProfileMenu();
+          });
+        }
+
+        if (profileWrapper) {
+          profileWrapper.addEventListener("focusout", (event) => {
+            if (!profileWrapper.contains(event.relatedTarget)) {
+              closeProfileMenu();
+            }
+          });
+        }
+
+        document.addEventListener("click", (event) => {
+          if (!profileMenuOpen || !profileWrapper) {
+            return;
+          }
+          if (!profileWrapper.contains(event.target)) {
+            closeProfileMenu();
+          }
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && profileMenuOpen) {
+            closeProfileMenu();
+          }
+        });
+
+        window.addEventListener("storage", (event) => {
+          if (event.key === SESSION_KEY) {
+            updateNav();
+          }
+          if (event.key === CHAT_KEY) {
+            updateMessageBadges(window.YolkargoSession || readSession());
+          }
+        });
+
+        document.addEventListener("nav:messages-updated", () => {
+          updateMessageBadges(window.YolkargoSession || readSession());
+        });
+
+        updateNav();
+      })();
+    </script>
+    <script>
+      (function () {
+        const STORAGE_KEY = "yolkargoListings";
+        const FLASH_KEY = "listingFlash";
+        const STATUS_LABELS = {
+          pending: "Onay bekliyor",
+          approved: "Yayınlandı",
+          in_transit: "Yolda",
+          delivered: "Teslim edildi",
+          cancelled: "İptal edildi",
+          archived: "Arşivlendi"
+        };
+        const PUBLISHED_STATUSES = new Set(["approved", "in_transit", "delivered"]);
+        const seedListings = [
+          {
+            id: "seed-istanbul-ankara",
+            senderName: "Ayşe K.",
+            senderPhone: "0 532 123 45 67",
+            senderEmail: "",
+            pickupCity: "İstanbul",
+            pickupAddress: "Kadıköy, Moda Caddesi",
+            dropoffCity: "Ankara",
+            dropoffAddress: "Çankaya, Atatürk Bulvarı",
+            cargoDate: "2024-05-12",
+            isFlexible: true,
+            packageSize: "Orta paket (10-25 kg)",
+            cargoNotes: "Cam şişe içerir, dik taşınması önemli.",
+            cargoWeight: "12",
+            budget: 450,
+            createdAt: "Bugün",
+            source: "seed",
+            status: "in_transit",
+            statusUpdatedAt: "2024-05-10T09:00:00.000Z",
+            statusHistory: [
+              {
+                status: "pending",
+                note: "İlan oluşturuldu",
+                timestamp: "2024-05-08T08:00:00.000Z"
+              },
+              {
+                status: "approved",
+                note: "Sistem tarafından onaylandı",
+                timestamp: "2024-05-09T09:00:00.000Z"
+              },
+              {
+                status: "in_transit",
+                note: "Sürücü yola çıktı",
+                timestamp: "2024-05-10T09:00:00.000Z"
+              }
+            ]
+          },
+          {
+            id: "seed-izmir-bursa",
+            senderName: "Mehmet T.",
+            senderPhone: "0 505 987 65 43",
+            senderEmail: "",
+            pickupCity: "İzmir",
+            pickupAddress: "Konak, Gazi Osman Paşa Bulvarı",
+            dropoffCity: "Bursa",
+            dropoffAddress: "Nilüfer, Ataevler Mah.",
+            cargoDate: "2024-05-15",
+            isFlexible: false,
+            packageSize: "Küçük paket (0-10 kg)",
+            cargoNotes: "Laptop ve aksesuar kutusu.",
+            cargoWeight: "6",
+            budget: 320,
+            createdAt: "Dün",
+            source: "seed",
+            status: "approved",
+            statusUpdatedAt: "2024-05-11T12:00:00.000Z",
+            statusHistory: [
+              {
+                status: "pending",
+                note: "İlan oluşturuldu",
+                timestamp: "2024-05-09T12:00:00.000Z"
+              },
+              {
+                status: "approved",
+                note: "Yayına alındı",
+                timestamp: "2024-05-11T12:00:00.000Z"
+              }
+            ]
+          },
+          {
+            id: "seed-antalya-istanbul",
+            senderName: "Selin D.",
+            senderPhone: "0 531 222 33 44",
+            senderEmail: "",
+            pickupCity: "Antalya",
+            pickupAddress: "Muratpaşa, Atatürk Caddesi",
+            dropoffCity: "İstanbul",
+            dropoffAddress: "Üsküdar, Çengelköy Mah.",
+            cargoDate: "2024-05-22",
+            isFlexible: true,
+            packageSize: "Büyük paket (25-40 kg)",
+            cargoNotes: "Dikkatli taşınması gereken spor ekipmanları",
+            cargoWeight: "28",
+            budget: 780,
+            createdAt: "3 gün önce",
+            source: "seed",
+            status: "pending",
+            statusUpdatedAt: "2024-05-08T15:30:00.000Z",
+            statusHistory: [
+              {
+                status: "pending",
+                note: "İlan oluşturuldu",
+                timestamp: "2024-05-08T15:30:00.000Z"
+              }
+            ]
+          }
+        ];
+
+        const filtersForm = document.getElementById("filtersForm");
+        const resultsContainer = document.getElementById("listingsResults");
+        const emptyState = document.getElementById("resultsEmpty");
+        const resultsCount = document.getElementById("resultsCount");
+        const summary = document.getElementById("resultsSummary");
+        const flashMessage = document.getElementById("flashMessage");
+        const detailModal = document.getElementById("detailsModal");
+        const detailChip = document.getElementById("detailsChip");
+        const detailTitle = document.getElementById("detailsTitle");
+        const detailDate = document.getElementById("detailsDate");
+        const detailBudget = document.getElementById("detailsBudget");
+        const detailContact = document.getElementById("detailsContact");
+        const detailContactName = document.getElementById("detailsContactName");
+        const detailContactInfo = document.getElementById("detailsContactInfo");
+        const detailList = document.getElementById("detailsList");
+        const detailAppointment = document.getElementById("detailsAppointment");
+        const detailChat = document.getElementById("detailsChat");
+
+        if (!filtersForm || !resultsContainer || !emptyState) {
+          return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const state = {
+          listings: [],
+          highlightId: urlParams.get("highlight") || ""
+        };
+
+        let lastFocusedElement = null;
+
+        function ensureDriverAccess(redirectTarget) {
+          const auth = window.YolkargoAuth;
+          if (!auth) {
+            return true;
+          }
+          let session = null;
+          if (typeof auth.getSession === "function") {
+            session = auth.getSession();
+          }
+          if (session && session.role === "driver") {
+            return session;
+          }
+          if (session && session.role !== "driver") {
+            alert("Bu işlem için sürücü hesabı ile giriş yapmalısınız.");
+          }
+          if (typeof auth.require === "function") {
+            return auth.require("driver", redirectTarget);
+          }
+          return null;
+        }
+
+        function createId(prefix = "listing") {
+          const random = Math.random().toString(36).slice(2, 10);
+          return `${prefix}-${Date.now().toString(36)}-${random}`;
+        }
+
+        function escapeHtml(value) {
+          if (value === undefined || value === null) {
+            return "";
+          }
+          return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+        }
+
+        function formatNotes(notes) {
+          if (!notes) {
+            return "";
+          }
+          return escapeHtml(notes).replace(/\r?\n/g, "<br />");
+        }
+
+        function escapeSelector(value) {
+          const stringValue = String(value);
+          if (window.CSS && typeof window.CSS.escape === "function") {
+            return window.CSS.escape(stringValue);
+          }
+          return stringValue.replace(/[^0-9a-zA-Z_-]/g, "\\$&");
+        }
+
+        function readStoredListings() {
+          try {
+            const raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+              return [];
+            }
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) {
+              return [];
+            }
+            let mutated = false;
+            const filtered = parsed.filter((item) => item && typeof item === "object");
+            const withIds = filtered.map((item) => {
+              const updated = { ...item };
+              let itemMutated = false;
+
+              if (!updated.id) {
+                updated.id = createId("user");
+                itemMutated = true;
+              }
+
+              if (!updated.status) {
+                updated.status = "pending";
+                itemMutated = true;
+              }
+
+              if (!Array.isArray(updated.statusHistory) || !updated.statusHistory.length) {
+                const createdAt = updated.createdAt || new Date().toISOString();
+                updated.statusHistory = [
+                  {
+                    status: updated.status,
+                    note: "İlan kaydı oluşturuldu",
+                    timestamp: createdAt
+                  }
+                ];
+                itemMutated = true;
+              }
+
+              if (!updated.statusUpdatedAt) {
+                const lastEntry =
+                  updated.statusHistory[updated.statusHistory.length - 1]?.timestamp ||
+                  new Date().toISOString();
+                updated.statusUpdatedAt = lastEntry;
+                itemMutated = true;
+              }
+
+              if (itemMutated) {
+                mutated = true;
+              }
+
+              return updated;
+            });
+            if (mutated) {
+              try {
+                window.localStorage.setItem(STORAGE_KEY, JSON.stringify(withIds));
+              } catch (setError) {
+                console.warn("Güncellenmiş ilanlar kaydedilemedi.", setError);
+              }
+            }
+            return withIds;
+          } catch (error) {
+            console.warn("İlan kayıtları okunamadı.", error);
+            return [];
+          }
+        }
+
+        function normalise(value) {
+          return typeof value === "string" ? value.toLocaleLowerCase("tr-TR") : "";
+        }
+
+        function formatDate(value) {
+          if (!value) return "";
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) {
+            return value;
+          }
+          return new Intl.DateTimeFormat("tr-TR", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+          }).format(date);
+        }
+
+        function formatBudget(value) {
+          if (value === undefined || value === null || value === "") {
+            return "Bütçe belirtilmedi";
+          }
+          const amount = Number(value);
+          if (Number.isNaN(amount)) {
+            return String(value);
+          }
+          return new Intl.NumberFormat("tr-TR", {
+            style: "currency",
+            currency: "TRY",
+            maximumFractionDigits: 0
+          }).format(amount);
+        }
+
+        function parseDate(value) {
+          if (!value) return null;
+          const date = new Date(value);
+          return Number.isNaN(date.getTime()) ? null : date;
+        }
+
+        function loadListings() {
+          const stored = readStoredListings().map((listing) => ({
+            ...listing,
+            source: listing.source || "user"
+          }));
+          state.listings = [...stored, ...seedListings];
+        }
+
+        function render(list) {
+          resultsContainer.innerHTML = "";
+
+          const visibleList = list.filter(
+            (item) => (item && (item.status || "pending")) !== "archived"
+          );
+
+          if (!visibleList.length) {
+            emptyState.hidden = false;
+            if (resultsCount) {
+              resultsCount.textContent = "";
+            }
+            if (summary) {
+              summary.textContent = "Seçilen filtrelere uygun ilan bulunamadı.";
+            }
+            return;
+          }
+
+          emptyState.hidden = true;
+
+          visibleList.forEach((listing) => {
+            const card = document.createElement("article");
+            card.className = "listing-card";
+            card.setAttribute("role", "listitem");
+
+            const listingId = listing.id ? String(listing.id) : "";
+            if (listingId) {
+              card.dataset.listingId = listingId;
+            }
+
+            const status = listing.status || "pending";
+            card.dataset.status = status;
+            const statusLabel = STATUS_LABELS[status] || "Durum güncelleniyor";
+            const statusClass = `listing-card__status listing-card__status--${status}`;
+            const statusBadge = `
+              <span class="${statusClass}">
+                <svg viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                  <circle cx="4" cy="4" r="3" fill="currentColor" />
+                </svg>
+                ${escapeHtml(statusLabel)}
+              </span>
+            `;
+
+            const dateParts = [];
+            const formattedDate = formatDate(listing.cargoDate);
+            if (formattedDate) {
+              dateParts.push(formattedDate);
+            }
+            if (listing.isFlexible) {
+              dateParts.push("Tarih esnek");
+            }
+            const dateLabel = dateParts.map(escapeHtml).join(" · ");
+
+            const chipLabel = listing.source === "seed" ? "Örnek ilan" : "Yeni ilan";
+            const contactParts = [];
+            if (listing.senderPhone) {
+              contactParts.push(escapeHtml(listing.senderPhone));
+            }
+            if (listing.senderEmail) {
+              contactParts.push(escapeHtml(listing.senderEmail));
+            }
+            const contactInfo = contactParts.length ? contactParts.join(" · ") : "Bilgi yok";
+            const pickupAddress = listing.pickupAddress
+              ? `<span><strong>Çıkış Adresi:</strong> ${escapeHtml(listing.pickupAddress)}</span>`
+              : "";
+            const dropoffAddress = listing.dropoffAddress
+              ? `<span><strong>Varış Adresi:</strong> ${escapeHtml(listing.dropoffAddress)}</span>`
+              : "";
+            const weight = listing.cargoWeight
+              ? `<span><strong>Ağırlık:</strong> ${escapeHtml(listing.cargoWeight)} kg</span>`
+              : "";
+            const notes = listing.cargoNotes
+              ? `<span class=\"listing-card__note\"><strong>Not:</strong> ${formatNotes(listing.cargoNotes)}</span>`
+              : "";
+
+            card.innerHTML = `
+              <div class=\"listing-card__meta\">
+                <div class=\"listing-card__chip\">${escapeHtml(chipLabel)}</div>
+                ${statusBadge}
+              </div>
+              <div class=\"listing-card__route\">
+                <strong>${escapeHtml(listing.pickupCity || "Bilinmiyor")} → ${escapeHtml(listing.dropoffCity || "Bilinmiyor")}</strong>
+                <span>${dateLabel}</span>
+              </div>
+              <div class=\"listing-card__details\">
+                <span><strong>Gönderici:</strong> ${escapeHtml(listing.senderName || "Bilinmiyor")}</span>
+                <span><strong>İletişim:</strong> ${contactInfo}</span>
+                <span><strong>Paket:</strong> ${escapeHtml(listing.packageSize || "Belirtilmedi")}</span>
+                ${pickupAddress}
+                ${dropoffAddress}
+                ${weight}
+                ${notes}
+              </div>
+              <div class=\"listing-card__actions\">
+                <button type=\"button\" class=\"button button--plain button--wide\" data-action=\"details\" data-id=\"${escapeHtml(listingId)}\">
+                  Detayları Gör
+                </button>
+                <button type=\"button\" class=\"button button--secondary button--wide\" data-action=\"appointment\" data-id=\"${escapeHtml(listingId)}\">
+                  Randevu Oluştur
+                </button>
+                <button type=\"button\" class=\"button button--neutral button--wide\" data-action=\"chat\" data-id=\"${escapeHtml(listingId)}\">
+                  Sohbet Başlat
+                </button>
+              </div>
+              <div class=\"listing-card__footer\">
+                <span>${escapeHtml(listing.createdAt || "Yeni")}</span>
+                <strong>${escapeHtml(formatBudget(listing.budget))}</strong>
+              </div>
+            `;
+
+            if (listingId && listingId === state.highlightId) {
+              card.classList.add("listing-card--highlight");
+              window.setTimeout(() => {
+                card.classList.remove("listing-card--highlight");
+              }, 6000);
+            }
+
+            resultsContainer.appendChild(card);
+          });
+
+          const countText = `${visibleList.length} ilan bulundu.`;
+          if (resultsCount) {
+            resultsCount.textContent = countText;
+          }
+          if (summary) {
+            summary.textContent = countText;
+          }
+
+          if (state.highlightId) {
+            const selectorId = escapeSelector(state.highlightId);
+            const highlightCard = resultsContainer.querySelector(`[data-listing-id=\"${selectorId}\"]`);
+            if (highlightCard && typeof highlightCard.scrollIntoView === "function") {
+              highlightCard.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+            const params = new URLSearchParams(window.location.search);
+            params.delete("highlight");
+            const newSearch = params.toString();
+            const newUrl = `${window.location.pathname}${newSearch ? `?${newSearch}` : ""}${window.location.hash}`;
+            window.history.replaceState({}, document.title, newUrl);
+            state.highlightId = "";
+          }
+        }
+
+        function filterListings() {
+          const formData = new FormData(filtersForm);
+          const pickupQuery = normalise(formData.get("pickup"));
+          const dropoffQuery = normalise(formData.get("dropoff"));
+          const packageSize = formData.get("packageSize") || "";
+          const flexible = formData.get("flexible") || "any";
+          const statusFilter = formData.get("status") || "published";
+          const minBudgetRaw = formData.get("minBudget");
+          const maxBudgetRaw = formData.get("maxBudget");
+          const minBudget = minBudgetRaw ? Number(minBudgetRaw) : null;
+          const maxBudget = maxBudgetRaw ? Number(maxBudgetRaw) : null;
+          const dateFrom = parseDate(formData.get("dateFrom"));
+          const dateTo = parseDate(formData.get("dateTo"));
+
+          const filtered = state.listings.filter((listing) => {
+            const listingStatus = listing.status || "pending";
+            if (pickupQuery && !normalise(listing.pickupCity).includes(pickupQuery)) {
+              return false;
+            }
+            if (dropoffQuery && !normalise(listing.dropoffCity).includes(dropoffQuery)) {
+              return false;
+            }
+            if (packageSize && listing.packageSize !== packageSize) {
+              return false;
+            }
+            if (statusFilter === "published") {
+              if (!PUBLISHED_STATUSES.has(listingStatus)) {
+                return false;
+              }
+            } else if (statusFilter && statusFilter !== "all") {
+              if (listingStatus !== statusFilter) {
+                return false;
+              }
+            }
+            if (flexible === "flex" && !listing.isFlexible) {
+              return false;
+            }
+            if (flexible === "strict" && listing.isFlexible) {
+              return false;
+            }
+            if (minBudget !== null) {
+              const amount = Number(listing.budget);
+              if (Number.isFinite(minBudget) && (!Number.isFinite(amount) || amount < minBudget)) {
+                return false;
+              }
+            }
+            if (maxBudget !== null) {
+              const amount = Number(listing.budget);
+              if (Number.isFinite(maxBudget) && (!Number.isFinite(amount) || amount > maxBudget)) {
+                return false;
+              }
+            }
+            if (dateFrom || dateTo) {
+              const listingDate = parseDate(listing.cargoDate);
+              if (listingDate) {
+                if (dateFrom && listingDate < dateFrom) {
+                  return false;
+                }
+                if (dateTo && listingDate > dateTo) {
+                  return false;
+                }
+              }
+            }
+            return true;
+          });
+
+          render(filtered);
+        }
+
+        function openModal(modal) {
+          if (!modal) {
+            return;
+          }
+          lastFocusedElement = document.activeElement;
+          modal.hidden = false;
+          document.body.classList.add("modal-open");
+          const focusTarget =
+            modal.querySelector("[data-modal-focus]") ||
+            modal.querySelector("button, [href], input, select, textarea");
+          if (focusTarget && typeof focusTarget.focus === "function") {
+            focusTarget.focus();
+          }
+        }
+
+        function closeModal(modal) {
+          if (!modal) {
+            return;
+          }
+          modal.hidden = true;
+          document.body.classList.remove("modal-open");
+          if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+            lastFocusedElement.focus();
+          }
+          lastFocusedElement = null;
+          delete modal.dataset.currentId;
+        }
+
+        function openDetails(listing) {
+          if (!detailModal || !listing) {
+            return;
+          }
+          detailModal.dataset.currentId = listing.id || "";
+          const status = listing.status || "pending";
+          const statusLabel = STATUS_LABELS[status] || "Durum güncelleniyor";
+          const chipLabel = listing.source === "seed" ? "Örnek ilan" : "Yeni ilan";
+          const badgeText = chipLabel ? `${chipLabel} · ${statusLabel}` : statusLabel;
+          if (badgeText) {
+            detailChip.textContent = badgeText;
+            detailChip.hidden = false;
+          } else {
+            detailChip.hidden = true;
+          }
+          const routeTitle = `${listing.pickupCity || "Bilinmiyor"} → ${listing.dropoffCity || "Bilinmiyor"}`;
+          detailTitle.textContent = routeTitle;
+          const dateParts = [];
+          const formattedDate = formatDate(listing.cargoDate);
+          if (formattedDate) {
+            dateParts.push(formattedDate);
+          }
+          if (listing.isFlexible) {
+            dateParts.push("Tarih esnek");
+          }
+          detailDate.textContent = dateParts.join(" · ") || "Tarih bilgisi paylaşılmadı";
+          detailBudget.textContent = formatBudget(listing.budget);
+          detailContact.hidden = false;
+          detailContactName.textContent = listing.senderName || "Gönderici bilgisi yok";
+          const contactParts = [];
+          if (listing.senderPhone) {
+            contactParts.push(listing.senderPhone);
+          }
+          if (listing.senderEmail) {
+            contactParts.push(listing.senderEmail);
+          }
+          detailContactInfo.textContent = contactParts.length
+            ? contactParts.join(" · ")
+            : "İletişim bilgisi paylaşılmadı.";
+
+          detailList.innerHTML = "";
+          const infoItems = [
+            { label: "Çıkış adresi", value: listing.pickupAddress },
+            { label: "Varış adresi", value: listing.dropoffAddress },
+            { label: "Paket boyutu", value: listing.packageSize },
+            { label: "Ağırlık", value: listing.cargoWeight ? `${listing.cargoWeight} kg` : "" },
+            { label: "Not", value: listing.cargoNotes, type: "note" }
+          ];
+
+          infoItems.forEach((item) => {
+            if (!item.value) {
+              return;
+            }
+            const li = document.createElement("li");
+            if (item.type === "note") {
+              li.classList.add("detail-list__note");
+            }
+            const labelEl = document.createElement("span");
+            labelEl.textContent = item.label;
+            const valueEl = document.createElement("strong");
+            if (item.type === "note") {
+              valueEl.innerHTML = formatNotes(item.value);
+            } else {
+              valueEl.textContent = item.value;
+            }
+            li.append(labelEl, valueEl);
+            detailList.appendChild(li);
+          });
+
+          if (!detailList.children.length) {
+            const li = document.createElement("li");
+            const labelEl = document.createElement("span");
+            labelEl.textContent = "Bilgi";
+            const valueEl = document.createElement("strong");
+            valueEl.textContent = "Bu ilan için ek bilgi paylaşılmadı.";
+            li.append(labelEl, valueEl);
+            detailList.appendChild(li);
+          }
+
+          if (detailAppointment) {
+            detailAppointment.dataset.id = listing.id || "";
+          }
+          if (detailChat) {
+            detailChat.dataset.id = listing.id || "";
+          }
+
+          openModal(detailModal);
+        }
+
+        function goToAppointment(listing) {
+          if (!listing || !listing.id) {
+            return;
+          }
+          const redirectTarget = `randevu.html?id=${encodeURIComponent(listing.id)}`;
+          if (!ensureDriverAccess(redirectTarget)) {
+            return;
+          }
+          const url = new URL("randevu.html", window.location.origin);
+          url.searchParams.set("id", listing.id);
+          window.location.href = url.toString();
+        }
+
+        function goToChat(listing) {
+          if (!listing || !listing.id) {
+            return;
+          }
+          const redirectTarget = `sohbet.html?id=${encodeURIComponent(listing.id)}`;
+          if (!ensureDriverAccess(redirectTarget)) {
+            return;
+          }
+          const url = new URL("sohbet.html", window.location.origin);
+          url.searchParams.set("id", listing.id);
+          window.location.href = url.toString();
+        }
+
+        resultsContainer.addEventListener("click", (event) => {
+          const button = event.target.closest("[data-action]");
+          if (!button) {
+            return;
+          }
+          const action = button.getAttribute("data-action");
+          const id = button.getAttribute("data-id");
+          if (!action || !id) {
+            return;
+          }
+          const listing = state.listings.find((item) => item.id === id);
+          if (!listing) {
+            return;
+          }
+          event.preventDefault();
+          if (action === "details") {
+            openDetails(listing);
+          } else if (action === "appointment") {
+            goToAppointment(listing);
+          } else if (action === "chat") {
+            goToChat(listing);
+          }
+        });
+
+        if (detailModal) {
+          detailModal.addEventListener("click", (event) => {
+            if (event.target === detailModal) {
+              closeModal(detailModal);
+              return;
+            }
+            const actionButton = event.target.closest("[data-modal-action]");
+            if (!actionButton) {
+              return;
+            }
+            const currentId = detailModal.dataset.currentId;
+            if (!currentId) {
+              return;
+            }
+            const listing = state.listings.find((item) => item.id === currentId);
+            if (!listing) {
+              return;
+            }
+            const action = actionButton.getAttribute("data-modal-action");
+            if (action === "appointment") {
+              closeModal(detailModal);
+              goToAppointment(listing);
+            } else if (action === "chat") {
+              closeModal(detailModal);
+              goToChat(listing);
+            }
+          });
+
+          const closeButton = detailModal.querySelector("[data-close-modal]");
+          if (closeButton) {
+            closeButton.addEventListener("click", () => {
+              closeModal(detailModal);
+            });
+          }
+        }
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && detailModal && !detailModal.hidden) {
+            closeModal(detailModal);
+          }
+        });
+
+        loadListings();
+        filterListings();
+
+        filtersForm.addEventListener("input", () => {
+          window.requestAnimationFrame(filterListings);
+        });
+
+        filtersForm.addEventListener("change", () => {
+          window.requestAnimationFrame(filterListings);
+        });
+
+        filtersForm.addEventListener("reset", () => {
+          window.setTimeout(() => {
+            filterListings();
+          }, 0);
+        });
+
+        if (flashMessage) {
+          try {
+            const message = window.sessionStorage.getItem(FLASH_KEY);
+            if (message) {
+              flashMessage.textContent = message;
+              flashMessage.hidden = false;
+              window.sessionStorage.removeItem(FLASH_KEY);
+            }
+          } catch (error) {
+            console.warn("Bilgilendirme mesajı gösterilemedi.", error);
+          }
+        }
+
+        window.addEventListener("storage", (event) => {
+          if (event.key === STORAGE_KEY) {
+            loadListings();
+            filterListings();
+          }
+        });
+      })();
+    </script>
+
+  </body>
+</html>
