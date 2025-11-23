@@ -2,41 +2,1054 @@
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YolKargo | Şehirler Arası Yol Arkadaşı Kargo Platformu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GoGo | Şehirler Arası Kargo Paylaşım Platformu</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <style>
+      :root {
+        --bg-dark: #090f1d;
+        --bg-light: #f3f6fc;
+        --bg-alt: #ffffff;
+        --accent: #ff7a00;
+        --accent-dark: #ff6700;
+        --text-dark: #0f172a;
+        --text-muted: #475569;
+        --border: #d6dae6;
+        --radius-lg: 28px;
+        --radius-md: 20px;
+        --radius-sm: 12px;
+        --shadow-soft: 0 24px 55px rgba(15, 23, 42, 0.12);
+        --shadow-card: 0 14px 38px rgba(15, 23, 42, 0.08);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: var(--bg-light);
+        color: var(--text-dark);
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(1120px, 92vw);
+        margin: 0 auto;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(255, 122, 0, 0.12);
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.78rem 1.6rem;
+        border-radius: 999px;
+        border: none;
+        font-weight: 600;
+        background: var(--accent);
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 12px 30px rgba(255, 122, 0, 0.28);
+      }
+
+      .button--large {
+        padding: 0.95rem 2.05rem;
+        font-size: 1rem;
+      }
+
+      .button--ghost {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        box-shadow: none;
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 36px rgba(255, 122, 0, 0.35);
+      }
+
+      .link {
+        font-weight: 600;
+        color: var(--accent);
+      }
+
+      .listings {
+        padding: 4.5rem 0 1.5rem;
+      }
+
+      .listings__header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        margin-bottom: 2.8rem;
+        text-align: center;
+      }
+
+      .listings__header span {
+        align-self: center;
+      }
+
+      .listings__header h2 {
+        margin: 0;
+        font-size: clamp(1.8rem, 2vw + 1rem, 2.4rem);
+      }
+
+      .listings__actions {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.8rem;
+      }
+
+      .listings__actions .button {
+        font-size: 0.95rem;
+        padding-inline: 2.1rem;
+      }
+
+      .listings__header p {
+        margin: 0;
+        color: var(--text-muted);
+        max-width: 620px;
+        margin-inline: auto;
+      }
+
+      .alert {
+        padding: 1rem 1.2rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid transparent;
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .alert--success {
+        background: rgba(56, 189, 98, 0.12);
+        border-color: rgba(22, 163, 74, 0.24);
+        color: #166534;
+      }
+
+      .listings__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.6rem;
+      }
+
+      .listing-card {
+        background: var(--bg-alt);
+        border-radius: var(--radius-md);
+        padding: 1.6rem;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        border: 1px solid rgba(15, 23, 42, 0.06);
+      }
+
+      .listing-card__meta {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+
+      .listing-card__route {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+      }
+
+      .listing-card__route strong {
+        font-size: 1.1rem;
+      }
+
+      .listing-card__chip {
+        background: rgba(255, 122, 0, 0.12);
+        color: var(--accent);
+        font-weight: 600;
+        border-radius: 999px;
+        padding: 0.3rem 0.75rem;
+        font-size: 0.82rem;
+        align-self: flex-start;
+      }
+
+      .listing-card__status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        border-radius: 999px;
+        padding: 0.3rem 0.75rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        background: rgba(15, 23, 42, 0.08);
+        color: var(--text-dark);
+      }
+
+      .listing-card__status svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .listing-card__status--pending {
+        background: rgba(251, 191, 36, 0.18);
+        color: #92400e;
+      }
+
+      .listing-card__status--approved {
+        background: rgba(34, 197, 94, 0.16);
+        color: #166534;
+      }
+
+      .listing-card__status--in_transit {
+        background: rgba(59, 130, 246, 0.16);
+        color: #1d4ed8;
+      }
+
+      .listing-card__status--delivered {
+        background: rgba(16, 185, 129, 0.18);
+        color: #0f766e;
+      }
+
+      .listing-card__status--cancelled {
+        background: rgba(248, 113, 113, 0.18);
+        color: #b91c1c;
+      }
+
+      .listing-card__status--archived {
+        background: rgba(148, 163, 184, 0.22);
+        color: #475569;
+      }
+
+      .listing-card__details {
+        display: grid;
+        gap: 0.35rem;
+        font-size: 0.92rem;
+        color: var(--text-muted);
+      }
+
+      .listing-card__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.88rem;
+        color: var(--text-muted);
+      }
+
+      .listing-card__footer strong {
+        color: var(--text-dark);
+        font-size: 1rem;
+      }
+
+      .empty-state {
+        text-align: center;
+        color: var(--text-muted);
+        padding: 2.4rem 1rem;
+        border: 2px dashed rgba(15, 23, 42, 0.12);
+        border-radius: var(--radius-md);
+      }
+
+      .form-preview {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 3rem;
+        align-items: center;
+        padding: 4.5rem 0 1rem;
+      }
+
+      .form-preview__content {
+        grid-column: span 5;
+      }
+
+      .form-preview__content h2 {
+        font-size: clamp(1.9rem, 2.2vw + 1.1rem, 2.6rem);
+        margin-bottom: 1rem;
+      }
+
+      .form-preview__content p {
+        font-size: 1.05rem;
+        color: var(--text-muted);
+        line-height: 1.65;
+      }
+
+      .form-card {
+        grid-column: span 7;
+        background: var(--bg-alt);
+        border-radius: var(--radius-lg);
+        padding: 2.6rem 2.8rem;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        gap: 1.8rem;
+      }
+
+      .form-card__header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+
+      .form-card__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .form-card__badge span {
+        width: 7px;
+        height: 7px;
+        background: var(--accent);
+        border-radius: 50%;
+      }
+
+      .form-card__title {
+        font-size: 1.4rem;
+        letter-spacing: -0.01em;
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 1.3rem;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+
+      .form-label {
+        font-weight: 600;
+        color: var(--text-dark);
+        font-size: 0.95rem;
+      }
+
+      .form-input {
+        padding: 0.85rem 1rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        font-size: 0.98rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        background: #fff;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.12);
+      }
+
+      .form-hint {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+
+      .form-card__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .form-card__steps {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.88rem;
+        color: var(--text-muted);
+      }
+
+      .form-card__steps::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        background: var(--accent);
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      .form-card__submit {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.85rem 1.6rem;
+        border-radius: 999px;
+        border: none;
+        background: var(--text-dark);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .form-card__submit span {
+        display: inline-flex;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--accent);
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+      }
+
+      .form-card__submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
+      }
+
+      header.hero {
+        position: relative;
+        overflow: hidden;
+        color: #fff;
+        background: radial-gradient(circle at top left, #ff8a1f, #ff7a00 34%, #6b2cff);
+      }
+
+      .hero__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(9, 15, 29, 0.2), rgba(9, 15, 29, 0.85));
+      }
+
+      .hero__content {
+        position: relative;
+        padding: 3rem 0 4.8rem;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        margin-bottom: 3.5rem;
+      }
+
+      .nav__actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .nav__profile {
+        position: relative;
+      }
+
+      .nav__profile-trigger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .nav__profile-trigger:hover,
+      .nav__profile-trigger[aria-expanded="true"] {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.18);
+        border-color: rgba(255, 255, 255, 0.6);
+      }
+
+      .nav__profile-trigger svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .nav__profile-menu {
+        position: absolute;
+        top: calc(100% + 0.75rem);
+        right: 0;
+        min-width: 230px;
+        padding: 1rem;
+        border-radius: var(--radius-sm);
+        background: #fff;
+        color: var(--text-dark);
+        box-shadow: var(--shadow-card);
+        display: grid;
+        gap: 0.35rem;
+        z-index: 20;
+      }
+
+      .nav__profile-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        margin-bottom: 0.35rem;
+      }
+
+      .nav__profile-name {
+        font-weight: 600;
+        font-size: 0.98rem;
+      }
+
+      .nav__profile-role {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+      }
+
+      .nav__profile-divider {
+        height: 1px;
+        background: rgba(15, 23, 42, 0.08);
+        margin: 0.25rem 0 0.35rem;
+      }
+
+      .nav__profile-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.55rem 0.65rem;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 0.92rem;
+        color: inherit;
+        transition: background 0.2s ease;
+      }
+
+      .nav__profile-link svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .nav__profile-link:hover {
+        background: rgba(15, 23, 42, 0.06);
+      }
+
+      .nav__profile-link--danger {
+        color: #dc2626;
+      }
+
+      .nav__profile-link--danger:hover {
+        background: rgba(220, 38, 38, 0.08);
+      }
+
+      .nav__profile-link--primary {
+        background: rgba(255, 122, 0, 0.12);
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .nav__profile-link--primary:hover {
+        background: rgba(255, 122, 0, 0.22);
+      }
+
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .logo img {
+        height: 42px;
+        width: auto;
+        display: block;
+      }
+
+      .nav__link {
+        color: rgba(255, 255, 255, 0.78);
+        font-weight: 500;
+      }
+
+      .nav__link:hover {
+        color: #fff;
+      }
+
+      .hero__grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .hero__text {
+        grid-column: span 7;
+      }
+
+      .hero__text h1 {
+        font-size: clamp(2.3rem, 3.2vw + 1.5rem, 3.6rem);
+        letter-spacing: -0.03em;
+        margin-bottom: 1.2rem;
+      }
+
+      .hero__text p {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.82);
+        margin-bottom: 1.8rem;
+      }
+
+      .hero__cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+        margin-bottom: 2.4rem;
+      }
+
+      .hero__stats {
+        display: flex;
+        gap: 1.5rem;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+      .hero__stats li {
+        padding: 1rem 1.2rem;
+        border-radius: var(--radius-sm);
+        background: rgba(255, 255, 255, 0.08);
+        min-width: 120px;
+      }
+
+      .hero__stats strong {
+        display: block;
+        font-size: 1.5rem;
+        letter-spacing: -0.02em;
+      }
+
+      .hero__stats span {
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 0.9rem;
+      }
+
+      .hero__card {
+        grid-column: span 5;
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .card {
+        padding: 1.8rem;
+        border-radius: var(--radius-lg);
+        background: rgba(9, 15, 29, 0.55);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(14px);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .card h2 {
+        margin-top: 0;
+        margin-bottom: 1.2rem;
+        font-size: 1.2rem;
+      }
+
+      .card ul {
+        padding-left: 1.1rem;
+        display: grid;
+        gap: 0.55rem;
+        color: rgba(255, 255, 255, 0.78);
+      }
+
+      main {
+        background: radial-gradient(circle at top, rgba(255, 122, 0, 0.09), transparent 55%),
+          var(--bg-light);
+      }
+
+      .section {
+        padding: 5.5rem 0;
+      }
+
+      .section__header {
+        text-align: center;
+        max-width: 640px;
+        margin: 0 auto 3rem;
+      }
+
+      .section__header h2 {
+        font-size: clamp(1.8rem, 2.7vw + 1.2rem, 2.8rem);
+        margin-bottom: 0.75rem;
+        letter-spacing: -0.02em;
+      }
+
+      .section__header p {
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+
+      .grid {
+        display: grid;
+        gap: 1.8rem;
+      }
+
+      .grid--features {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .feature {
+        background: var(--bg-alt);
+        border-radius: var(--radius-md);
+        padding: 2.1rem;
+        box-shadow: var(--shadow-card);
+        display: grid;
+        gap: 0.8rem;
+      }
+
+      .feature__icon {
+        font-size: 1.8rem;
+      }
+
+      .feature p {
+        margin: 0;
+        color: var(--text-muted);
+      }
+
+      .cards {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+
+      .cards .card {
+        background: var(--bg-alt);
+        color: var(--text-dark);
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        backdrop-filter: none;
+        box-shadow: var(--shadow-card);
+      }
+
+      .cards .card ul {
+        color: var(--text-muted);
+      }
+
+      .process {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        counter-reset: step;
+      }
+
+      .process__item {
+        position: relative;
+        background: var(--bg-alt);
+        border-radius: var(--radius-md);
+        padding: 2rem 1.8rem 1.8rem;
+        box-shadow: var(--shadow-card);
+      }
+
+      .process__item::before {
+        counter-increment: step;
+        content: counter(step);
+        position: absolute;
+        top: -18px;
+        left: 1.8rem;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: var(--accent);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+      }
+
+      .process__item h3 {
+        margin-top: 0.5rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .process__item p {
+        margin: 0;
+        color: var(--text-muted);
+      }
+
+      .highlight {
+        display: grid;
+        gap: 1.5rem;
+        background: linear-gradient(145deg, rgba(255, 122, 0, 0.14), rgba(255, 255, 255, 0.85));
+        border-radius: var(--radius-lg);
+        padding: 3rem;
+        align-items: center;
+      }
+
+      .highlight__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .highlight__item {
+        background: rgba(255, 255, 255, 0.58);
+        border-radius: var(--radius-md);
+        padding: 1.4rem 1.6rem;
+        border: 1px solid rgba(255, 122, 0, 0.22);
+      }
+
+      .highlight__item h3 {
+        margin: 0 0 0.5rem;
+      }
+
+      .highlight__item p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+
+      .cta {
+        background: var(--bg-dark);
+        color: #fff;
+        border-radius: var(--radius-lg);
+        padding: 3.6rem 3rem;
+        display: grid;
+        gap: 1.6rem;
+        text-align: center;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .cta h2 {
+        margin: 0;
+        font-size: clamp(1.8rem, 2.5vw + 1.2rem, 2.7rem);
+      }
+
+      .cta p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.72);
+      }
+
+      footer {
+        padding: 3rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+
+      footer a {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      @media (max-width: 900px) {
+        .nav {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .hero__grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero__text,
+        .hero__card {
+          grid-column: span 12;
+        }
+
+        .card {
+          background: rgba(9, 15, 29, 0.75);
+        }
+
+        .form-preview {
+          grid-template-columns: 1fr;
+          padding: 3.2rem 0 0;
+        }
+
+        .form-preview__content,
+        .form-card {
+          grid-column: span 12;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .nav__actions {
+          justify-content: flex-start;
+        }
+
+        .hero__stats {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .section {
+          padding: 4rem 0;
+        }
+
+        .listings {
+          padding: 3.6rem 0 1.2rem;
+        }
+
+        .listings__header {
+          margin-bottom: 2rem;
+        }
+
+        .highlight {
+          padding: 2.4rem;
+        }
+
+        .cta {
+          padding: 3rem 2rem;
+        }
+
+        .form-card {
+          padding: 2rem;
+        }
+
+        .form-card__footer {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
   </head>
   <body>
     <header class="hero" id="top">
       <div class="hero__overlay"></div>
       <div class="container hero__content">
         <nav class="nav">
-          <a class="logo" href="#top">YolKargo</a>
+          <a class="logo" href="#top" aria-label="GoGo ana sayfa">
+            <img src="assets/gogo-logo.svg" alt="GoGo" />
+          </a>
           <div class="nav__actions">
             <a class="nav__link" href="#features">Özellikler</a>
             <a class="nav__link" href="#process">Nasıl Çalışır?</a>
             <a class="nav__link" href="#pricing">Ücretlendirme</a>
-            <a class="button button--ghost" href="#waitlist">Giriş Yap</a>
-            <a class="button" href="#waitlist">Hemen Katıl</a>
+            <a class="nav__link" href="ilanlar.html">İlanlar</a>
+            <a class="nav__link" href="#security">Güvenlik</a>
+            <div class="nav__profile" data-auth-profile hidden>
+              <button
+                class="nav__profile-trigger"
+                type="button"
+                data-auth-profile-trigger
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-label="Hesap menüsünü aç"
+              >
+                <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4 0-7 2-7 4.2 0 1.1.9 1.8 2.5 1.8h9c1.6 0 2.5-.7 2.5-1.8C19 16 16 14 12 14Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+              <div class="nav__profile-menu" data-auth-profile-menu hidden role="menu">
+                <div class="nav__profile-header">
+                  <span class="nav__profile-name" data-auth-name>Hesabım</span>
+                  <span class="nav__profile-role" data-auth-role></span>
+                </div>
+                <div class="nav__profile-divider"></div>
+                <a
+                  class="nav__profile-link nav__profile-link--primary"
+                  data-auth-trigger="login"
+                  data-auth-role="sender"
+                  href="giris.html"
+                  role="menuitem"
+                >
+                  <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M14 3h7v18h-7v-2h5V5h-5ZM3.29 11.29l3-3 1.42 1.42L6.41 11H16v2H6.41l1.3 1.29-1.42 1.42-3-3a1 1 0 0 1 0-1.42Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Giriş Yap / Kayıt Ol
+                </a>
+                <a class="nav__profile-link" href="ilanlar.html#my" data-auth-visible="sender" role="menuitem">
+                  <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M5 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Zm2 0h10v1H7Zm0 3h10v9H7Zm2 2v2h6v-2Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  İlanlarım
+                </a>
+                <a class="nav__profile-link" href="randevu.html" data-auth-visible="sender" role="menuitem">
+                  <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M7 3h2v2h6V3h2v2h3v16H4V5h3Zm12 6H5v10h14Zm-9 3h2v2H10Zm4 0h2v2h-2Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Kargo Durumlarım
+                </a>
+                <a class="nav__profile-link" href="randevu.html#hareket" data-auth-visible="driver" role="menuitem">
+                  <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M4 5h4l2 3h10v6h-3l-2 3H4Zm2 2v8h8.17l2-3H18V10H9.83l-2-3Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Kargo Hareket Durumu
+                </a>
+                <a class="nav__profile-link" href="giris.html#ayarlar" role="menuitem">
+                  <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M12 15a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm8-3a1 1 0 0 0-.52-.88l-1.54-.88.06-1.78a1 1 0 0 0-.29-.73l-1.5-1.5a1 1 0 0 0-.73-.29l-1.78.06-.88-1.54A1 1 0 0 0 12 2h-2a1 1 0 0 0-.88.52l-.88 1.54-1.78-.06a1 1 0 0 0-.73.29l-1.5 1.5a1 1 0 0 0-.29.73l.06 1.78-1.54.88A1 1 0 0 0 2 12v2a1 1 0 0 0 .52.88l1.54.88-.06 1.78a1 1 0 0 0 .29.73l1.5 1.5a1 1 0 0 0 .73.29l1.78-.06.88 1.54A1 1 0 0 0 10 22h2a1 1 0 0 0 .88-.52l.88-1.54 1.78.06a1 1 0 0 0 .73-.29l1.5-1.5a1 1 0 0 0 .29-.73l-.06-1.78 1.54-.88A1 1 0 0 0 20 14Zm-2 1.38-1.22.7a1 1 0 0 0-.49.91l.05 1.42-1 .95-1.42-.05a1 1 0 0 0-.91.49L12.88 20h-1.76l-.69-1.22a1 1 0 0 0-.91-.49l-1.42.05-1-.95.05-1.42a1 1 0 0 0-.49-.91L5 15.38V13l1.22-.7a1 1 0 0 0 .49-.91l-.05-1.42 1-.95 1.42.05a1 1 0 0 0 .91-.49L11.12 4h1.76l.69 1.22a1 1 0 0 0 .91.49l1.42-.05 1 .95-.05 1.42a1 1 0 0 0 .49.91L19 11.05Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Ayarlar
+                </a>
+                <button
+                  class="nav__profile-link nav__profile-link--danger"
+                  type="button"
+                  data-auth-trigger="logout"
+                  role="menuitem"
+                >
+                  <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9 21H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4v2H6v14h3Zm10.71-9.71-3-3-1.42 1.42L16.59 11H10v2h6.59l-1.3 1.29 1.42 1.42 3-3a1 1 0 0 0 0-1.42Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Çıkış Yap
+                </button>
+              </div>
+            </div>
+            <a class="button" href="ilan-ver.html" data-requires-auth="sender">İlan Ver</a>
           </div>
         </nav>
         <div class="hero__grid">
           <div class="hero__text">
-            <span class="badge">Beta erken erişimi başladı</span>
+            <span class="badge">Yeni nesil kargo paylaşımı</span>
             <h1>Şehirler arası yolculukları kazanca çeviren kargo paylaşım ağı</h1>
             <p>
-              YolKargo, araçlarında boş alan bulunan sürücüler ile kargosunu hızlı ve uygun fiyata
+              GoGo, araçlarında boş alan bulunan sürücüler ile kargosunu hızlı ve uygun fiyata
               göndermek isteyen kişileri aynı platformda buluşturur.
             </p>
             <div class="hero__cta">
-              <a class="button button--large" href="#waitlist">Bekleme listesine katıl</a>
-              <a class="link" href="#security">Nasıl güvende kalıyoruz?</a>
+              <a class="button button--large" href="ilanlar.html">Aktif ilanları keşfet</a>
+              <a class="link" href="giris.html?role=sender&intent=register">Gönderici hesabı oluştur</a>
             </div>
             <ul class="hero__stats">
               <li>
@@ -59,7 +1072,7 @@
               <ul>
                 <li>Çıkış ve varış illerini seç</li>
                 <li>Yola çıkış tarihini belirt</li>
-                <li>Araç tipini ve boş alanını ekle</li>
+                <li>Araç tipi ve boş alanını ekle</li>
                 <li>Fiyat aralığını gir</li>
               </ul>
               <button class="button button--ghost">Paneli keşfet</button>
@@ -79,13 +1092,104 @@
     </header>
 
     <main>
+      <section class="listings" id="listings">
+        <div class="container">
+          <div class="listings__header">
+            <span class="badge">Canlı ilanlar</span>
+            <h2>Göndericiler için en yeni ilanlar</h2>
+            <p>
+              Aracındaki boş alanı paylaşmak isteyen sürücüler için göndericilerin oluşturduğu
+              ilanları inceleyin. İlan ver butonuyla siz de birkaç dakika içinde kendi talebinizi
+              ekleyebilirsiniz.
+            </p>
+            <div class="listings__actions">
+              <a class="button" href="ilanlar.html">Tüm ilanları görüntüle</a>
+            </div>
+          </div>
+          <div class="alert alert--success" id="listingSuccess" hidden>
+            Yeni ilanınız başarıyla oluşturuldu. Aşağıda görüntülenmektedir.
+          </div>
+          <div class="listings__grid" id="listingsContainer" role="list"></div>
+          <div class="empty-state" id="listingsEmpty" hidden>
+            Henüz bir ilan yok. İlk ilanı oluşturmak için yukarıdaki “İlan Ver” bağlantısından
+            formu doldurun.
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="driver-form">
+        <div class="container">
+          <div class="form-preview">
+            <div class="form-preview__content">
+              <span class="badge">Sürücü formu</span>
+              <h2>Rota bilgilerinizi girin, uygun gönderileri anında görün</h2>
+              <p>
+                Yolculuğunuzun başlangıç ve varış noktalarını, tarihini ve araç kapasitenizi dakikalar
+                içinde paylaşın. Sistemimiz, kriterlerinize göre eşleşebileceğiniz gönderileri size
+                önerir.
+              </p>
+            </div>
+            <form class="form-card" aria-labelledby="driver-form-title">
+              <div class="form-card__header">
+                <span class="form-card__badge"><span></span>Rota Bilgileri</span>
+                <h3 class="form-card__title" id="driver-form-title">Nereye seyahat ediyorsunuz?</h3>
+              </div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="from-city">Nereden</label>
+                  <input
+                    class="form-input"
+                    id="from-city"
+                    name="from-city"
+                    placeholder="Örn: İstanbul"
+                    type="text"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="to-city">Nereye</label>
+                  <input
+                    class="form-input"
+                    id="to-city"
+                    name="to-city"
+                    placeholder="Örn: Ankara"
+                    type="text"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="travel-date">Tarih</label>
+                  <input
+                    class="form-input"
+                    id="travel-date"
+                    name="travel-date"
+                    placeholder="gg.aa.yyyy"
+                    type="text"
+                    inputmode="numeric"
+                    required
+                  />
+                  <span class="form-hint">Tarihiniz esnekse daha fazla eşleşme görebilirsiniz.</span>
+                </div>
+              </div>
+              <div class="form-card__footer">
+                <div class="form-card__steps">Adım 1 / 3</div>
+                <button class="form-card__submit" type="button">
+                  İleri
+                  <span>➜</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
       <section class="section" id="features">
         <div class="container">
           <header class="section__header">
             <span class="badge">Özellikler</span>
             <h2>Güvenilir, şeffaf ve ölçeklenebilir pazar yeri altyapısı</h2>
             <p>
-              YolKargo, gerçek zamanlı eşleştirme ve güvenlik kontrolleri ile hem sürücüler hem de
+              GoGo, gerçek zamanlı eşleştirme ve güvenlik kontrolleri ile hem sürücüler hem de
               göndericiler için sorunsuz bir deneyim sunar.
             </p>
           </header>
@@ -108,227 +1212,754 @@
             <article class="feature">
               <div class="feature__icon">🛰️</div>
               <h3>Konum takibi</h3>
-              <p>
-                Google Maps API entegrasyonu sayesinde gönderinizin yolculuğunu gerçek zamanlı izleyin.
-              </p>
+              <p>Google Maps API entegrasyonu sayesinde gönderinizin yolculuğunu gerçek zamanlı izleyin.</p>
             </article>
             <article class="feature">
               <div class="feature__icon">🛡️</div>
               <h3>Kimlik ve plaka doğrulama</h3>
-              <p>
-                Sürücü kimliği ve araç plakası doğrulaması ile güvenli bir ekosistem oluşturuyoruz.
-              </p>
+              <p>Sürücü kimliği ve araç plakası doğrulaması ile güvenli bir ekosistem oluşturuyoruz.</p>
             </article>
             <article class="feature">
-              <div class="feature__icon">⭐</div>
-              <h3>Puanlama & yorum sistemi</h3>
-              <p>
-                Her teslimat sonrası iki taraflı değerlendirme ile kalite standartlarını koruyun.
-              </p>
+              <div class="feature__icon">📦</div>
+              <h3>Dijital kargo sigortası</h3>
+              <p>İsteğe bağlı sigorta paketi ile değerli gönderilerinizi güvence altına alın.</p>
             </article>
             <article class="feature">
-              <div class="feature__icon">🔒</div>
-              <h3>Opsiyonel kargo sigortası</h3>
-              <p>
-                Dilerseniz kargonuzu YolKargo Sigorta ile güvence altına alın.
-              </p>
+              <div class="feature__icon">⚡</div>
+              <h3>Esnek fiyatlandırma</h3>
+              <p>Teklif verin veya sabit fiyat ile göndermek istediğiniz kargo için hızlıca anlaşın.</p>
             </article>
           </div>
         </div>
       </section>
 
-      <section class="section section--alt" id="process">
+      <section class="section" id="process">
         <div class="container">
           <header class="section__header">
-            <span class="badge">Adım Adım</span>
-            <h2>3 kolay adımda hızlı teslimat</h2>
+            <span class="badge">Süreç</span>
+            <h2>Sürücüler ve göndericiler için dakikalar içinde eşleşme</h2>
+            <p>
+              Yolculuk planı yapan sürücüler ile şehirler arası gönderi yapmak isteyen kişileri birkaç
+              adımda buluşturuyoruz.
+            </p>
           </header>
-          <div class="timeline">
-            <div class="timeline__item">
-              <div class="timeline__step">1</div>
-              <h3>Kayıt ol ve profilini doğrula</h3>
-              <p>
-                Kimlik, sürücü belgesi ve araç bilgilerinizi birkaç dakikada tamamlayın. Göndericiler
-                için sadece kimlik doğrulaması yeterli.
-              </p>
+          <div class="grid process">
+            <div class="process__item">
+              <h3>Sürücü kaydı</h3>
+              <p>Rota, araç tipi ve boş alan bilgilerini girerek ilan oluşturun.</p>
             </div>
-            <div class="timeline__item">
-              <div class="timeline__step">2</div>
-              <h3>İhtiyacına uygun ilanı oluştur</h3>
-              <p>
-                Sürücüler rotalarını eklerken, göndericiler kargonun detaylarını paylaşır. Sistem
-                otomatik eşleşmeleri önerir.
-              </p>
+            <div class="process__item">
+              <h3>Gönderi talebi</h3>
+              <p>Kargonun çıkış/varış adresini ve önem derecesini paylaşın.</p>
             </div>
-            <div class="timeline__item">
-              <div class="timeline__step">3</div>
-              <h3>Anlaş, takip et, puanla</h3>
-              <p>
-                Canlı sohbetle anlaş, Stripe / iyzico güvencesiyle ödemeni yap, kargonun takibini izle
-                ve deneyimini puanla.
-              </p>
+            <div class="process__item">
+              <h3>Akıllı eşleşme</h3>
+              <p>Algoritmamız uygun sürücü ve gönderileri eşleştirip anlık bildirim gönderir.</p>
             </div>
+            <div class="process__item">
+              <h3>Güvenli teslimat</h3>
+              <p>Canlı konum takibi, sigorta ve değerlendirmeler ile güven içinde teslim edin.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="pricing">
+        <div class="container">
+          <header class="section__header">
+            <span class="badge">Kazanç Modeli</span>
+            <h2>Şeffaf ücretlendirme ile sürdürülebilir büyüme</h2>
+            <p>GoGo hem kullanıcılar hem de işletme için adil ve kazan-kazan modeli sunar.</p>
+          </header>
+          <div class="grid cards">
+            <article class="card">
+              <h3>Komisyon modeli</h3>
+              <ul>
+                <li>Her başarılı teslimattan %12 komisyon</li>
+                <li>Ödeme altyapısı Stripe ve iyzico entegrasyonu</li>
+                <li>Anında hesap özeti ve raporlama</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>Premium üyelik</h3>
+              <ul>
+                <li>Öne çıkan ilanlar ve hızlı eşleşme</li>
+                <li>Aylık abone olan sürücülere ek güven rozeti</li>
+                <li>Özel kampanyalar ve destek kanalı</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>Reklam alanı</h3>
+              <ul>
+                <li>Kargo ürünleri, araç servisleri ve sigorta iş birlikleri</li>
+                <li>Bölgesel hedefleme ve ölçümleme</li>
+                <li>Ay sonunda performans raporu</li>
+              </ul>
+            </article>
           </div>
         </div>
       </section>
 
       <section class="section" id="security">
-        <div class="container security">
-          <div class="security__content">
-            <span class="badge">Güvenlik</span>
-            <h2>Güvendiğiniz teslimatlar için uçtan uca koruma</h2>
-            <p>
-              YolKargo, tüm kullanıcılarını doğrular, ödemeleri güvence altına alır ve teslimat süreci
-              boyunca şeffaflık sağlar.
-            </p>
-            <ul class="checklist">
-              <li>Kimlik, plaka ve belge doğrulama</li>
-              <li>Stripe / iyzico güvenceli emanet hesap</li>
-              <li>Opsiyonel kargo sigortası ve hasar desteği</li>
-              <li>Gerçek zamanlı konum paylaşımı</li>
-            </ul>
-          </div>
-          <div class="security__card">
-            <div class="map">
-              <div class="map__pin map__pin--driver">Sürücü</div>
-              <div class="map__route"></div>
-              <div class="map__pin map__pin--sender">Gönderi</div>
-            </div>
-            <p class="map__caption">
-              Konum takibi Google Maps API üzerinden gerçekleşir ve yalnızca eşleşen taraflarca
-              görüntülenir.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section section--alt" id="pricing">
         <div class="container">
-          <header class="section__header">
-            <span class="badge">Kazanç Modeli</span>
-            <h2>Sürdürülebilir gelir için şeffaf ücretlendirme</h2>
-          </header>
-          <div class="pricing">
-            <article class="pricing__card">
-              <h3>Komisyon</h3>
-              <p>Her başarılı teslimatta %8 sabit komisyon.</p>
-              <ul>
-                <li>Ödeme sonrası otomatik tahsilat</li>
-                <li>Anında cüzdan bakiyesi</li>
-                <li>Esnek çekim limitleri</li>
-              </ul>
-            </article>
-            <article class="pricing__card">
-              <h3>Premium üyelik</h3>
-              <p>Daha fazla görünürlük ve hızlı eşleşmeler.</p>
-              <ul>
-                <li>Öne çıkan ilanlar</li>
-                <li>Rota başına maksimum eşleşme</li>
-                <li>Öncelikli destek</li>
-              </ul>
-            </article>
-            <article class="pricing__card">
-              <h3>Reklam alanı</h3>
-              <p>Kargo ve araç ekosistemine özel kampanyalar.</p>
-              <ul>
-                <li>Hedefli banner alanları</li>
-                <li>Partner iş birlikleri</li>
-                <li>Aylık raporlama</li>
-              </ul>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="integrations">
-        <div class="container">
-          <header class="section__header">
-            <span class="badge">Teknoloji</span>
-            <h2>Modern altyapı ile dakikalar içinde yayına hazır</h2>
-            <p>
-              Firebase kimlik doğrulaması, Google Maps entegrasyonu ve Stripe / iyzico ödeme altyapısı
-              ile güvenli ve ölçeklenebilir bir çözüm.
-            </p>
-          </header>
-          <div class="integrations">
-            <div class="integrations__item">
-              <span>🔥</span>
-              <h3>Firebase</h3>
-              <p>Gerçek zamanlı veri tabanı ve kimlik doğrulama.</p>
-            </div>
-            <div class="integrations__item">
-              <span>🗺️</span>
-              <h3>Google Maps API</h3>
-              <p>Dinamik rota hesaplama ve konum paylaşımı.</p>
-            </div>
-            <div class="integrations__item">
-              <span>💳</span>
-              <h3>Stripe / iyzico</h3>
-              <p>Güvenli ödeme alma ve komisyon yönetimi.</p>
+          <div class="highlight">
+            <header class="section__header">
+              <span class="badge">Güvenlik</span>
+              <h2>Her gönderi için şeffaflık, güven ve izlenebilirlik</h2>
+              <p>
+                GoGo platformunda yer alan tüm sürücüler kimlik ve plaka doğrulamasından geçer.
+                Gönderilerinizi dilediğiniz noktadan takip edin.
+              </p>
+            </header>
+            <div class="highlight__grid">
+              <div class="highlight__item">
+                <h3>Kimlik doğrulama</h3>
+                <p>Kimlik, ehliyet ve plaka kontrolü ile güvenli sürücü ağı.</p>
+              </div>
+              <div class="highlight__item">
+                <h3>Kargo sigortası</h3>
+                <p>Opsiyonel sigorta paketleri ile değerli gönderileri güvence altına alın.</p>
+              </div>
+              <div class="highlight__item">
+                <h3>Canlı takip</h3>
+                <p>Google Maps entegrasyonu sayesinde teslimatı gerçek zamanlı izleyin.</p>
+              </div>
+              <div class="highlight__item">
+                <h3>Puanlama sistemi</h3>
+                <p>Her teslimat sonrası iki taraflı değerlendirme ve yorumlar.</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="section section--alt waitlist" id="waitlist">
-        <div class="container waitlist__content">
-          <div>
-            <span class="badge">Erken erişim</span>
-            <h2>İlk kullananlardan olun</h2>
-            <p>
-              YolKargo'yu denemek ve topluluğumuza katılmak için e-posta adresinizi bırakmanız yeterli.
-              Cpanel üzerinden kolayca yükleyebileceğiniz bu sayfa, ziyaretçilerinizi bekleme listesine
-              davet eder.
-            </p>
-          </div>
-          <form class="waitlist__form">
-            <label class="sr-only" for="email">E-posta adresi</label>
-            <input id="email" type="email" placeholder="E-posta adresiniz" required />
-            <button type="submit" class="button button--large">Beni haberdar et</button>
-            <small>Kaydolarak kullanım koşulları ve KVKK metnini kabul etmiş olursunuz.</small>
-          </form>
-        </div>
-      </section>
     </main>
 
-    <footer class="footer">
-      <div class="container footer__grid">
-        <div>
-          <a class="logo" href="#top">YolKargo</a>
-          <p>Türkiye'nin şehirler arası kargo paylaşım platformu.</p>
-        </div>
-        <div>
-          <h4>Platform</h4>
-          <ul>
-            <li><a href="#features">Özellikler</a></li>
-            <li><a href="#process">Süreç</a></li>
-            <li><a href="#pricing">Ücretlendirme</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Topluluk</h4>
-          <ul>
-            <li><a href="mailto:hello@yolkargo.com">hello@yolkargo.com</a></li>
-            <li><a href="https://t.me/yolkargo" target="_blank" rel="noreferrer">Telegram</a></li>
-            <li><a href="https://instagram.com/yolkargo" target="_blank" rel="noreferrer">Instagram</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Hızlı bağlantılar</h4>
-          <ul>
-            <li><a href="#security">Güvenlik</a></li>
-            <li><a href="#integrations">Entegrasyonlar</a></li>
-            <li><a href="#waitlist">Bekleme listesi</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer__bottom">
-        <p>© <span id="year"></span> YolKargo Teknoloji. Tüm hakları saklıdır.</p>
+    <footer>
+      <div class="container">
+        © 2024 GoGo. Tüm hakları saklıdır. Daha fazla bilgi için
+        <a href="mailto:destek@gogo.com">destek@gogo.com</a>
       </div>
     </footer>
-
     <script>
-      document.getElementById('year').textContent = new Date().getFullYear();
+      (function () {
+        const SESSION_KEY = "yolkargoSession";
+        const loginLinks = Array.from(document.querySelectorAll('[data-auth-trigger="login"]'));
+        const logoutButtons = Array.from(
+          document.querySelectorAll('[data-auth-trigger="logout"]')
+        );
+        const guardedElements = Array.from(document.querySelectorAll('[data-requires-auth]'));
+        const profileWrapper = document.querySelector('[data-auth-profile]');
+        const profileTrigger = profileWrapper
+          ? profileWrapper.querySelector('[data-auth-profile-trigger]')
+          : null;
+        const profileMenu = profileWrapper
+          ? profileWrapper.querySelector('[data-auth-profile-menu]')
+          : null;
+        if (profileMenu) {
+          profileMenu.hidden = true;
+        }
+        const profileName = document.querySelector('[data-auth-name]');
+        const profileRole = document.querySelector('[data-auth-role]');
+        const roleVisibility = Array.from(document.querySelectorAll('[data-auth-visible]'));
+        const ROLE_LABELS = {
+          sender: "Gönderici",
+          driver: "Sürücü",
+          admin: "Yönetici"
+        };
+        let profileMenuOpen = false;
+
+        function readSession() {
+          try {
+            const raw = window.localStorage.getItem(SESSION_KEY);
+            if (!raw) {
+              return null;
+            }
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== "object") {
+              return null;
+            }
+            if (!parsed.role || !parsed.id) {
+              return null;
+            }
+            return parsed;
+          } catch (error) {
+            console.warn("Oturum bilgisi okunamadı.", error);
+            return null;
+          }
+        }
+
+        function getRedirectTarget() {
+          const path = window.location.pathname.split("/").pop() || "index.html";
+          const search = window.location.search || "";
+          const hash = window.location.hash || "";
+          return `${path}${search}${hash}`;
+        }
+
+        function buildLoginUrl(options = {}) {
+          const params = new URLSearchParams();
+          if (options.redirect) {
+            params.set("redirect", options.redirect);
+          }
+          if (options.role) {
+            params.set("role", options.role);
+          }
+          if (options.intent) {
+            params.set("intent", options.intent);
+          }
+          const query = params.toString();
+          return `giris.html${query ? `?${query}` : ""}`;
+        }
+
+        function closeProfileMenu() {
+          if (!profileTrigger || !profileMenu) {
+            return;
+          }
+          profileMenu.hidden = true;
+          profileTrigger.setAttribute("aria-expanded", "false");
+          profileMenuOpen = false;
+        }
+
+        function openProfileMenu() {
+          if (!profileTrigger || !profileMenu) {
+            return;
+          }
+          profileMenu.hidden = false;
+          profileTrigger.setAttribute("aria-expanded", "true");
+          profileMenuOpen = true;
+        }
+
+        function toggleProfileMenu() {
+          if (profileMenuOpen) {
+            closeProfileMenu();
+          } else {
+            openProfileMenu();
+          }
+        }
+
+        function syncRoleVisibility(session) {
+          roleVisibility.forEach((element) => {
+            const role = element.getAttribute("data-auth-visible");
+            if (!session) {
+              element.hidden = true;
+              return;
+            }
+            if (!role || session.role === role) {
+              element.hidden = false;
+            } else {
+              element.hidden = true;
+            }
+          });
+        }
+
+        function updateNav() {
+          const session = readSession();
+          const redirect = getRedirectTarget();
+
+          loginLinks.forEach((link) => {
+            if (session) {
+              link.hidden = true;
+              return;
+            }
+            link.hidden = false;
+            const role = link.getAttribute("data-auth-role") || undefined;
+            const intent = link.getAttribute("data-auth-intent") || "login";
+            link.setAttribute(
+              "href",
+              buildLoginUrl({
+                role,
+                intent,
+                redirect
+              })
+            );
+          });
+
+          logoutButtons.forEach((button) => {
+            button.hidden = !session;
+          });
+
+          if (profileWrapper) {
+            profileWrapper.hidden = false;
+            if (profileTrigger) {
+              profileTrigger.setAttribute(
+                "aria-label",
+                session ? "Hesap menüsünü aç" : "Giriş seçeneklerini aç"
+              );
+            }
+            if (session) {
+              if (profileName) {
+                profileName.textContent = session.name || "Hesabım";
+              }
+              if (profileRole) {
+                profileRole.textContent = ROLE_LABELS[session.role] || "";
+                profileRole.hidden = false;
+              }
+            } else {
+              if (profileName) {
+                profileName.textContent = "GoGo hesabı";
+              }
+              if (profileRole) {
+                profileRole.textContent = "";
+                profileRole.hidden = true;
+              }
+            }
+            closeProfileMenu();
+          }
+
+          guardedElements.forEach((element) => {
+            element.removeAttribute("title");
+            const requiredRole = element.getAttribute("data-requires-auth");
+            if (!requiredRole) {
+              return;
+            }
+            if (session && session.role !== requiredRole) {
+              const message =
+                requiredRole === "sender"
+                  ? "İlan vermek için gönderici hesabı ile giriş yapmalısınız."
+                  : "Bu işlem için sürücü hesabı ile giriş yapmalısınız.";
+              element.setAttribute("title", message);
+            }
+          });
+
+          syncRoleVisibility(session);
+
+          window.YolkargoSession = session;
+          window.YolkargoAuth = {
+            getSession: readSession,
+            buildLoginUrl,
+            getRedirectTarget,
+            require(role, redirectTarget) {
+              const activeSession = readSession();
+              if (activeSession && (!role || activeSession.role === role)) {
+                return activeSession;
+              }
+              const intent = activeSession ? "login" : "register";
+              const destination = redirectTarget || getRedirectTarget();
+              const url = buildLoginUrl({
+                role: role || (activeSession ? activeSession.role : undefined),
+                intent,
+                redirect: destination
+              });
+              window.location.href = url;
+              return null;
+            }
+          };
+        }
+
+        function handleLogout(event) {
+          if (event) {
+            event.preventDefault();
+          }
+          try {
+            window.localStorage.removeItem(SESSION_KEY);
+          } catch (error) {
+            console.warn("Oturum kapatılamadı.", error);
+          }
+          closeProfileMenu();
+          updateNav();
+          window.location.reload();
+        }
+
+        function guardClick(event) {
+          const element = event.currentTarget;
+          const requiredRole = element.getAttribute("data-requires-auth");
+          const session = readSession();
+          if (session && (!requiredRole || session.role === requiredRole)) {
+            return;
+          }
+          event.preventDefault();
+          if (session && requiredRole && session.role !== requiredRole) {
+            const message =
+              requiredRole === "sender"
+                ? "İlan vermek için gönderici hesabı ile giriş yapmalısınız."
+                : "Bu işlem için sürücü hesabı ile giriş yapmalısınız.";
+            alert(message);
+          }
+          const href = element.getAttribute("href") || getRedirectTarget();
+          const intent = session ? "login" : "register";
+          const url = buildLoginUrl({
+            role: requiredRole || (session ? session.role : undefined),
+            intent,
+            redirect: href
+          });
+          window.location.href = url;
+        }
+
+        logoutButtons.forEach((button) => {
+          button.addEventListener("click", handleLogout);
+        });
+
+        guardedElements.forEach((element) => {
+          element.addEventListener("click", guardClick);
+        });
+
+        if (profileTrigger) {
+          profileTrigger.addEventListener("click", (event) => {
+            event.preventDefault();
+            toggleProfileMenu();
+          });
+        }
+
+        if (profileWrapper) {
+          profileWrapper.addEventListener("focusout", (event) => {
+            if (!profileWrapper.contains(event.relatedTarget)) {
+              closeProfileMenu();
+            }
+          });
+        }
+
+        document.addEventListener("click", (event) => {
+          if (!profileMenuOpen || !profileWrapper) {
+            return;
+          }
+          if (!profileWrapper.contains(event.target)) {
+            closeProfileMenu();
+          }
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && profileMenuOpen) {
+            closeProfileMenu();
+          }
+        });
+
+        window.addEventListener("storage", (event) => {
+          if (event.key === SESSION_KEY) {
+            updateNav();
+          }
+        });
+
+        updateNav();
+      })();
+    </script>
+    <script>
+      (function () {
+        const STORAGE_KEY = "yolkargoListings";
+        const STATUS_LABELS = {
+          pending: "Onay bekliyor",
+          approved: "Yayınlandı",
+          in_transit: "Yolda",
+          delivered: "Teslim edildi",
+          cancelled: "İptal edildi",
+          archived: "Arşivlendi"
+        };
+        const seedListings = [
+          {
+            senderName: "Ayşe K.",
+            senderPhone: "0 532 123 45 67",
+            senderEmail: "",
+            pickupCity: "İstanbul",
+            pickupAddress: "Kadıköy, Moda Caddesi",
+            dropoffCity: "Ankara",
+            dropoffAddress: "Çankaya, Atatürk Bulvarı",
+            cargoDate: "2024-05-12",
+            isFlexible: true,
+            packageSize: "Orta paket (10-25 kg)",
+            cargoNotes: "Cam şişe içerir, dik taşınması önemli.",
+            cargoWeight: "12",
+            budget: 450,
+            createdAt: "Bugün",
+            source: "seed",
+            status: "in_transit",
+            statusUpdatedAt: "2024-05-10T09:00:00.000Z",
+            statusHistory: [
+              {
+                status: "pending",
+                note: "İlan oluşturuldu",
+                timestamp: "2024-05-08T08:00:00.000Z"
+              },
+              {
+                status: "approved",
+                note: "Sistem tarafından onaylandı",
+                timestamp: "2024-05-09T09:00:00.000Z"
+              },
+              {
+                status: "in_transit",
+                note: "Sürücü yola çıktı",
+                timestamp: "2024-05-10T09:00:00.000Z"
+              }
+            ]
+          },
+          {
+            senderName: "Mehmet T.",
+            senderPhone: "0 505 987 65 43",
+            senderEmail: "",
+            pickupCity: "İzmir",
+            pickupAddress: "Konak, Gazi Osman Paşa Bulvarı",
+            dropoffCity: "Bursa",
+            dropoffAddress: "Nilüfer, Ataevler Mah.",
+            cargoDate: "2024-05-15",
+            isFlexible: false,
+            packageSize: "Küçük paket (0-10 kg)",
+            cargoNotes: "Laptop ve aksesuar kutusu.",
+            cargoWeight: "6",
+            budget: 320,
+            createdAt: "Dün",
+            source: "seed",
+            status: "approved",
+            statusUpdatedAt: "2024-05-11T12:00:00.000Z",
+            statusHistory: [
+              {
+                status: "pending",
+                note: "İlan oluşturuldu",
+                timestamp: "2024-05-09T12:00:00.000Z"
+              },
+              {
+                status: "approved",
+                note: "Yayına alındı",
+                timestamp: "2024-05-11T12:00:00.000Z"
+              }
+            ]
+          },
+          {
+            senderName: "Selin D.",
+            senderPhone: "0 531 222 33 44",
+            senderEmail: "",
+            pickupCity: "Antalya",
+            pickupAddress: "Muratpaşa, Atatürk Caddesi",
+            dropoffCity: "İstanbul",
+            dropoffAddress: "Üsküdar, Çengelköy Mah.",
+            cargoDate: "2024-05-22",
+            isFlexible: true,
+            packageSize: "Büyük paket (25-40 kg)",
+            cargoNotes: "Dikkatli taşınması gereken spor ekipmanları",
+            cargoWeight: "28",
+            budget: 780,
+            createdAt: "3 gün önce",
+            source: "seed",
+            status: "pending",
+            statusUpdatedAt: "2024-05-08T15:30:00.000Z",
+            statusHistory: [
+              {
+                status: "pending",
+                note: "İlan oluşturuldu",
+                timestamp: "2024-05-08T15:30:00.000Z"
+              }
+            ]
+          }
+        ];
+
+        const listingsContainer = document.getElementById("listingsContainer");
+        const listingsEmpty = document.getElementById("listingsEmpty");
+        const successBanner = document.getElementById("listingSuccess");
+
+        if (!listingsContainer || !listingsEmpty) {
+          return;
+        }
+
+        function createId(prefix = "listing") {
+          const random = Math.random().toString(36).slice(2, 10);
+          return `${prefix}-${Date.now().toString(36)}-${random}`;
+        }
+
+        function normaliseListing(item) {
+          const updated = { ...item };
+          let mutated = false;
+
+          if (!updated.id) {
+            updated.id = createId("user");
+            mutated = true;
+          }
+
+          if (!updated.status) {
+            updated.status = "pending";
+            mutated = true;
+          }
+
+          if (!Array.isArray(updated.statusHistory) || !updated.statusHistory.length) {
+            const createdAt = updated.createdAt || new Date().toISOString();
+            updated.statusHistory = [
+              {
+                status: updated.status,
+                note: "İlan kaydı oluşturuldu",
+                timestamp: createdAt
+              }
+            ];
+            mutated = true;
+          }
+
+          if (!updated.statusUpdatedAt) {
+            const lastEntry =
+              updated.statusHistory[updated.statusHistory.length - 1]?.timestamp ||
+              new Date().toISOString();
+            updated.statusUpdatedAt = lastEntry;
+            mutated = true;
+          }
+
+          return { updated, mutated };
+        }
+
+        function readStoredListings() {
+          if (typeof window === "undefined") {
+            return [];
+          }
+          try {
+            const raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+              return [];
+            }
+
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) {
+              return [];
+            }
+
+            let mutated = false;
+            const cleaned = parsed
+              .filter((item) => item && typeof item === "object")
+              .map((item) => {
+                const result = normaliseListing(item);
+                if (result.mutated) {
+                  mutated = true;
+                }
+                return result.updated;
+              });
+
+            if (mutated) {
+              try {
+                window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cleaned));
+              } catch (setError) {
+                console.warn("Güncellenmiş ilanlar kaydedilemedi.", setError);
+              }
+            }
+
+            return cleaned;
+          } catch (error) {
+            console.warn("İlan kayıtları okunamadı.", error);
+            return [];
+          }
+        }
+
+        function formatDate(value) {
+          if (!value) return "";
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) {
+            return value;
+          }
+          return new Intl.DateTimeFormat("tr-TR", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+          }).format(date);
+        }
+
+        function formatBudget(value) {
+          if (value === undefined || value === null || value === "") {
+            return "Bütçe belirtilmedi";
+          }
+          const amount = Number(value);
+          if (Number.isNaN(amount)) {
+            return value;
+          }
+          return new Intl.NumberFormat("tr-TR", {
+            style: "currency",
+            currency: "TRY",
+            maximumFractionDigits: 0
+          }).format(amount);
+        }
+
+        function renderListings() {
+          const storedListings = readStoredListings().map((listing) => ({
+            ...listing,
+            source: listing.source || "user"
+          }));
+
+          const allListings = [...storedListings, ...seedListings];
+          const visibleListings = allListings.filter(
+            (listing) => (listing.status || "pending") !== "archived"
+          );
+
+          listingsContainer.innerHTML = "";
+
+          if (!visibleListings.length) {
+            listingsEmpty.hidden = false;
+            return;
+          }
+
+          listingsEmpty.hidden = true;
+
+          visibleListings.forEach((listing) => {
+            const card = document.createElement("article");
+            card.className = "listing-card";
+            card.setAttribute("role", "listitem");
+
+            const status = listing.status || "pending";
+            card.dataset.status = status;
+            const statusLabel = STATUS_LABELS[status] || "Durum güncelleniyor";
+            const statusClass = `listing-card__status listing-card__status--${status}`;
+            const statusBadge = `
+              <span class="${statusClass}">
+                <svg viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                  <circle cx="4" cy="4" r="3" fill="currentColor" />
+                </svg>
+                ${statusLabel}
+              </span>
+            `;
+
+            const dateParts = [];
+            const formattedDate = formatDate(listing.cargoDate);
+            if (formattedDate) {
+              dateParts.push(formattedDate);
+            }
+            if (listing.isFlexible) {
+              dateParts.push("Tarih esnek");
+            }
+
+            const chipLabel = listing.source === "seed" ? "Örnek ilan" : "Yeni ilan";
+
+            card.innerHTML = `
+              <div class="listing-card__meta">
+                <div class="listing-card__chip">${chipLabel}</div>
+                ${statusBadge}
+              </div>
+              <div class="listing-card__route">
+                <strong>${listing.pickupCity} → ${listing.dropoffCity}</strong>
+                <span>${dateParts.filter(Boolean).join(" · ")}</span>
+              </div>
+              <div class="listing-card__details">
+                <span><strong>Gönderici:</strong> ${listing.senderName || "Bilinmiyor"}</span>
+                <span><strong>İletişim:</strong> ${listing.senderPhone || "Bilgi yok"}${
+              listing.senderEmail ? ` · ${listing.senderEmail}` : ""
+            }</span>
+                <span><strong>Paket:</strong> ${listing.packageSize || "Belirtilmedi"}</span>
+                ${listing.pickupAddress ? `<span><strong>Çıkış Adresi:</strong> ${listing.pickupAddress}</span>` : ""}
+                ${listing.dropoffAddress ? `<span><strong>Varış Adresi:</strong> ${listing.dropoffAddress}</span>` : ""}
+                ${listing.cargoWeight ? `<span><strong>Ağırlık:</strong> ${listing.cargoWeight} kg</span>` : ""}
+                ${listing.cargoNotes ? `<span><strong>Not:</strong> ${listing.cargoNotes}</span>` : ""}
+              </div>
+              <div class="listing-card__footer">
+                <span>${listing.createdAt || "Yeni"}</span>
+                <strong>${formatBudget(listing.budget)}</strong>
+              </div>
+            `;
+
+            listingsContainer.appendChild(card);
+          });
+        }
+
+        if (successBanner && typeof window !== "undefined") {
+          try {
+            const flashMessage = window.sessionStorage.getItem("listingFlash");
+            if (flashMessage) {
+              successBanner.textContent = flashMessage;
+              successBanner.hidden = false;
+              window.sessionStorage.removeItem("listingFlash");
+            }
+          } catch (error) {
+            console.warn("Bilgilendirme mesajı gösterilemedi.", error);
+          }
+        }
+
+        renderListings();
+
+        if (typeof window !== "undefined") {
+          window.addEventListener("storage", (event) => {
+            if (event.key === STORAGE_KEY) {
+              renderListings();
+            }
+          });
+        }
+      })();
     </script>
   </body>
 </html>
